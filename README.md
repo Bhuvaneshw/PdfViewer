@@ -95,7 +95,7 @@ dependencies {
 ### 2.1 XML PdfViewer
 Include PdfViewer in your xml
 ```xml
-<com.acutecoder.pdf.PdfViewer
+<com.bhuvaneshw.pdf.PdfViewer
     android:id="@+id/pdf_viewer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

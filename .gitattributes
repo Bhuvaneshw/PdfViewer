@@ -1,8 +1,8 @@
-core/src/main/assets/com/acutecoder/mozilla/pdfjs/build/** linguist-vendored
-core/src/main/assets/com/acutecoder/mozilla/pdfjs/images/** linguist-vendored
-core/src/main/assets/com/acutecoder/mozilla/pdfjs/locale/** linguist-vendored
-core/src/main/assets/com/acutecoder/mozilla/pdfjs/locale/en-US/** linguist-vendored
-core/src/main/assets/com/acutecoder/mozilla/pdfjs/pdf_viewer.css linguist-vendored
-core/src/main/assets/com/acutecoder/mozilla/pdfjs/pdf_viewer.html linguist-vendored
-core/src/main/assets/com/acutecoder/mozilla/pdfjs/pdf_viewer.mjs linguist-vendored
-core/src/main/assets/com/acutecoder/mozilla/web/standard_fonts/** linguist-vendored
+core/src/main/assets/com/bhuvaneshw/mozilla/pdfjs/build/** linguist-vendored
+core/src/main/assets/com/bhuvaneshw/mozilla/pdfjs/images/** linguist-vendored
+core/src/main/assets/com/bhuvaneshw/mozilla/pdfjs/locale/** linguist-vendored
+core/src/main/assets/com/bhuvaneshw/mozilla/pdfjs/locale/en-US/** linguist-vendored
+core/src/main/assets/com/bhuvaneshw/mozilla/pdfjs/pdf_viewer.css linguist-vendored
+core/src/main/assets/com/bhuvaneshw/mozilla/pdfjs/pdf_viewer.html linguist-vendored
+core/src/main/assets/com/bhuvaneshw/mozilla/pdfjs/pdf_viewer.mjs linguist-vendored
+core/src/main/assets/com/bhuvaneshw/mozilla/web/standard_fonts/** linguist-vendored
