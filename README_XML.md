@@ -11,7 +11,7 @@ For setup see [Setup](README.md#1-setup)
 
 ### Simple Pdf Viewer
 ```xml
-<com.acutecoder.pdf.PdfViewer
+<com.bhuvaneshw.pdf.PdfViewer
     android:id="@+id/pdf_viewer"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
@@ -35,7 +35,7 @@ PdfUtil.onReady(pdfViewer, () -> {
 
 ### Changing container color
 ```xml
-<com.acutecoder.pdf.PdfViewer
+<com.bhuvaneshw.pdf.PdfViewer
     android:id="@+id/pdf_viewer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -51,7 +51,7 @@ pdfViewer.onReady {
 
 ### With PdfViewerContainer
 ```xml
-<com.acutecoder.pdf.ui.PdfViewerContainer
+<com.bhuvaneshw.pdf.ui.PdfViewerContainer
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pdf_viewer_container"
@@ -59,17 +59,17 @@ pdfViewer.onReady {
     android:layout_height="match_parent"
     tools:context=".MainActivity2">
 
-    <com.acutecoder.pdf.PdfViewer
+    <com.bhuvaneshw.pdf.PdfViewer
         android:id="@+id/pdf_viewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</com.acutecoder.pdf.ui.PdfViewerContainer>
+</com.bhuvaneshw.pdf.ui.PdfViewerContainer>
 ```
 
 ### With ToolBar and ScrollBar
 ```xml
-<com.acutecoder.pdf.ui.PdfViewerContainer xmlns:android="http://schemas.android.com/apk/res/android"
+<com.bhuvaneshw.pdf.ui.PdfViewerContainer xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pdf_viewer_container"
     android:layout_width="match_parent"
@@ -77,28 +77,28 @@ pdfViewer.onReady {
     tools:context=".MainActivity2">
 
     <!-- id is mandatory, if not random int will be assigned by PdfViewerContainer-->
-    <com.acutecoder.pdf.ui.PdfToolBar
+    <com.bhuvaneshw.pdf.ui.PdfToolBar
         android:id="@+id/pdf_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.acutecoder.pdf.PdfViewer
+    <com.bhuvaneshw.pdf.PdfViewer
         android:id="@+id/pdf_viewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.acutecoder.pdf.ui.PdfScrollBar
+    <com.bhuvaneshw.pdf.ui.PdfScrollBar
         android:id="@+id/pdf_scroll_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-</com.acutecoder.pdf.ui.PdfViewerContainer>
+</com.bhuvaneshw.pdf.ui.PdfViewerContainer>
 ```
 
 ### ToolBar back icon
 ```kotlin
 val pdfToolBar = findViewById<PdfToolBar>(R.id.pdf_tool_bar)
-pdfToolBar.back.setImageResource(com.acutecoder.pdf.ui.R.drawable.outline_arrow_back_24)
+pdfToolBar.back.setImageResource(com.bhuvaneshw.pdf.ui.R.drawable.outline_arrow_back_24)
 ```
 
 ### Extended ToolBar
@@ -106,7 +106,7 @@ See [ExtendedToolBar.kt](/app/src/main/java/com/bhuvaneshw/pdfviewerdemo/Extende
 
 ### Colors
 ```xml
-<com.acutecoder.pdf.ui.PdfViewerContainer xmlns:android="http://schemas.android.com/apk/res/android"
+<com.bhuvaneshw.pdf.ui.PdfViewerContainer xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/container"
@@ -115,32 +115,32 @@ See [ExtendedToolBar.kt](/app/src/main/java/com/bhuvaneshw/pdfviewerdemo/Extende
   tools:context=".MainActivity">
 
 <!-- id is mandatory, if not random int will be assigned by PdfViewerContainer-->
-  <com.acutecoder.pdf.ui.PdfToolBar
+  <com.bhuvaneshw.pdf.ui.PdfToolBar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:contentColor="@color/md_theme_onBackground" />
 
-  <com.acutecoder.pdf.PdfViewer
+  <com.bhuvaneshw.pdf.PdfViewer
       android:id="@+id/pdf_viewer"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:background="@color/md_theme_primaryContainer"
       app:containerBackgroundColor="@android:color/transparent" />
 
-  <com.acutecoder.pdf.ui.PdfScrollBar
+  <com.bhuvaneshw.pdf.ui.PdfScrollBar
       android:id="@+id/pdf_scroll_bar"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       app:contentColor="@color/md_theme_onBackground"
       app:handleColor="@color/md_theme_background" />
 
-</com.acutecoder.pdf.ui.PdfViewerContainer>
+</com.bhuvaneshw.pdf.ui.PdfViewerContainer>
 ```
 
 ### Customize ScrollBar
 ```xml
-<com.acutecoder.pdf.ui.PdfScrollBar
+<com.bhuvaneshw.pdf.ui.PdfScrollBar
     android:id="@+id/pdf_scroll_bar"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -153,7 +153,7 @@ pdfScrollBar.interactiveScrolling = false
 
 ### Loading indicator
 ```xml
-<com.acutecoder.pdf.ui.PdfViewerContainer xmlns:android="http://schemas.android.com/apk/res/android"
+<com.bhuvaneshw.pdf.ui.PdfViewerContainer xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pdf_viewer_container"
     android:layout_width="match_parent"
@@ -161,17 +161,17 @@ pdfScrollBar.interactiveScrolling = false
     tools:context=".MainActivity2">
 
     <!-- id is mandatory, if not random int will be assigned by PdfViewerContainer-->
-    <com.acutecoder.pdf.ui.PdfToolBar
+    <com.bhuvaneshw.pdf.ui.PdfToolBar
         android:id="@+id/pdf_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.acutecoder.pdf.PdfViewer
+    <com.bhuvaneshw.pdf.PdfViewer
         android:id="@+id/pdf_viewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.acutecoder.pdf.ui.PdfScrollBar
+    <com.bhuvaneshw.pdf.ui.PdfScrollBar
         android:id="@+id/pdf_scroll_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -191,7 +191,7 @@ pdfScrollBar.interactiveScrolling = false
 
     </LinearLayout>
 
-</com.acutecoder.pdf.ui.PdfViewerContainer>
+</com.bhuvaneshw.pdf.ui.PdfViewerContainer>
 ```
 
 ```kotlin
@@ -210,14 +210,14 @@ pdfContainer.setAsLoadingIndicator(loadingIndicator)
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.acutecoder.pdf.ui.PdfToolBar
+    <com.bhuvaneshw.pdf.ui.PdfToolBar
         android:id="@+id/pdf_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:contentColor="@color/md_theme_onBackground" />
 
 <!--    add below toolbar-->
-    <com.acutecoder.pdf.PdfViewer
+    <com.bhuvaneshw.pdf.PdfViewer
         android:id="@+id/pdf_viewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -226,7 +226,7 @@ pdfContainer.setAsLoadingIndicator(loadingIndicator)
         app:containerBackgroundColor="@android:color/transparent" />
 
 <!--    set align parent right, don't add below toolbar-->
-    <com.acutecoder.pdf.ui.PdfScrollBar
+    <com.bhuvaneshw.pdf.ui.PdfScrollBar
         android:id="@+id/pdf_scroll_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

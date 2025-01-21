@@ -924,7 +924,7 @@ class PdfViewer @JvmOverloads constructor(
 
     companion object {
         private const val PDF_VIEWER_URL =
-            "file:///android_asset/com/acutecoder/mozilla/pdfjs/pdf_viewer.html"
+            "file:///android_asset/com/bhuvaneshw/mozilla/pdfjs/pdf_viewer.html"
         private const val COLOR_NOT_FOUND = 11
         private val ZOOM_SCALE_RANGE = -4f..-1f
 
