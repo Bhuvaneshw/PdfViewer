@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.acutecoder.pdf.ui"
+    namespace = "com.bhuvaneshw.pdf.ui"
     compileSdk = 35
 
     defaultConfig {
@@ -45,7 +45,7 @@ afterEvaluate {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
-                groupId = "com.acutecoder.pdfviewer"
+                groupId = "com.bhuvaneshw.pdfviewer"
                 artifactId = "ui"
             }
         }

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.acutecoder.pdfviewerdemo"
+    namespace = "com.bhuvaneshw.pdfviewerdemo"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.acutecoder.pdfviewerdemo"
+        applicationId = "com.bhuvaneshw.pdfviewerdemo"
         minSdk = 23
         targetSdk = 35
         versionCode = 1

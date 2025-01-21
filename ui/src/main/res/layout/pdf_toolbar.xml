@@ -153,7 +153,7 @@
                         android:padding="8dp"
                         android:src="@drawable/baseline_thickness_24" />
 
-                    <com.acutecoder.pdf.ui.ColorItemView
+                    <com.bhuvaneshw.pdf.ui.ColorItemView
                         android:id="@+id/highlight_color"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
@@ -189,7 +189,7 @@
                         android:padding="8dp"
                         android:src="@drawable/baseline_text_fields_24" />
 
-                    <com.acutecoder.pdf.ui.ColorItemView
+                    <com.bhuvaneshw.pdf.ui.ColorItemView
                         android:id="@+id/free_font_color"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
@@ -227,7 +227,7 @@
                         android:padding="8dp"
                         android:src="@drawable/baseline_opacity_24" />
 
-                    <com.acutecoder.pdf.ui.ColorItemView
+                    <com.bhuvaneshw.pdf.ui.ColorItemView
                         android:id="@+id/ink_color"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"

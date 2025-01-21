@@ -102,7 +102,7 @@ pdfToolBar.back.setImageResource(com.acutecoder.pdf.ui.R.drawable.outline_arrow_
 ```
 
 ### Extended ToolBar
-See [ExtendedToolBar.kt](/app/src/main/java/com/acutecoder/pdfviewerdemo/ExtendedToolBar.kt)
+See [ExtendedToolBar.kt](/app/src/main/java/com/bhuvaneshw/pdfviewerdemo/ExtendedToolBar.kt)
 
 ### Colors
 ```xml
@@ -265,7 +265,7 @@ pdfViewer.addListener(object: PdfListener {
 })
 ```
 > [!NOTE]
-> For Download listener see implementation in [PdfViewerActivity.kt](/app/src/main/java/com/acutecoder/pdfviewerdemo/PdfViewerActivity.kt)
+> For Download listener see implementation in [PdfViewerActivity.kt](/app/src/main/java/com/bhuvaneshw/pdfviewerdemo/PdfViewerActivity.kt)
 
 ### See Also
 1. [Implementations](README.md#3-see-also)
