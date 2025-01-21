@@ -161,12 +161,12 @@ PdfViewer(
 
 ## 3. See also
 > [!NOTE]
-> [PdfViewerActivity.kt](/app/src/main/java/com/acutecoder/pdfviewerdemo/PdfViewerActivity.kt) <br>
-> [ComposePdfViewerActivity.kt](/app/src/main/java/com/acutecoder/pdfviewerdemo/ComposePdfViewerActivity.kt)<br>
-> [PdfViewerContainer.kt](/ui/src/main/java/com/acutecoder/pdf/ui/PdfViewerContainer.kt)<br>
-> [PdfScrollBar.kt](/ui/src/main/java/com/acutecoder/pdf/ui/PdfScrollBar.kt)<br>
-> [PdfToolBar.kt](/ui/src/main/java/com/acutecoder/pdf/ui/PdfToolBar.kt)<br>
-> [ExtendedToolBar.kt](/app/src/main/java/com/acutecoder/pdfviewerdemo/ExtendedToolBar.kt)<br>
+> [PdfViewerActivity.kt](/app/src/main/java/com/bhuvaneshw/pdfviewerdemo/PdfViewerActivity.kt) <br>
+> [ComposePdfViewerActivity.kt](/app/src/main/java/com/bhuvaneshw/pdfviewerdemo/ComposePdfViewerActivity.kt)<br>
+> [PdfViewerContainer.kt](/ui/src/main/java/com/bhuvaneshw/pdf/ui/PdfViewerContainer.kt)<br>
+> [PdfScrollBar.kt](/ui/src/main/java/com/bhuvaneshw/pdf/ui/PdfScrollBar.kt)<br>
+> [PdfToolBar.kt](/ui/src/main/java/com/bhuvaneshw/pdf/ui/PdfToolBar.kt)<br>
+> [ExtendedToolBar.kt](/app/src/main/java/com/bhuvaneshw/pdfviewerdemo/ExtendedToolBar.kt)<br>
 
 ## 4. Public Members
 `isInitialized: Boolean`

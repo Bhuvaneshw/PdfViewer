@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.acutecoder.pdf.ui.PdfViewerContainer xmlns:android="http://schemas.android.com/apk/res/android"
+<com.bhuvaneshw.pdf.ui.PdfViewerContainer xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.acutecoder.pdfviewerdemo.ExtendedToolBar
+    <com.bhuvaneshw.pdfviewerdemo.ExtendedToolBar
         android:id="@+id/pdf_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,14 +15,14 @@
         app:popupBackgroundColor="@color/md_theme_background"
         app:showEditor="true" />
 
-    <com.acutecoder.pdf.PdfViewer
+    <com.bhuvaneshw.pdf.PdfViewer
         android:id="@+id/pdf_viewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/md_theme_surfaceContainer"
         app:containerBackgroundColor="@android:color/transparent" />
 
-    <com.acutecoder.pdf.ui.PdfScrollBar
+    <com.bhuvaneshw.pdf.ui.PdfScrollBar
         android:id="@+id/pdf_scroll_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,4 +45,4 @@
 
     </LinearLayout>
 
-</com.acutecoder.pdf.ui.PdfViewerContainer>
+</com.bhuvaneshw.pdf.ui.PdfViewerContainer>
