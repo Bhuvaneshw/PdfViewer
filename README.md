@@ -43,7 +43,7 @@ dependencies {
     implementation("com.github.bhuvaneshw.pdfviewer:$module:$version")
 }
 ```
-Replace <b>$module</b> with <b>core</b>, <b>ui</b>, <b>compose</b> and  <b>compose-ui</b>
+Replace <b>$module</b> with <b>core</b>, <b>ui</b>, <b>compose</b> or <b>compose-ui</b>
 Replace <b>$version</b> with latest version<br> 
 Latest Version: <br>
 [![](https://jitpack.io/v/bhuvaneshw/pdfviewer.svg)](https://jitpack.io/#bhuvaneshw/pdfviewer)
