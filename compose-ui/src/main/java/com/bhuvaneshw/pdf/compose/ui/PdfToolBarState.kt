@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdfviewer.compose.ui
+package com.bhuvaneshw.pdf.compose.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

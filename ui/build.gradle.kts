@@ -45,7 +45,7 @@ afterEvaluate {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
-                groupId = "com.bhuvaneshw.pdfviewer"
+                groupId = "com.bhuvaneshw.pdf"
                 artifactId = "ui"
             }
         }
