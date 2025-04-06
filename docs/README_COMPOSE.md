@@ -3,7 +3,7 @@
 
 A lightweight **Android PDF viewer library** powered by Mozilla's [PDF.js](https://github.com/mozilla/pdf.js), offering seamless PDF rendering and interactive features. Supports both Jetpack Compose and Xml.
 
-For setup see [Setup](README.md#1-setup)
+For setup see [Setup](../README.md#1-setup)
 <br>For XML examples see [XML Examples](README_XML.md)
 
 ## Compose Examples
@@ -336,5 +336,5 @@ fun PdfViewerOnCreateViewerCallback() {
 19. scrollSpeedLimit
 
 ### See Also
-1. [Implementations](README.md#3-see-also)
-2. [PdfViewer public members](README.md#4-public-members)
+1. [Implementations](../README.md#3-see-also)
+2. [PdfViewer public members](../README.md#4-public-members)
