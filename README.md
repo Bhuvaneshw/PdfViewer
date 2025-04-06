@@ -48,6 +48,8 @@ Replace <b>$version</b> with latest version<br>
 Latest Version: <br>
 [![](https://jitpack.io/v/bhuvaneshw/pdfviewer.svg)](https://jitpack.io/#bhuvaneshw/pdfviewer)
 
+> [!NOTE]  
+> **If you are upgrading to v1.1.0 see [Migration](docs/MIGRATION.md)**
 
 Example:
 
@@ -155,8 +157,8 @@ PdfViewer(
 > 13. PdfViewer.scrollSpeedLimit
 
 ### 2.3 More Examples
-1. For XML examples see [XML Examples](README_XML.md)
-2. For Jetpack Compose examples see [Jetpack Compose Examples](README_COMPOSE.md)
+1. For XML examples see [XML Examples](docs/README_XML.md)
+2. For Jetpack Compose examples see [Jetpack Compose Examples](docs/README_COMPOSE.md)
 
 ## 3. See also
 > [!NOTE]

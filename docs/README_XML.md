@@ -4,7 +4,7 @@
 A lightweight **Android PDF viewer library** powered by Mozilla's [PDF.js](https://github.com/mozilla/pdf.js), offering seamless PDF rendering and interactive features. Supports both Jetpack Compose and Xml.
 
 ## Setup
-For setup see [Setup](README.md#1-setup)
+For setup see [Setup](../README.md#1-setup)
 <br>For Jetpack Compose examples see [Jetpack Compose Examples](README_COMPOSE.md)
 
 ## Examples
@@ -268,5 +268,5 @@ pdfViewer.addListener(object: PdfListener {
 > For Download listener see implementation in [PdfViewerActivity.kt](/app/src/main/java/com/bhuvaneshw/pdfviewerdemo/PdfViewerActivity.kt)
 
 ### See Also
-1. [Implementations](README.md#3-see-also)
-2. [PdfViewer public members](README.md#4-public-members)
+1. [Implementations](../README.md#3-see-also)
+2. [PdfViewer public members](../README.md#4-public-members)
