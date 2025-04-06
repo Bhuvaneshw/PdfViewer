@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdfviewer.compose.ui
+package com.bhuvaneshw.pdf.compose.ui
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -83,8 +83,8 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
-import com.bhuvaneshw.pdfviewer.compose.MatchState
-import com.bhuvaneshw.pdfviewer.compose.PdfState
+import com.bhuvaneshw.pdf.compose.MatchState
+import com.bhuvaneshw.pdf.compose.PdfState
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 

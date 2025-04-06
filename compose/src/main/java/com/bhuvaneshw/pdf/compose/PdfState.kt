@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdfviewer.compose
+package com.bhuvaneshw.pdf.compose
 
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange

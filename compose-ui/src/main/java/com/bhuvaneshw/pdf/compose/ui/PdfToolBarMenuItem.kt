@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdfviewer.compose.ui
+package com.bhuvaneshw.pdf.compose.ui
 
 enum class PdfToolBarMenuItem(internal val displayName: String) {
     DOWNLOAD("Download"),

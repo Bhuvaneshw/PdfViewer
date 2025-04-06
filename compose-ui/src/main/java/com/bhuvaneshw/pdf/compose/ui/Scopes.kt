@@ -1,7 +1,7 @@
-package com.bhuvaneshw.pdfviewer.compose.ui
+package com.bhuvaneshw.pdf.compose.ui
 
 import androidx.compose.foundation.layout.BoxScope
-import com.bhuvaneshw.pdfviewer.compose.PdfState
+import com.bhuvaneshw.pdf.compose.PdfState
 
 open class PdfContainerScope internal constructor(
     val pdfState: PdfState

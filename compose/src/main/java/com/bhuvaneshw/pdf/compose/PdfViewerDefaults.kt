@@ -1,4 +1,4 @@
-package com.bhuvaneshw.pdfviewer.compose
+package com.bhuvaneshw.pdf.compose
 
 import androidx.compose.ui.graphics.Color
 

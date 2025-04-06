@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.bhuvaneshw.pdfviewer.compose"
+    namespace = "com.bhuvaneshw.pdf.compose"
     compileSdk = 35
 
     defaultConfig {
@@ -50,7 +50,7 @@ afterEvaluate {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
-                groupId = "com.bhuvaneshw"
+                groupId = "com.bhuvaneshw.pdf"
                 artifactId = "compose"
             }
         }

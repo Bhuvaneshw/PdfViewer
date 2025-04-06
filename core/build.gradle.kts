@@ -41,7 +41,7 @@ afterEvaluate {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
-                groupId = "com.bhuvaneshw"
+                groupId = "com.bhuvaneshw.pdf"
                 artifactId = "core"
             }
         }
