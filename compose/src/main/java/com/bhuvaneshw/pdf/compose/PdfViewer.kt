@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
-import com.bhuvaneshw.pdf.PdfUnstableApi
 import com.bhuvaneshw.pdf.PdfViewer
 
 @Composable
@@ -37,7 +36,6 @@ fun PdfViewer(
                     pdfState.setPdfViewerTo(it)
                     onCreateViewer?.invoke(it)
                     it.onReady {
-                        @OptIn(PdfUnstableApi::class)
                         it.editor.highlightColor = pdfState.defaultHighlightColor.toArgb()
                         onReady.onReady(this) { load(pdfState.source) }
                     }

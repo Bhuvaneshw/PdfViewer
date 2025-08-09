@@ -54,7 +54,6 @@ class PdfViewerActivity : AppCompatActivity() {
             return
         }
 
-        @OptIn(PdfUnstableApi::class)
         view.pdfViewer.onReady {
 //            minPageScale = PdfViewer.Zoom.PAGE_WIDTH.floatValue
 //            maxPageScale = 5f

@@ -36,7 +36,6 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
             pdfViewer.webView callDirectly if (value) "openEditorStamp"() else "closeEditorStamp"()
         }
 
-    @PdfUnstableApi
     var highlightColor =
         pdfViewer.highlightEditorColors.firstOrNull()?.second
             ?: defaultHighlightEditorColors.first().second
