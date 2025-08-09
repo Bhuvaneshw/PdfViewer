@@ -604,7 +604,9 @@ class PdfViewer @JvmOverloads constructor(
             dispatchToListener = dispatchToListener,
             callListener = { onEditorHighlightColorChange(highlightColor) }
         ) {
-            webView callDirectly "selectHighlightColor"(highlightColor.toJsHex().toJsString())
+            webView callDirectly "selectHighlightColor"(
+                highlightColor.toJsHex(includeAlpha = false).toJsString()
+            )
         }
     }
 

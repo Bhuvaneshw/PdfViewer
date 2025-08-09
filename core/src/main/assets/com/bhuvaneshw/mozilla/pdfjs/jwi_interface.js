@@ -7,7 +7,7 @@ try {
 
     window.JWI = {
         getHighlightEditorColorsString() {
-            return "yellow=#ffff98,green=#53FFBC,blue=#80EBFF,pink=#FFCBE6,red=#FF4F5F";
+            return "yellow=#FFFF98,green=#53FFBC,blue=#80EBFF,pink=#FFCBE6,red=#FF4F5F";
         },
         onLoadFailed() {},
         onLoadSuccess() {},

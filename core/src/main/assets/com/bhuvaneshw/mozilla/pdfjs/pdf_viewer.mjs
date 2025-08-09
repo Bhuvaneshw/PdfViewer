@@ -1466,7 +1466,7 @@ class BasePreferences {
     enableSignatureEditor: false,
     enableUpdatedAddImage: false,
     externalLinkTarget: 0,
-    highlightEditorColors: "yellow=#FFFF98,green=#53FFBC,blue=#80EBFF,pink=#FFCBE6,red=#FF4F5F",
+    highlightEditorColors: JWI.getHighlightEditorColorsString().toLowerCase(),
     historyUpdateUrl: false,
     ignoreDestinationZoom: false,
     forcePageColors: false,

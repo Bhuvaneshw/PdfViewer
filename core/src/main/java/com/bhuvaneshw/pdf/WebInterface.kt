@@ -123,7 +123,7 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
 
     @JavascriptInterface
     fun getHighlightEditorColorsString() = pdfViewer.highlightEditorColors
-        .joinToString(separator = ",") { "${it.first}=${it.second.toJsHex()}" }
+        .joinToString(separator = ",") { "${it.first}=${it.second.toJsHex(includeAlpha = false)}" }
 
     @JavascriptInterface
     fun onPrintProcessStart() = post {
