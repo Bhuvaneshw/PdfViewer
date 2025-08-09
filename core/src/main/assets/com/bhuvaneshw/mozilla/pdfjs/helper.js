@@ -356,6 +356,7 @@ function printFile() {
 
 function cancelPrinting() {
     $("#printCancel").click();
+    $("#printContainer").textContent = "";
 }
 
 function startPresentationMode() {
