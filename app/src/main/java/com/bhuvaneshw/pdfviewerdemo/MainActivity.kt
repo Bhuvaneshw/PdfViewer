@@ -7,11 +7,13 @@ import android.webkit.MimeTypeMap
 import android.webkit.URLUtil
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bhuvaneshw.pdf.js.WebViewSupport
 import com.bhuvaneshw.pdfviewerdemo.databinding.ActivityMainBinding
 import com.bhuvaneshw.pdfviewerdemo.databinding.UrlDialogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -98,6 +100,8 @@ class MainActivity : AppCompatActivity() {
         view.librariesUsed.setOnClickListener {
             startActivity(Intent(this, UsedLibrariesActivity::class.java))
         }
+
+        checkWebView()
     }
 
     private fun guessFileNameFromUrl(url: String): String? = URLUtil.guessFileName(
@@ -155,5 +159,42 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         }
+    }
+
+    private fun checkWebView() {
+        val checkResult = WebViewSupport.check(this)
+
+        when (checkResult) {
+            WebViewSupport.CheckResult.REQUIRES_UPDATE -> showStrictUpdateDialog()
+            WebViewSupport.CheckResult.UPDATE_RECOMMENDED -> showRecommendedUpdateDialog()
+            WebViewSupport.CheckResult.NO_WEBVIEW_FOUND -> showInstallDialog()
+            WebViewSupport.CheckResult.NO_ACTION_REQUIRED -> {}
+        }
+    }
+
+    private fun showRecommendedUpdateDialog() {
+        showDialog("Consider updating WebView/Chrome to v115", true)
+    }
+
+    private fun showStrictUpdateDialog() {
+        showDialog("Please update WebView/Chrome to minimum v110! Recommended v115", false)
+    }
+
+    private fun showInstallDialog() {
+        showDialog("Please install WebView/Chrome!", false)
+    }
+
+    private fun showDialog(message: String, cancellable: Boolean) {
+        AlertDialog.Builder(this)
+            .setTitle("WebView Support")
+            .setMessage(message)
+            .setPositiveButton(if (cancellable) "Later" else "Exit") { _, _ ->
+                if (!cancellable) finishAffinity()
+            }
+            .create()
+            .run {
+                setCancelable(cancellable)
+                show()
+            }
     }
 }

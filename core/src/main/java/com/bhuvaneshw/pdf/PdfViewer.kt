@@ -7,6 +7,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -496,6 +497,11 @@ class PdfViewer @JvmOverloads constructor(
             ?.createSharableUri(context, authority, currentSource ?: return null)
     }
 
+    override fun setLayerType(layerType: Int, paint: Paint?) {
+        super.setLayerType(layerType, paint)
+        webView.setLayerType(layerType, paint)
+    }
+
     internal fun loadPage() {
         webView.loadUrl(PDF_VIEWER_URL)
     }
@@ -598,7 +604,7 @@ class PdfViewer @JvmOverloads constructor(
             dispatchToListener = dispatchToListener,
             callListener = { onEditorHighlightColorChange(highlightColor) }
         ) {
-            webView callDirectly "selectHighlighterColor"(highlightColor.toJsHex().toJsString())
+            webView callDirectly "selectHighlightColor"(highlightColor.toJsHex().toJsString())
         }
     }
 

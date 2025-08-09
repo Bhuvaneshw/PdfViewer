@@ -67,7 +67,7 @@ fun PdfContainerBoxScope.PdfScrollBar(
     }
 
     LaunchedEffect(pdfState.loadingState.isInitialized) {
-        if (pdfState.loadingState.isInitialized) {
+        if (pdfState.loadingState.isInitialized && pdfState.pdfViewer?.ui?.viewerScrollbar == true) {
             pdfState.pdfViewer?.ui?.viewerScrollbar = false
         }
     }

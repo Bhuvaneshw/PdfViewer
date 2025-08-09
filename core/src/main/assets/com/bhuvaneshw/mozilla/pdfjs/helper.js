@@ -1037,7 +1037,7 @@ function setInkOpacity(opacity) {
     opacityInput.dispatchEvent(new Event("change"));
 }
 
-function selectHighlighterColor(color) {
+function selectHighlightColor(color) {
     try {
         $(`[data-color="${color.toLowerCase()}"]`).click();
     } catch (e) {
