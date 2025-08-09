@@ -52,6 +52,8 @@ fun PdfViewerContainer(
     pdfToolBar: (@Composable PdfContainerScope.() -> Unit)? = null,
     pdfScrollBar: (@Composable PdfContainerBoxScope.(parentSize: IntSize) -> Unit)? = null,
     loadingIndicator: (@Composable PdfContainerBoxScope.() -> Unit)? = null,
+    passwordDialogEnabled: Boolean = true,
+    printDialogEnabled: Boolean = true,
 ) {
     var parentSize by remember { mutableStateOf(IntSize(1, 1)) }
 
@@ -76,9 +78,9 @@ fun PdfViewerContainer(
         }
     }
 
-    if (pdfState.passwordRequired)
+    if (passwordDialogEnabled && pdfState.passwordRequired)
         PasswordDialog(pdfState)
-    if (pdfState.printState.isLoading)
+    if (printDialogEnabled && pdfState.printState.isLoading)
         PrintDialog(pdfState)
 }
 

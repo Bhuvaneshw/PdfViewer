@@ -32,6 +32,8 @@ class PdfViewerContainer : RelativeLayout {
     var pdfToolBar: PdfToolBar? = null; private set
     var pdfScrollBar: PdfScrollBar? = null; private set
     var alertDialogBuilder: () -> AlertDialog.Builder = { AlertDialog.Builder(context) }
+    var passwordDialogEnabled: Boolean = true
+    var printDialogEnabled: Boolean = true
 
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
         when (child) {
@@ -118,6 +120,7 @@ class PdfViewerContainer : RelativeLayout {
                 dialog = null
                 return
             }
+            if (!passwordDialogEnabled) return
 
             pdfViewer?.let { pdfViewer ->
                 pdfViewer.ui.passwordDialog.getLabelText { title ->
@@ -171,20 +174,22 @@ class PdfViewerContainer : RelativeLayout {
         var progressText: TextView? = null
 
         override fun onPrintProcessStart() {
-            pdfViewer?.let { pdfViewer ->
-                @SuppressLint("InflateParams")
-                val root = LayoutInflater.from(context).inflate(R.layout.pdf_print_dialog, null)
-                progressBar = root.findViewById(R.id.progress)
-                progressText = root.findViewById(R.id.progress_text)
+            if (printDialogEnabled) {
+                pdfViewer?.let { pdfViewer ->
+                    @SuppressLint("InflateParams")
+                    val root = LayoutInflater.from(context).inflate(R.layout.pdf_print_dialog, null)
+                    progressBar = root.findViewById(R.id.progress)
+                    progressText = root.findViewById(R.id.progress_text)
 
-                dialog = alertDialogBuilder()
-                    .setTitle("Preparing to print…")
-                    .setView(root)
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        pdfViewer.ui.printDialog.cancel()
-                        dialog.dismiss()
-                    }
-                    .show()
+                    dialog = alertDialogBuilder()
+                        .setTitle("Preparing to print…")
+                        .setView(root)
+                        .setNegativeButton("Cancel") { dialog, _ ->
+                            pdfViewer.ui.printDialog.cancel()
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
             }
         }
 
