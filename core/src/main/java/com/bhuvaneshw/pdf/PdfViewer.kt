@@ -860,8 +860,8 @@ class PdfViewer @JvmOverloads constructor(
          * Flings based on the parameter - canFling
          */
         data class Fixed(
-            @FloatRange(from = 0.0, fromInclusive = false) val limit: Float = 100f,
-            @FloatRange(from = 0.0, fromInclusive = false) val flingThreshold: Float = 0.5f,
+            @param:FloatRange(from = 0.0, fromInclusive = false) val limit: Float = 100f,
+            @param:FloatRange(from = 0.0, fromInclusive = false) val flingThreshold: Float = 0.5f,
             val canFling: Boolean = false,
         ) : ScrollSpeedLimit()
 
@@ -871,8 +871,8 @@ class PdfViewer @JvmOverloads constructor(
          * Flings only when the page size is less than its container's size.
          */
         data class AdaptiveFling(
-            @FloatRange(from = 0.0, fromInclusive = false) val limit: Float = 100f,
-            @FloatRange(from = 0.0, fromInclusive = false) val flingThreshold: Float = 0.5f,
+            @param:FloatRange(from = 0.0, fromInclusive = false) val limit: Float = 100f,
+            @param:FloatRange(from = 0.0, fromInclusive = false) val flingThreshold: Float = 0.5f,
         ) : ScrollSpeedLimit()
     }
 
