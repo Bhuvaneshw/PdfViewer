@@ -12,64 +12,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.core.net.toUri
 import com.bhuvaneshw.pdf.PdfDocumentProperties
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfUnstableApi
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.WebViewError
-import java.io.File
-
-@Composable
-fun rememberAssetPdfState(
-    assetPath: String,
-    highlightEditorColors: List<Pair<String, Color>> = PdfViewerDefaults.highlightEditorColors,
-    defaultHighlightColor: Color = highlightEditorColors.firstOrNull()?.second
-        ?: PdfViewerDefaults.highlightEditorColors[0].second,
-): PdfState = rememberPdfState(
-    source = "asset://$assetPath",
-    highlightEditorColors = highlightEditorColors,
-    defaultHighlightColor = defaultHighlightColor
-)
-
-@Composable
-fun rememberFilePdfState(
-    file: File,
-    highlightEditorColors: List<Pair<String, Color>> = PdfViewerDefaults.highlightEditorColors,
-    defaultHighlightColor: Color = highlightEditorColors.firstOrNull()?.second
-        ?: PdfViewerDefaults.highlightEditorColors[0].second,
-): PdfState = rememberFilePdfState(
-    filePath = file.absolutePath,
-    highlightEditorColors = highlightEditorColors,
-    defaultHighlightColor = defaultHighlightColor
-)
-
-@Composable
-fun rememberFilePdfState(
-    filePath: String,
-    highlightEditorColors: List<Pair<String, Color>> = PdfViewerDefaults.highlightEditorColors,
-    defaultHighlightColor: Color = highlightEditorColors.firstOrNull()?.second
-        ?: PdfViewerDefaults.highlightEditorColors[0].second,
-): PdfState = rememberPdfState(
-    source = "file://$filePath",
-    highlightEditorColors = highlightEditorColors,
-    defaultHighlightColor = defaultHighlightColor
-)
-
-@Composable
-fun rememberPdfState(
-    uri: Uri,
-    highlightEditorColors: List<Pair<String, Color>> = PdfViewerDefaults.highlightEditorColors,
-    defaultHighlightColor: Color = highlightEditorColors.firstOrNull()?.second
-        ?: PdfViewerDefaults.highlightEditorColors[0].second,
-): PdfState = rememberPdfState(
-    source = uri.toString(),
-    highlightEditorColors = highlightEditorColors,
-    defaultHighlightColor = defaultHighlightColor
-)
 
 @Composable
 fun rememberPdfState(
     source: String,
+    highlightEditorColors: List<Pair<String, Color>> = PdfViewerDefaults.highlightEditorColors,
+    defaultHighlightColor: Color = highlightEditorColors.firstOrNull()?.second
+        ?: PdfViewerDefaults.highlightEditorColors[0].second,
+): PdfState = rememberPdfState(
+    source = PdfSource.Plain(source),
+    highlightEditorColors = highlightEditorColors,
+    defaultHighlightColor = defaultHighlightColor,
+)
+
+@Composable
+fun rememberPdfState(
+    source: PdfSource,
     highlightEditorColors: List<Pair<String, Color>> = PdfViewerDefaults.highlightEditorColors,
     defaultHighlightColor: Color = highlightEditorColors.firstOrNull()?.second
         ?: PdfViewerDefaults.highlightEditorColors[0].second,
@@ -82,7 +46,7 @@ fun rememberPdfState(
 }
 
 class PdfState(
-    source: String,
+    source: PdfSource,
     val highlightEditorColors: List<Pair<String, Color>> = PdfViewerDefaults.highlightEditorColors,
     val defaultHighlightColor: Color = highlightEditorColors.firstOrNull()?.second
         ?: PdfViewerDefaults.highlightEditorColors[0].second,
@@ -348,6 +312,27 @@ class PdfState(
         override fun onPrintCancelled() {
             this@PdfState.printState = PdfPrintState.Idle
         }
+    }
+}
+
+sealed class PdfSource {
+
+    data class Asset(val assetPath: String) : PdfSource()
+
+    data class ContentUri(val contentUri: Uri) : PdfSource() {
+        constructor(contentUri: String) : this(contentUri.toUri())
+    }
+
+    data class File(val file: java.io.File) : PdfSource() {
+        constructor(filePath: String) : this(java.io.File(filePath))
+    }
+
+    data class Plain(val source: String) : PdfSource() {
+        constructor(source: Uri) : this(source.toString())
+    }
+
+    data class Url(val url: String) : PdfSource() {
+        constructor(url: Uri) : this(url.toString())
     }
 }
 

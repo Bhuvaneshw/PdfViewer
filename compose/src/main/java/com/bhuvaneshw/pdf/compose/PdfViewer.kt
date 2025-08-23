@@ -86,3 +86,13 @@ data class CustomOnReadyCallback(
         callback(pdfViewer, loadSource)
     }
 }
+
+private fun PdfViewer.load(source: PdfSource) {
+    when(source) {
+        is PdfSource.Asset -> loadFromAsset(source.assetPath)
+        is PdfSource.ContentUri -> loadFromContentUri(source.contentUri)
+        is PdfSource.File -> loadFromFile(source.file)
+        is PdfSource.Plain -> load(source.source)
+        is PdfSource.Url -> loadFromUrl(source.url)
+    }
+}

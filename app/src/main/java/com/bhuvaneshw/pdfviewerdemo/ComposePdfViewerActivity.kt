@@ -115,7 +115,7 @@ class ComposePdfViewerActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(innerPadding)) {
                         MainScreen(
                             title = fileName,
-                            url = filePath,
+                            source = filePath,
                             pdfSettingsManager = pdfSettingsManager,
                             setPdfViewer = { pdfViewer = it },
                             downloadPdfListener = downloadPdfListener,
@@ -142,7 +142,7 @@ class ComposePdfViewerActivity : ComponentActivity() {
     private fun MainScreenPreview() {
         MainScreen(
             title = "Preview",
-            url = "",
+            source = "",
             pdfSettingsManager = null,
             setPdfViewer = {},
             downloadPdfListener = downloadPdfListener,
@@ -187,13 +187,13 @@ class ComposePdfViewerActivity : ComponentActivity() {
 @Composable
 private fun Activity.MainScreen(
     title: String,
-    url: String,
+    source: String,
     pdfSettingsManager: PdfSettingsManager?,
     setPdfViewer: (PdfViewer?) -> Unit,
     downloadPdfListener: ComposePdfViewerActivity.DownloadPdfListener,
     imagePickerListener: ImagePickerListener,
 ) {
-    val pdfState = rememberPdfState(source = url)
+    val pdfState = rememberPdfState(source = source)
     val toolBarState = rememberToolBarState()
     var fullscreen by remember { mutableStateOf(false) }
 
