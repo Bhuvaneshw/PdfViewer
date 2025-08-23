@@ -353,7 +353,7 @@ class PdfState(
 
 sealed interface PdfLoadingState {
     data object Initializing : PdfLoadingState
-    data class Loading(@FloatRange(0.0, 1.0) val progress: Float) : PdfLoadingState
+    data class Loading(@param:FloatRange(0.0, 1.0) val progress: Float) : PdfLoadingState
     data class Finished(val pagesCount: Int) : PdfLoadingState
     data class Error(val errorMessage: String) : PdfLoadingState
 
@@ -380,7 +380,7 @@ sealed class MatchState(val current: Int = 0, val total: Int = 0) {
 
 sealed interface PdfPrintState {
     data object Idle : PdfPrintState
-    data class Loading(@FloatRange(0.0, 1.0) val progress: Float) : PdfPrintState
+    data class Loading(@param:FloatRange(0.0, 1.0) val progress: Float) : PdfPrintState
 
     val isLoading: Boolean get() = this is Loading
 }

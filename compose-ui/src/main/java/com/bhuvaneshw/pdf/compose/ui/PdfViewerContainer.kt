@@ -72,9 +72,7 @@ fun PdfViewerContainer(
                 }
             }
 
-            if (pdfState.loadingState.isLoading) loadingIndicator?.invoke(
-                PdfContainerBoxScope(pdfState, this)
-            )
+            loadingIndicator?.invoke(PdfContainerBoxScope(pdfState, this))
         }
     }
 

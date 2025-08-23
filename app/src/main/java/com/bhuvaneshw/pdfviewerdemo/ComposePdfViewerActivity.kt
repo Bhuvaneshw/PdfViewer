@@ -316,19 +316,25 @@ private fun Activity.MainScreen(
             )
         },
         loadingIndicator = {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            AnimatedVisibility(
+                visible = pdfState.loadingState.isLoading,
+                enter = fadeIn(),
+                exit = fadeOut()
             ) {
-                when (val loadingState = pdfState.loadingState) {
-                    is PdfLoadingState.Initializing -> CircularProgressIndicator()
-                    is PdfLoadingState.Loading -> CircularProgressIndicator(progress = { loadingState.progress })
-                    else -> {}
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    when (val loadingState = pdfState.loadingState) {
+                        is PdfLoadingState.Initializing -> CircularProgressIndicator()
+                        is PdfLoadingState.Loading -> CircularProgressIndicator(progress = { loadingState.progress })
+                        else -> {}
+                    }
+                    Text(text = "Loading...")
                 }
-                Text(text = "Loading...")
             }
         }
     )
