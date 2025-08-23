@@ -33,8 +33,12 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
-    fun onLoadFailed(error: String) = post {
-        pdfViewer.listeners.forEach { it.onPageLoadFailed(error) }
+    fun onLoadFailed(message: String, type: String = "") {
+        onLoadFailed(exceptionFrom(message, type))
+    }
+
+    fun onLoadFailed(exception: Exception) = post {
+        pdfViewer.listeners.forEach { it.onPageLoadFailed(exception) }
     }
 
     @JavascriptInterface

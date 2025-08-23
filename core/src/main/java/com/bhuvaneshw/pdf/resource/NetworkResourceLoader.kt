@@ -9,7 +9,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 internal class NetworkResourceLoader(
-    onError: (String) -> Unit,
+    onError: (Exception) -> Unit,
 ) : ResourceLoader {
 
     companion object {
@@ -36,7 +36,7 @@ internal class NetworkResourceLoader(
 }
 
 private class NetworkUriPathHandler(
-    private val onError: (String) -> Unit,
+    private val onError: (Exception) -> Unit,
 ) : WebViewAssetLoader.PathHandler {
 
     @SuppressLint("UseKtx")
@@ -52,7 +52,7 @@ private class NetworkUriPathHandler(
 
             WebResourceResponse(mimeType, "UTF-8", inputStream)
         } catch (e: Exception) {
-            onError(e.message ?: "$e")
+            onError(e)
             null
         }
     }

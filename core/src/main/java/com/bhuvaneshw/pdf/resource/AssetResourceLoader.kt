@@ -5,10 +5,11 @@ import android.net.Uri
 import android.webkit.WebResourceResponse
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewAssetLoader.PathHandler
+import com.bhuvaneshw.pdf.PdfException
 
 internal class AssetResourceLoader(
     context: Context,
-    onError: (String) -> Unit,
+    onError: (Exception) -> Unit,
 ) : ResourceLoader {
 
     companion object {
@@ -40,7 +41,7 @@ internal class AssetResourceLoader(
 
 internal class AssetsPathHandler(
     private val context: Context,
-    private val onError: (String) -> Unit,
+    private val onError: (Exception) -> Unit,
     private val actualAssetLoader: PathHandler = WebViewAssetLoader.AssetsPathHandler(context)
 ) : PathHandler by actualAssetLoader {
 
@@ -50,12 +51,12 @@ internal class AssetsPathHandler(
             when ("$error") {
                 "java.io.FileNotFoundException: com/bhuvaneshw/mozilla/web/wasm/openjpeg.wasm",
                 "java.io.FileNotFoundException: com/bhuvaneshw/mozilla/web/wasm/openjpeg_nowasm_fallback.js"
-                    -> onError("JPEG2000 not found. Please include jp2 module!")
+                    -> onError(PdfException("JPEG2000 not found. Please include jp2 module!"))
 
                 "java.io.FileNotFoundException: com/bhuvaneshw/mozilla/web/wasm/qcms_bg.wasm"
-                    -> onError("Color profile not found. Please include icc module!")
+                    -> onError(PdfException("Color profile not found. Please include icc module!"))
 
-                else -> onError("$error")
+                else -> onError(error)
             }
             return null
         }

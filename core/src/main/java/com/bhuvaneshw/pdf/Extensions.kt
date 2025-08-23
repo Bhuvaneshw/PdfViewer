@@ -39,7 +39,7 @@ class ScrollSpeedLimitScope internal constructor(internal var onEnabled: (() -> 
 fun PdfViewer.addListener(
     onPageLoadStart: (() -> Unit)? = null,
     onPageLoadSuccess: ((pagesCount: Int) -> Unit)? = null,
-    onPageLoadFailed: ((errorMessage: String) -> Unit)? = null,
+    onPageLoadFailed: ((exception: Exception) -> Unit)? = null,
     onReceivedError: ((error: WebViewError) -> Unit)? = null,
     onProgressChange: ((progress: Float) -> Unit)? = null,
     onPageChange: ((pageNumber: Int) -> Unit)? = null,
@@ -88,8 +88,8 @@ fun PdfViewer.addListener(
             onPageLoadSuccess?.invoke(pagesCount)
         }
 
-        override fun onPageLoadFailed(errorMessage: String) {
-            onPageLoadFailed?.invoke(errorMessage)
+        override fun onPageLoadFailed(exception: Exception) {
+            onPageLoadFailed?.invoke(exception)
         }
 
         override fun onReceivedError(error: WebViewError) {

@@ -200,7 +200,7 @@ private fun Activity.MainScreen(
     LaunchedEffect(pdfState.loadingState) {
         pdfState.loadingState.let {
             if (it is PdfLoadingState.Error) {
-                toast(it.errorMessage)
+                toast(it.formatToString())
                 finish()
             }
         }
@@ -528,7 +528,7 @@ private fun Activity.MainScreenWithScrollModeSupport() {
     LaunchedEffect(pdfState.loadingState) {
         pdfState.loadingState.let {
             if (it is PdfLoadingState.Error) {
-                toast(it.errorMessage)
+                toast(it.formatToString())
                 finish()
             }
         }

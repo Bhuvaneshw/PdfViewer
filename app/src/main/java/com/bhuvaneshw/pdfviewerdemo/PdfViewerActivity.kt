@@ -97,7 +97,7 @@ class PdfViewerActivity : AppCompatActivity() {
             highlightEditorColors = listOf("blue" to Color.BLUE, "black" to Color.BLACK)
             addListener(
                 onPageLoadFailed = {
-                    toast(it)
+                    toast(it.formatToString())
                     finish()
                 },
                 onLinkClick = { link ->

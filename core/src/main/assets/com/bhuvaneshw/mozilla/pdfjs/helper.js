@@ -2,7 +2,8 @@ function openUrl(args) {
     PDFViewerApplication.open(args)
         .then(() => sendDocumentProperties())
         .catch((e) => {
-//            JWI.onLoadFailed(e.message)
+            if (e.message !== 'Failed to fetch') // Covered by native resource loaders
+                JWI.onLoadFailed(e.message, e.name);
         });
 
     let callback = (event) => {

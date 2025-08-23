@@ -10,7 +10,7 @@ import androidx.webkit.WebViewAssetLoader
 import java.io.File
 
 internal class FileResourceLoader(
-    onError: (String) -> Unit,
+    onError: (Exception) -> Unit,
 ) : ResourceLoader {
 
     companion object {
@@ -44,7 +44,7 @@ internal class FileResourceLoader(
 }
 
 private class FileUriPathHandler(
-    private val onError: (String) -> Unit,
+    private val onError: (Exception) -> Unit,
 ) : WebViewAssetLoader.PathHandler {
 
     @SuppressLint("UseKtx")
@@ -56,7 +56,7 @@ private class FileUriPathHandler(
             val inputStream = file.inputStream()
             WebResourceResponse(mimeType, "UTF-8", inputStream)
         } catch (e: Exception) {
-            onError(e.message ?: "$e")
+            onError(e)
             null
         }
     }

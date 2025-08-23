@@ -13,6 +13,7 @@ import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.bhuvaneshw.pdf.compose.PdfLoadingState
 
 fun Activity.getDataFromIntent(): Pair<String, String>? {
     val filePath: String
@@ -83,6 +84,14 @@ fun <T> Activity.setComponentEnabled(componentClass: Class<T>, enable: Boolean) 
         else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
         PackageManager.DONT_KILL_APP
     )
+}
+
+fun Exception.formatToString(): String {
+    return "${this::class.java.simpleName}: $message"
+}
+
+fun PdfLoadingState.Error.formatToString(): String {
+    return "${exception::class.java.simpleName}: $message"
 }
 
 fun Context.toast(msg: String) {

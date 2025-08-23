@@ -8,7 +8,7 @@ import androidx.webkit.WebViewAssetLoader
 
 internal class PdfViewerResourceLoader(
     context: Context,
-    onError: (String) -> Unit,
+    onError: (Exception) -> Unit,
 ) : ResourceLoader {
 
     companion object {

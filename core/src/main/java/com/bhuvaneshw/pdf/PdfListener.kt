@@ -12,7 +12,7 @@ interface PdfListener {
 
     fun onPageLoadStart() {}
     fun onPageLoadSuccess(pagesCount: Int) {}
-    fun onPageLoadFailed(errorMessage: String) {}
+    fun onPageLoadFailed(exception: Exception) {}
     fun onReceivedError(error: WebViewError) {}
     fun onProgressChange(@FloatRange(0.0, 1.0) progress: Float) {}
     fun onPageChange(pageNumber: Int) {}

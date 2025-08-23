@@ -197,8 +197,8 @@ class PdfState(
             this@PdfState.currentPage = 1
         }
 
-        override fun onPageLoadFailed(errorMessage: String) {
-            this@PdfState.loadingState = PdfLoadingState.Error(errorMessage)
+        override fun onPageLoadFailed(exception: Exception) {
+            this@PdfState.loadingState = PdfLoadingState.Error(exception)
         }
 
         override fun onReceivedError(error: WebViewError) {
@@ -355,7 +355,9 @@ sealed interface PdfLoadingState {
     data object Initializing : PdfLoadingState
     data class Loading(@param:FloatRange(0.0, 1.0) val progress: Float) : PdfLoadingState
     data class Finished(val pagesCount: Int) : PdfLoadingState
-    data class Error(val errorMessage: String) : PdfLoadingState
+    data class Error(val exception: Exception) : PdfLoadingState {
+        val message: String? get() = exception.message
+    }
 
     val isLoading: Boolean get() = this is Initializing || this is Loading
     val isInitialized: Boolean get() = this !is Initializing

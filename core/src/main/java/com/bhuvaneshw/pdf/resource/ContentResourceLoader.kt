@@ -8,7 +8,7 @@ import androidx.webkit.WebViewAssetLoader
 
 internal class ContentResourceLoader(
     context: Context,
-    onError: (String) -> Unit,
+    onError: (Exception) -> Unit,
 ) : ResourceLoader {
 
     companion object {
@@ -39,7 +39,7 @@ internal class ContentResourceLoader(
 
 private class ContentUriPathHandler(
     private val context: Context,
-    private val onError: (String) -> Unit,
+    private val onError: (Exception) -> Unit,
 ) : WebViewAssetLoader.PathHandler {
 
     @SuppressLint("UseKtx")
@@ -50,7 +50,7 @@ private class ContentUriPathHandler(
             val inputStream = context.contentResolver.openInputStream(uri)
             WebResourceResponse(mimeType, "UTF-8", inputStream)
         } catch (e: Exception) {
-            onError(e.message ?: "$e")
+            onError(e)
             null
         }
     }
