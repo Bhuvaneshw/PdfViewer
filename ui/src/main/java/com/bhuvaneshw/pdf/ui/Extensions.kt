@@ -122,3 +122,13 @@ internal fun Context.dpToPx(dp: Int): Int {
         TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics
     ).roundToInt()
 }
+
+internal inline fun Float.tryCoerceIn(min: Float, max: Float, block: (value: Float) -> Unit) {
+    val value = try {
+        this.coerceIn(min, max)
+    } catch (_: Exception) {
+        return
+    }
+
+    block(value)
+}

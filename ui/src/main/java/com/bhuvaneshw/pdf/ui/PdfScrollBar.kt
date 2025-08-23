@@ -13,12 +13,12 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.core.content.withStyledAttributes
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.roundToInt
-import androidx.core.content.withStyledAttributes
 
 class PdfScrollBar @JvmOverloads constructor(
     context: Context,
@@ -75,7 +75,8 @@ class PdfScrollBar @JvmOverloads constructor(
                     useVerticalScrollBarForHorizontalMode
                 )
                 setContentColor(contentColor, handleColor)
-                this@PdfScrollBar.useVerticalScrollBarForHorizontalMode = useVerticalScrollBarForHorizontalMode
+                this@PdfScrollBar.useVerticalScrollBarForHorizontalMode =
+                    useVerticalScrollBarForHorizontalMode
             }
         }
 
@@ -258,13 +259,15 @@ class PdfScrollBar @JvmOverloads constructor(
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    val x = (event.rawX + dX - width / 2)
-                        .coerceIn(0f, parentWidth.toFloat() - width)
-
-                    targetView.translationX = x
-                    if (interactiveScrolling)
-                        onScrollChange(x)
-                    else onUpdatePageInfoForNonInteractiveMode(x)
+                    (event.rawX + dX - width / 2).tryCoerceIn(
+                        min = 0f,
+                        max = parentWidth.toFloat() - width
+                    ) { x ->
+                        targetView.translationX = x
+                        if (interactiveScrolling)
+                            onScrollChange(x)
+                        else onUpdatePageInfoForNonInteractiveMode(x)
+                    }
                 }
 
                 else -> {
@@ -300,16 +303,15 @@ class PdfScrollBar @JvmOverloads constructor(
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    val y =
-                        (event.rawY + dY - height / 2).coerceIn(
-                            topHeight.toFloat(),
-                            topHeight.toFloat() + parentHeight.toFloat() - height
-                        )
-
-                    targetView.translationY = y
-                    if (interactiveScrolling)
-                        onScrollChange(y)
-                    else onUpdatePageInfoForNonInteractiveMode(y)
+                    (event.rawY + dY - height / 2).tryCoerceIn(
+                        min = topHeight.toFloat(),
+                        max = topHeight.toFloat() + parentHeight.toFloat() - height
+                    ) { y ->
+                        targetView.translationY = y
+                        if (interactiveScrolling)
+                            onScrollChange(y)
+                        else onUpdatePageInfoForNonInteractiveMode(y)
+                    }
                 }
 
                 else -> {
