@@ -85,7 +85,7 @@ class PdfScrollBar @JvmOverloads constructor(
         else visibility = GONE
     }
 
-    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     fun setupWith(pdfViewer: PdfViewer, toolBar: PdfToolBar? = null, force: Boolean = false) {
         if (isSetupDone && !force) return
         isSetupDone = true
@@ -106,7 +106,7 @@ class PdfScrollBar @JvmOverloads constructor(
                     val ratio = x / (pdfViewer.width - width)
                     val pageNumber =
                         (ratio * (pdfViewer.pagesCount - 1)).checkNaN(1f).roundToInt() + 1
-                    pageNumberInfo.text = "$pageNumber/${pdfViewer.pagesCount}"
+                    updatePageNumber(pageNumber, pdfViewer.pagesCount)
                 }
             )
             val dragListenerY = DragListenerY(
@@ -125,7 +125,7 @@ class PdfScrollBar @JvmOverloads constructor(
                     val ratio = (y - (toolBar?.height ?: 0)) / (pdfViewer.height - height)
                     val pageNumber =
                         (ratio * (pdfViewer.pagesCount - 1)).checkNaN(1f).roundToInt() + 1
-                    pageNumberInfo.text = "$pageNumber/${pdfViewer.pagesCount}"
+                    updatePageNumber(pageNumber, pdfViewer.pagesCount)
                 }
             )
 
@@ -135,7 +135,7 @@ class PdfScrollBar @JvmOverloads constructor(
 
             pdfViewer.addListener(object : PdfListener {
                 override fun onPageChange(pageNumber: Int) {
-                    pageNumberInfo.text = "$pageNumber/${pdfViewer.pagesCount}"
+                    updatePageNumber(pageNumber, pdfViewer.pagesCount)
                 }
 
                 override fun onPageLoadStart() {
@@ -143,7 +143,7 @@ class PdfScrollBar @JvmOverloads constructor(
                 }
 
                 override fun onPageLoadSuccess(pagesCount: Int) {
-                    pageNumberInfo.text = "${pdfViewer.currentPage}/${pdfViewer.pagesCount}"
+                    updatePageNumber(pdfViewer.currentPage, pdfViewer.pagesCount)
                     pdfViewer.scrollTo(0)
                 }
 
@@ -156,7 +156,7 @@ class PdfScrollBar @JvmOverloads constructor(
                     if (visibility != VISIBLE) animateShow()
                     startTimer()
                     this@PdfScrollBar.isHorizontalScroll = isHorizontalScroll
-                    pageNumberInfo.text = "${pdfViewer.currentPage}/${pdfViewer.pagesCount}"
+                    updatePageNumber(pdfViewer.currentPage, pdfViewer.pagesCount)
 
                     if (!dragListenerY.isDragging && !dragListenerX.isDragging) {
                         val ratio = currentOffset.toFloat() / totalOffset.toFloat()
@@ -192,6 +192,12 @@ class PdfScrollBar @JvmOverloads constructor(
         rootHorizontal.findViewById<ImageView>(R.id.drag_handle).setTintModes(contentColor)
         rootVertical.findViewById<ImageView>(R.id.drag_handle).setBgTintModes(handleColor)
         rootHorizontal.findViewById<ImageView>(R.id.drag_handle).setBgTintModes(handleColor)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updatePageNumber(pageNumber: Int, count: Int) {
+        pageNumberInfo.text = "$pageNumber/$count"
+        root.contentDescription = resources.getString(R.string.pdf_scroll_bar, pageNumber, count)
     }
 
     private fun startTimer() {

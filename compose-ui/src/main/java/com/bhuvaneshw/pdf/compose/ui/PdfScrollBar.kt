@@ -10,18 +10,32 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -126,7 +140,10 @@ private fun HorizontalScrollBar(
     DisposableEffect(Unit) { onDispose { setIsDragging(false) } }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.semantics {
+            contentDescription = "Page ${pdfState.currentPage} of ${pdfState.pagesCount}"
+        }
     ) {
         val currentPage =
             if (interactiveScrolling) pdfState.currentPage
@@ -140,7 +157,8 @@ private fun HorizontalScrollBar(
             modifier = Modifier
                 .clip(CircleShape)
                 .background(handleColor)
-                .padding(horizontal = 8.dp, vertical = 1.dp),
+                .padding(horizontal = 8.dp, vertical = 1.dp)
+                .clearAndSetSemantics {},
             fontSize = 12.sp,
             color = contentColor
         )
@@ -198,7 +216,10 @@ private fun VerticalScrollBar(
     DisposableEffect(Unit) { onDispose { setIsDragging(false) } }
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.semantics {
+            contentDescription = "Page ${pdfState.currentPage} of ${pdfState.pagesCount}"
+        }
     ) {
         val currentPage =
             if (interactiveScrolling) pdfState.currentPage
@@ -212,7 +233,8 @@ private fun VerticalScrollBar(
             modifier = Modifier
                 .clip(CircleShape)
                 .background(handleColor)
-                .padding(horizontal = 8.dp, vertical = 1.dp),
+                .padding(horizontal = 8.dp, vertical = 1.dp)
+                .clearAndSetSemantics { },
             fontSize = 12.sp,
             color = contentColor
         )

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:contentDescription="@string/pdf_scroll_bar"
     android:gravity="center"
     android:orientation="vertical"
     tools:ignore="UseCompoundDrawables">
@@ -12,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/pdf_page_no_bg"
+        android:importantForAccessibility="no"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4dp" />
 

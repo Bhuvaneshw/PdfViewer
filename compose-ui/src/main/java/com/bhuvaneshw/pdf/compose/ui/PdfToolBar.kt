@@ -149,181 +149,189 @@ fun PdfToolBar(
             )
         }
 
-        if (showEditor) toolBarScope.ToolBarIcon(
-            icon = Icons.Default.Edit,
-            isEnabled = !pdfState.loadingState.isLoading,
-            onClick = { toolBarState.isEditorOpen = true },
-            tint = contentColor ?: Color.Unspecified,
-        )
-        toolBarScope.ToolBarIcon(
-            icon = Icons.Default.Search,
-            isEnabled = !pdfState.loadingState.isLoading,
-            onClick = { toolBarState.isFindBarOpen = true },
-            tint = contentColor ?: Color.Unspecified,
-        )
-        Box {
-            var showMoreOptions by remember { mutableStateOf(false) }
-
-            var showZoom by remember { mutableStateOf(false) }
-            var showGoToPage by remember { mutableStateOf(false) }
-            var showScrollMode by remember { mutableStateOf(false) }
-            var showPageSingleArrangement by remember { mutableStateOf(false) }
-            var showSplitMode by remember { mutableStateOf(false) }
-            var showAlignMode by remember { mutableStateOf(false) }
-            var showSnapPage by remember { mutableStateOf(false) }
-            var showDocumentProperties by remember { mutableStateOf(false) }
-            val onDismiss = { showMoreOptions = false }
+        if (!toolBarScope.toolBarState.isFindBarOpen && !toolBarState.isEditorOpen) {
+            if (showEditor) {
+                toolBarScope.ToolBarIcon(
+                    icon = Icons.Default.Edit,
+                    contentDescription = "Edit",
+                    isEnabled = !pdfState.loadingState.isLoading,
+                    onClick = { toolBarState.isEditorOpen = true },
+                    tint = contentColor ?: Color.Unspecified,
+                )
+            }
 
             toolBarScope.ToolBarIcon(
-                icon = Icons.Default.MoreVert,
+                icon = Icons.Default.Search,
+                contentDescription = "Search",
                 isEnabled = !pdfState.loadingState.isLoading,
-                onClick = { showMoreOptions = true },
+                onClick = { toolBarState.isFindBarOpen = true },
                 tint = contentColor ?: Color.Unspecified,
             )
+            Box {
+                var showMoreOptions by remember { mutableStateOf(false) }
 
-            DropdownMenu(
-                expanded = showMoreOptions,
-                onDismissRequest = onDismiss,
-                shape = RoundedCornerShape(12.dp),
-            ) {
-                dropDownMenu(onDismiss) { filtered ->
-                    filtered.forEach { filteredItem ->
-                        val pdfViewer = pdfState.pdfViewer ?: return@forEach
+                var showZoom by remember { mutableStateOf(false) }
+                var showGoToPage by remember { mutableStateOf(false) }
+                var showScrollMode by remember { mutableStateOf(false) }
+                var showPageSingleArrangement by remember { mutableStateOf(false) }
+                var showSplitMode by remember { mutableStateOf(false) }
+                var showAlignMode by remember { mutableStateOf(false) }
+                var showSnapPage by remember { mutableStateOf(false) }
+                var showDocumentProperties by remember { mutableStateOf(false) }
+                val onDismiss = { showMoreOptions = false }
 
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.SAVE,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                pdfViewer.downloadFile()
-                                onDismiss()
-                            }
-                        )
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.ZOOM,
-                            filteredItem = filteredItem,
-                            text = pdfViewer.currentPageScaleValue.formatZoom(pdfViewer.currentPageScale),
-                            onClick = {
-                                showZoom = true
-                                onDismiss()
-                            }
-                        )
+                toolBarScope.ToolBarIcon(
+                    icon = Icons.Default.MoreVert,
+                    contentDescription = "More",
+                    isEnabled = !pdfState.loadingState.isLoading,
+                    onClick = { showMoreOptions = true },
+                    tint = contentColor ?: Color.Unspecified,
+                )
 
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.GO_TO_PAGE,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                showGoToPage = true
-                                onDismiss()
-                            }
-                        )
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.ROTATE_CLOCK_WISE,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                pdfViewer.rotateClockWise()
-                                onDismiss()
-                            }
-                        )
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.ROTATE_ANTI_CLOCK_WISE,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                pdfViewer.rotateCounterClockWise()
-                                onDismiss()
-                            }
-                        )
+                DropdownMenu(
+                    expanded = showMoreOptions,
+                    onDismissRequest = onDismiss,
+                    shape = RoundedCornerShape(12.dp),
+                ) {
+                    dropDownMenu(onDismiss) { filtered ->
+                        filtered.forEach { filteredItem ->
+                            val pdfViewer = pdfState.pdfViewer ?: return@forEach
 
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.SCROLL_MODE,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                showScrollMode = true
-                                onDismiss()
-                            }
-                        )
-
-                        val showSingleArrangementMenu = remember {
-                            pdfState.scrollMode.let { it == PdfViewer.PageScrollMode.VERTICAL || it == PdfViewer.PageScrollMode.HORIZONTAL }
-                                    && pdfState.spreadMode == PageSpreadMode.NONE
-                        }
-                        if (showSingleArrangementMenu)
                             DropdownMenuItem(
-                                menuItem = PdfToolBarMenuItem.CUSTOM_PAGE_ARRANGEMENT,
+                                menuItem = PdfToolBarMenuItem.SAVE,
                                 filteredItem = filteredItem,
                                 onClick = {
-                                    showPageSingleArrangement = true
+                                    pdfViewer.downloadFile()
                                     onDismiss()
                                 }
                             )
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.SPREAD_MODE,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                showSplitMode = true
-                                onDismiss()
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.ZOOM,
+                                filteredItem = filteredItem,
+                                text = pdfViewer.currentPageScaleValue.formatZoom(pdfViewer.currentPageScale),
+                                onClick = {
+                                    showZoom = true
+                                    onDismiss()
+                                }
+                            )
+
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.GO_TO_PAGE,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    showGoToPage = true
+                                    onDismiss()
+                                }
+                            )
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.ROTATE_CLOCK_WISE,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    pdfViewer.rotateClockWise()
+                                    onDismiss()
+                                }
+                            )
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.ROTATE_ANTI_CLOCK_WISE,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    pdfViewer.rotateCounterClockWise()
+                                    onDismiss()
+                                }
+                            )
+
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.SCROLL_MODE,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    showScrollMode = true
+                                    onDismiss()
+                                }
+                            )
+
+                            val showSingleArrangementMenu = remember {
+                                pdfState.scrollMode.let { it == PdfViewer.PageScrollMode.VERTICAL || it == PdfViewer.PageScrollMode.HORIZONTAL }
+                                        && pdfState.spreadMode == PageSpreadMode.NONE
                             }
-                        )
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.ALIGN_MODE,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                showAlignMode = true
-                                onDismiss()
-                            }
-                        )
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.SNAP_PAGE,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                showSnapPage = true
-                                onDismiss()
-                            }
-                        )
-                        DropdownMenuItem(
-                            menuItem = PdfToolBarMenuItem.PROPERTIES,
-                            filteredItem = filteredItem,
-                            onClick = {
-                                showDocumentProperties = true
-                                onDismiss()
-                            }
-                        )
+                            if (showSingleArrangementMenu)
+                                DropdownMenuItem(
+                                    menuItem = PdfToolBarMenuItem.CUSTOM_PAGE_ARRANGEMENT,
+                                    filteredItem = filteredItem,
+                                    onClick = {
+                                        showPageSingleArrangement = true
+                                        onDismiss()
+                                    }
+                                )
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.SPREAD_MODE,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    showSplitMode = true
+                                    onDismiss()
+                                }
+                            )
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.ALIGN_MODE,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    showAlignMode = true
+                                    onDismiss()
+                                }
+                            )
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.SNAP_PAGE,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    showSnapPage = true
+                                    onDismiss()
+                                }
+                            )
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.PROPERTIES,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    showDocumentProperties = true
+                                    onDismiss()
+                                }
+                            )
+                        }
                     }
                 }
-            }
 
-            if (showZoom)
-                ZoomDialog(pdfState = pdfState, onDismiss = { showZoom = false })
-            if (showGoToPage)
-                GoToPageDialog(
-                    pdfState = pdfState,
-                    onDismiss = { showGoToPage = false })
-            if (showScrollMode)
-                ScrollModeDialog(
-                    pdfState = pdfState,
-                    onDismiss = { showScrollMode = false })
-            if (showPageSingleArrangement)
-                SinglePageArrangementDialog(
-                    pdfState = pdfState,
-                    onDismiss = { showPageSingleArrangement = false }
-                )
-            if (showSplitMode)
-                SplitModeDialog(
-                    pdfState = pdfState,
-                    onDismiss = { showSplitMode = false })
-            if (showAlignMode)
-                AlignModeDialog(
-                    pdfState = pdfState,
-                    onDismiss = { showAlignMode = false })
-            if (showSnapPage)
-                SnapPageDialog(
-                    pdfState = pdfState,
-                    onDismiss = { showSnapPage = false })
-            if (showDocumentProperties)
-                DocumentPropertiesDialog(
-                    pdfState = pdfState,
-                    fileName = fileName,
-                    onDismiss = { showDocumentProperties = false },
-                )
+                if (showZoom)
+                    ZoomDialog(pdfState = pdfState, onDismiss = { showZoom = false })
+                if (showGoToPage)
+                    GoToPageDialog(
+                        pdfState = pdfState,
+                        onDismiss = { showGoToPage = false })
+                if (showScrollMode)
+                    ScrollModeDialog(
+                        pdfState = pdfState,
+                        onDismiss = { showScrollMode = false })
+                if (showPageSingleArrangement)
+                    SinglePageArrangementDialog(
+                        pdfState = pdfState,
+                        onDismiss = { showPageSingleArrangement = false }
+                    )
+                if (showSplitMode)
+                    SplitModeDialog(
+                        pdfState = pdfState,
+                        onDismiss = { showSplitMode = false })
+                if (showAlignMode)
+                    AlignModeDialog(
+                        pdfState = pdfState,
+                        onDismiss = { showAlignMode = false })
+                if (showSnapPage)
+                    SnapPageDialog(
+                        pdfState = pdfState,
+                        onDismiss = { showSnapPage = false })
+                if (showDocumentProperties)
+                    DocumentPropertiesDialog(
+                        pdfState = pdfState,
+                        fileName = fileName,
+                        onDismiss = { showDocumentProperties = false },
+                    )
+            }
         }
     }
 }
@@ -391,17 +399,24 @@ private fun PdfToolBarScope.Editor(
             StampOptions(contentColor)
         }
 
-        Text(
-            text = "Edit",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .padding(8.dp)
-                .weight(1f),
-            color = contentColor,
-        )
-        MainIcons(contentColor)
+        if(toolBarState.isNothingOn()) {
+            Text(
+                text = "Edit",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(8.dp)
+                    .weight(1f),
+                color = contentColor,
+            )
+            MainIcons(contentColor)
+        }
     }
+}
+
+@Suppress("NOTHING_TO_INLINE")
+private inline fun PdfToolBarState.isNothingOn(): Boolean {
+    return !(isTextHighlighterOn || isEditorFreeTextOn|| isEditorInkOn || isEditorStampOn)
 }
 
 @Composable
@@ -425,6 +440,7 @@ private fun PdfToolBarScope.HighlightOptions(popupY: Int, contentColor: Color) {
         PopupSlider(
             icon = painterResource(R.drawable.baseline_thickness_24),
             text = "Thickness",
+            contentDescription = "Thickness",
             value = pdfState.editor.highlightThickness,
             onValueChange = { pdfState.pdfViewer?.editor?.highlightThickness = it },
             range = 8f..24f,
@@ -491,6 +507,7 @@ private fun PdfToolBarScope.FreeTextOptions(
         PopupSlider(
             icon = painterResource(R.drawable.baseline_text_fields_24),
             text = "Font Size",
+            contentDescription = "Font Size",
             value = pdfState.editor.freeFontSize,
             onValueChange = { pdfState.pdfViewer?.editor?.freeFontSize = it },
             range = 5f..100f,
@@ -537,6 +554,7 @@ private fun PdfToolBarScope.InkOptions(
         PopupSlider(
             icon = painterResource(R.drawable.baseline_thickness_24),
             text = "Thickness",
+            contentDescription = "Thickness",
             value = pdfState.editor.inkThickness,
             onValueChange = { pdfState.pdfViewer?.editor?.inkThickness = it },
             range = 1f..20f,
@@ -547,6 +565,7 @@ private fun PdfToolBarScope.InkOptions(
         PopupSlider(
             icon = painterResource(R.drawable.baseline_opacity_24),
             text = "Opacity",
+            contentDescription = "Opacity",
             value = pdfState.editor.inkOpacity,
             onValueChange = { pdfState.pdfViewer?.editor?.inkOpacity = it },
             range = 1f..100f,
@@ -592,6 +611,7 @@ private fun PdfToolBarScope.StampOptions(contentColor: Color) {
 private fun PdfToolBarScope.MainIcons(contentColor: Color) {
     ToolBarIcon(
         painter = painterResource(R.drawable.baseline_highlight_24),
+        contentDescription = "Highlight",
         isEnabled = true,
         onClick = {
             toolBarState.isTextHighlighterOn = true
@@ -603,6 +623,7 @@ private fun PdfToolBarScope.MainIcons(contentColor: Color) {
     )
     ToolBarIcon(
         painter = painterResource(R.drawable.baseline_text_fields_24),
+        contentDescription = "Free Text",
         isEnabled = true,
         onClick = {
             toolBarState.isTextHighlighterOn = false
@@ -614,6 +635,7 @@ private fun PdfToolBarScope.MainIcons(contentColor: Color) {
     )
     ToolBarIcon(
         painter = painterResource(R.drawable.baseline_draw_24),
+        contentDescription = "Draw",
         isEnabled = true,
         onClick = {
             toolBarState.isTextHighlighterOn = false
@@ -625,6 +647,7 @@ private fun PdfToolBarScope.MainIcons(contentColor: Color) {
     )
     ToolBarIcon(
         painter = painterResource(R.drawable.baseline_image_24),
+        contentDescription = "Add Image",
         isEnabled = true,
         onClick = {
             toolBarState.isTextHighlighterOn = false
@@ -640,6 +663,7 @@ private fun PdfToolBarScope.MainIcons(contentColor: Color) {
 private fun PdfToolBarScope.UndoRedoButtons() {
     ToolBarIcon(
         painter = painterResource(R.drawable.baseline_undo_24),
+        contentDescription = "Undo",
         isEnabled = true,
         tint = MaterialTheme.colorScheme.onBackground,
         onClick = { pdfState.pdfViewer?.editor?.undo() }
@@ -647,6 +671,7 @@ private fun PdfToolBarScope.UndoRedoButtons() {
 
     ToolBarIcon(
         painter = painterResource(R.drawable.baseline_redo_24),
+        contentDescription = "Redo",
         isEnabled = true,
         tint = MaterialTheme.colorScheme.onBackground,
         onClick = { pdfState.pdfViewer?.editor?.redo() }
@@ -657,6 +682,7 @@ private fun PdfToolBarScope.UndoRedoButtons() {
 private fun PdfToolBarScope.PopupSlider(
     icon: Painter,
     text: String,
+    contentDescription: String,
     value: Int,
     onValueChange: (Int) -> Unit,
     steps: Int,
@@ -667,6 +693,7 @@ private fun PdfToolBarScope.PopupSlider(
 
     ToolBarIcon(
         painter = icon,
+        contentDescription = contentDescription,
         onClick = { showPicker = !showPicker },
         isEnabled = true,
         tint = MaterialTheme.colorScheme.onBackground,
@@ -856,12 +883,14 @@ private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
 
         ToolBarIcon(
             icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+            contentDescription = "Find Previous",
             isEnabled = true,
             onClick = { pdfState.pdfViewer?.findController?.findPrevious() },
             tint = contentColor,
         )
         ToolBarIcon(
             icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = "Find Next",
             isEnabled = true,
             onClick = { pdfState.pdfViewer?.findController?.findNext() },
             tint = contentColor,
@@ -1268,13 +1297,14 @@ private fun RadioButtonItem(
 @Composable
 internal fun PdfToolBarScope.ToolBarIcon(
     icon: ImageVector,
+    contentDescription: String,
     isEnabled: Boolean,
     tint: Color,
     onClick: (() -> Unit)? = null,
 ) {
     Icon(
         imageVector = icon,
-        contentDescription = null,
+        contentDescription = contentDescription,
         modifier = Modifier
             .clip(CircleShape)
             .let {
@@ -1290,13 +1320,14 @@ internal fun PdfToolBarScope.ToolBarIcon(
 @Composable
 internal fun PdfToolBarScope.ToolBarIcon(
     painter: Painter,
+    contentDescription: String,
     isEnabled: Boolean,
     tint: Color,
     onClick: (() -> Unit)? = null,
 ) {
     Icon(
         painter = painter,
-        contentDescription = null,
+        contentDescription = contentDescription,
         modifier = Modifier
             .clip(CircleShape)
             .let {
@@ -1315,6 +1346,7 @@ internal fun defaultToolBarBackIcon(
     return {
         ToolBarIcon(
             icon = Icons.AutoMirrored.Default.ArrowBack,
+            contentDescription = "Back",
             onClick = {
                 when {
                     toolBarState.isTextHighlighterOn -> toolBarState.isTextHighlighterOn = false

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_scroll_bar">Page %d of %d</string>
+</resources>
