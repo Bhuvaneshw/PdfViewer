@@ -232,6 +232,23 @@ class PdfViewer @JvmOverloads constructor(
             field = dispatchScrollSpeedLimit(value)
         }
 
+    var ariaLabel: String = "Pdf Viewer"
+        set(value) {
+            checkViewer()
+            webView callDirectly "setAriaLabel"(value.toJsString())
+            field = value
+        }
+
+    /**
+     * If ariaRoleDescription is left empty, TalkBack may sometimes interpret the role-description as ‘Region’ (role)
+     */
+    var ariaRoleDescription: String = "Region"
+        set(value) {
+            checkViewer()
+            webView callDirectly "setAriaRoleDescription"(value.toJsString())
+            field = value
+        }
+
     val editor = PdfEditor(this)
 
     init {

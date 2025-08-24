@@ -64,6 +64,9 @@ class PdfViewerActivity : AppCompatActivity() {
             load(filePath)
             if (filePath.isNotBlank())
                 view.pdfToolBar.setFileName(fileName)
+
+            ariaLabel = fileName.split(".")[0]
+            ariaRoleDescription = "Pdf"
         }
 
         view.pdfToolBar.alertDialogBuilder = { MaterialAlertDialogBuilder(this) }

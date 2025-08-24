@@ -102,6 +102,9 @@ function doOnLast() {
     viewerContainer.addEventListener("touchmove", (e) => {
         clearTimeout(longClickTimer);
     });
+
+    setAriaLabel("Pdf Viewer");
+    setAriaRoleDescription("Region");
 }
 
 function setupHelper() {
@@ -1085,6 +1088,17 @@ function redo() {
     });
 
     document.dispatchEvent(undoEvent);
+}
+
+function setAriaLabel(ariaLabel) {
+    const viewerContainer = $('#viewerContainer');
+    viewerContainer.ariaLabel = ariaLabel;
+}
+
+function setAriaRoleDescription(roleDescription) {
+    const viewerContainer = $('#viewerContainer');
+    viewerContainer.role = "region";
+    viewerContainer.ariaRoleDescription = roleDescription;
 }
 
 function $(query) {
