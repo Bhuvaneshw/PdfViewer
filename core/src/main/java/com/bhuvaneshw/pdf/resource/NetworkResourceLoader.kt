@@ -5,8 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.WebResourceResponse
 import androidx.webkit.WebViewAssetLoader
-import java.net.HttpURLConnection
-import java.net.URL
 
 internal class NetworkResourceLoader(
     onError: (Exception) -> Unit,
@@ -16,11 +14,12 @@ internal class NetworkResourceLoader(
         const val PATH = "/network/"
     }
 
+    internal var handler: NetworkResourceHandler = DefaultNetworkResourceHandler()
     private val assetLoader = WebViewAssetLoader.Builder()
         .setDomain(ResourceLoader.RESOURCE_DOMAIN)
         .addPathHandler(
             PATH,
-            NetworkUriPathHandler(onError)
+            NetworkUriPathHandler(loader = this, onError = onError)
         )
         .build()
 
@@ -36,21 +35,18 @@ internal class NetworkResourceLoader(
 }
 
 private class NetworkUriPathHandler(
+    private val loader: NetworkResourceLoader,
     private val onError: (Exception) -> Unit,
 ) : WebViewAssetLoader.PathHandler {
 
     @SuppressLint("UseKtx")
     override fun handle(path: String): WebResourceResponse? {
         return try {
-            val uri = Uri.decode(path)
-            val url = URL(uri)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.connect()
+            val url = Uri.decode(path)
 
-            val mimeType = connection.contentType ?: "application/octet-stream"
-            val inputStream = connection.inputStream
+            val (mimeType, encoding, inputStream) = loader.handler.open(url)
 
-            WebResourceResponse(mimeType, "UTF-8", inputStream)
+            WebResourceResponse(mimeType, encoding, inputStream)
         } catch (e: Exception) {
             onError(e)
             null

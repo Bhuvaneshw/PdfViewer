@@ -35,6 +35,7 @@ import com.bhuvaneshw.pdf.js.with
 import com.bhuvaneshw.pdf.resource.AssetResourceLoader
 import com.bhuvaneshw.pdf.resource.ContentResourceLoader
 import com.bhuvaneshw.pdf.resource.FileResourceLoader
+import com.bhuvaneshw.pdf.resource.NetworkResourceHandler
 import com.bhuvaneshw.pdf.resource.NetworkResourceLoader
 import com.bhuvaneshw.pdf.resource.PdfViewerResourceLoader
 import com.bhuvaneshw.pdf.resource.ResourceLoader
@@ -68,12 +69,13 @@ class PdfViewer @JvmOverloads constructor(
     internal var onReadyListeners = mutableListOf<PdfViewer.() -> Unit>()
     internal var tempBackgroundColor: Int? = null
 
+    private val networkResourceLoader = NetworkResourceLoader(webInterface::onLoadFailed)
     internal val resourceLoaders = listOf(
         PdfViewerResourceLoader(context, webInterface::onLoadFailed),
         AssetResourceLoader(context, webInterface::onLoadFailed),
         ContentResourceLoader(context, webInterface::onLoadFailed),
         FileResourceLoader(webInterface::onLoadFailed),
-        NetworkResourceLoader(webInterface::onLoadFailed),
+        networkResourceLoader,
     )
 
     internal val webView: WebView = PdfJsWebView()
@@ -247,6 +249,12 @@ class PdfViewer @JvmOverloads constructor(
             checkViewer()
             webView callDirectly "setAriaRoleDescription"(value.toJsString())
             field = value
+        }
+
+    var networkResourceHandler: NetworkResourceHandler
+        get() = networkResourceLoader.handler
+        set(value) {
+            networkResourceLoader.handler = value
         }
 
     val editor = PdfEditor(this)
