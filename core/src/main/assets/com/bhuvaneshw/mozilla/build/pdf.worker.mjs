@@ -49380,10 +49380,10 @@ class AnnotationFactory {
               data: imageStream
             });
             image.imageStream = image.smaskStream = null;
+            promises.push(StampAnnotation.createNewAnnotation(xref, annotation, changes, {
+              image
+            }));
           }
-          promises.push(StampAnnotation.createNewAnnotation(xref, annotation, changes, {
-            image
-          }));
           break;
         case AnnotationEditorType.SIGNATURE:
           promises.push(StampAnnotation.createNewAnnotation(xref, annotation, changes, {}));
@@ -49443,11 +49443,11 @@ class AnnotationFactory {
             }
             image.imageRef = new JpegStream(imageStream, imageStream.length);
             image.imageStream = image.smaskStream = null;
+            promises.push(StampAnnotation.createNewPrintAnnotation(annotationGlobals, xref, annotation, {
+              image,
+              evaluatorOptions: options
+            }));
           }
-          promises.push(StampAnnotation.createNewPrintAnnotation(annotationGlobals, xref, annotation, {
-            image,
-            evaluatorOptions: options
-          }));
           break;
         case AnnotationEditorType.SIGNATURE:
           promises.push(StampAnnotation.createNewPrintAnnotation(annotationGlobals, xref, annotation, {
