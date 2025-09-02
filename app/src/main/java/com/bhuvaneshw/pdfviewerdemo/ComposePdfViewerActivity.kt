@@ -145,8 +145,8 @@ class ComposePdfViewerActivity : ComponentActivity() {
             source = "",
             pdfSettingsManager = null,
             setPdfViewer = {},
-            downloadPdfListener = downloadPdfListener,
-            imagePickerListener = imagePickerListener,
+            downloadPdfListener = DownloadPdfListener(""),
+            imagePickerListener = ImagePickerListener(this),
         )
     }
 
