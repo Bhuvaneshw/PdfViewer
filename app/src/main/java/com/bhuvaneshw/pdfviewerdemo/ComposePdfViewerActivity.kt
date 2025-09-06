@@ -114,7 +114,7 @@ class ComposePdfViewerActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
                         MainScreen(
-                            title = fileName,
+                            fileName = fileName,
                             source = filePath,
                             pdfSettingsManager = pdfSettingsManager,
                             setPdfViewer = { pdfViewer = it },
@@ -141,7 +141,7 @@ class ComposePdfViewerActivity : ComponentActivity() {
     @Composable
     private fun MainScreenPreview() {
         MainScreen(
-            title = "Preview",
+            fileName = "Preview",
             source = "",
             pdfSettingsManager = null,
             setPdfViewer = {},
@@ -186,7 +186,7 @@ class ComposePdfViewerActivity : ComponentActivity() {
 @OptIn(ExperimentalComposeUiApi::class, PdfUnstablePrintApi::class)
 @Composable
 private fun Activity.MainScreen(
-    title: String,
+    fileName: String,
     source: String,
     pdfSettingsManager: PdfSettingsManager?,
     setPdfViewer: (PdfViewer?) -> Unit,
@@ -271,7 +271,7 @@ private fun Activity.MainScreen(
                 var showZoomLimitDialog by remember { mutableStateOf(false) }
 
                 PdfToolBar(
-                    title = title,
+                    title = fileName,
                     toolBarState = toolBarState,
                     onBack = { finish() },
                     contentColor = MaterialTheme.colorScheme.onBackground,
@@ -279,6 +279,7 @@ private fun Activity.MainScreen(
                     dropDownMenu = { onDismiss, defaultMenus ->
                         ExtendedTooBarMenus(
                             pdfState = pdfState,
+                            fileName = fileName,
                             showZoomLimitDialog = { showZoomLimitDialog = it },
                             onDismiss = onDismiss,
                             defaultMenus = defaultMenus
@@ -344,6 +345,7 @@ private fun Activity.MainScreen(
 @Composable
 private fun Activity.ExtendedTooBarMenus(
     pdfState: PdfState,
+    fileName: String,
     showZoomLimitDialog: (Boolean) -> Unit,
     onDismiss: () -> Unit,
     defaultMenus: @Composable (filtered: List<PdfToolBarMenuItem>) -> Unit
@@ -386,7 +388,7 @@ private fun Activity.ExtendedTooBarMenus(
     DropdownMenuItem(
         text = { Text(text = "Print", modifier = dropDownModifier) },
         onClick = {
-            pdfState.pdfViewer?.printFile()
+            pdfState.pdfViewer?.printFile(defaultFileName = fileName)
             onDismiss()
         }
     )

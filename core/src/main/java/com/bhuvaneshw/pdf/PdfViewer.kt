@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.print.PrintDocumentAdapter
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -32,6 +31,7 @@ import com.bhuvaneshw.pdf.js.toJsHex
 import com.bhuvaneshw.pdf.js.toJsRgba
 import com.bhuvaneshw.pdf.js.toJsString
 import com.bhuvaneshw.pdf.js.with
+import com.bhuvaneshw.pdf.print.PdfPrintAdapter
 import com.bhuvaneshw.pdf.resource.AssetResourceLoader
 import com.bhuvaneshw.pdf.resource.ContentResourceLoader
 import com.bhuvaneshw.pdf.resource.FileResourceLoader
@@ -61,7 +61,7 @@ class PdfViewer @JvmOverloads constructor(
      * Changes require reinitializing PdfViewer
      */
     var highlightEditorColors: List<Pair<String, Int>> = defaultHighlightEditorColors
-    var pdfPrintAdapter: PrintDocumentAdapter? = null
+    var pdfPrintAdapter: PdfPrintAdapter? = null
 
     internal val listeners = mutableListOf<PdfListener>()
     internal val webInterface: WebInterface = WebInterface(this)
@@ -461,8 +461,20 @@ class PdfViewer @JvmOverloads constructor(
         webView callDirectly "downloadFile"()
     }
 
-    fun printFile() {
-        pdfPrintAdapter ?: throw RuntimeException("PdfPrintAdapter has not been set!")
+    /**
+     * @param defaultFileName forwarded to [com.bhuvaneshw.pdf.print.PdfPrintAdapter.defaultFileName] when it is not null
+     */
+    @JvmOverloads
+    fun printFile(defaultFileName: String? = null) {
+        pdfPrintAdapter?.also { pdfPrintAdapter ->
+            if (pdfPrintAdapter.isPrinting)
+                return
+
+            defaultFileName?.let { fileName ->
+                pdfPrintAdapter.defaultFileName = fileName
+            }
+        } ?: throw RuntimeException("PdfPrintAdapter has not been set!")
+
         webView callDirectly "printFile"()
     }
 

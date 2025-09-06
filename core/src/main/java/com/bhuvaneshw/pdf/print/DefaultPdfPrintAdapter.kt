@@ -7,7 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.pdf.PdfDocument
 
-class DefaultPdfPrintAdapter(context: Context) : AbstractPdfPrintAdapter(context) {
+class DefaultPdfPrintAdapter(context: Context) : PdfPrintAdapter(context) {
 
     override fun onRenderStart() {}
     override fun onRenderEnd() {}

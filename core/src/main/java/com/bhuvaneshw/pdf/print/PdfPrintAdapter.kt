@@ -16,7 +16,14 @@ import android.util.Base64
 import android.util.Log
 import java.io.FileOutputStream
 
-abstract class AbstractPdfPrintAdapter(protected val context: Context) : PdfPrintBridge() {
+abstract class PdfPrintAdapter(protected val context: Context) : PdfPrintBridge() {
+
+    /**
+     * This is the default name/placeholder shown when the user chooses to save a PDF.
+     * It appears in the save dialog but does not guarantee that the user will save the file with this name.
+     */
+    var defaultFileName: String = "PdfDocument.pdf"
+    var isPrinting: Boolean = false; private set
 
     private var writer: FileOutputStream? = null
     private var cancellationSignal: CancellationSignal? = null
@@ -27,7 +34,8 @@ abstract class AbstractPdfPrintAdapter(protected val context: Context) : PdfPrin
     private val lock = Any()
 
     override fun onStart() {
-        cache = mutableMapOf()
+        isPrinting = true
+        cache.clear()
     }
 
     override fun onLayout(
@@ -121,6 +129,7 @@ abstract class AbstractPdfPrintAdapter(protected val context: Context) : PdfPrin
         pdfDocument = null
         cache = mutableMapOf()
         pageCount = 0
+        isPrinting = false
     }
 
     private fun extractPageCountAndLayoutPdf(
@@ -136,7 +145,7 @@ abstract class AbstractPdfPrintAdapter(protected val context: Context) : PdfPrin
             try {
                 pageCount = result.toIntOrNull() ?: 0
 
-                val builder = PrintDocumentInfo.Builder("PDFDocument.pdf")
+                val builder = PrintDocumentInfo.Builder(defaultFileName)
                     .setContentType(PrintDocumentInfo.CONTENT_TYPE_PHOTO)
                     .setPageCount(pageCount)
 

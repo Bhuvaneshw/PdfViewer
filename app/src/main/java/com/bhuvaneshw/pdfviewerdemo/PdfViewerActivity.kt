@@ -60,7 +60,6 @@ class PdfViewerActivity : AppCompatActivity() {
 //            defaultPageScale = PdfViewer.Zoom.PAGE_WIDTH.floatValue
             editor.highlightColor = Color.BLUE
             pdfSettingsManager.restore(this)
-            pdfPrintAdapter = DefaultPdfPrintAdapter(context)
             load(filePath)
             if (filePath.isNotBlank())
                 view.pdfToolBar.setFileName(fileName)
@@ -87,6 +86,9 @@ class PdfViewerActivity : AppCompatActivity() {
                 }
         }
         view.container.alertDialogBuilder = view.pdfToolBar.alertDialogBuilder
+        view.pdfViewer.pdfPrintAdapter = DefaultPdfPrintAdapter(this).apply {
+            defaultFileName = fileName
+        }
         view.pdfViewer.addListener(DownloadPdfListener(fileName))
         view.pdfViewer.addListener(ImagePickerListener(this))
         view.container.setAsLoadingIndicator(view.loader)
