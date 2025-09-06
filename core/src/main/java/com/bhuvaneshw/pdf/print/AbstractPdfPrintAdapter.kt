@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.pdf.PdfDocument
+import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.print.PageRange
@@ -15,7 +16,7 @@ import android.util.Base64
 import android.util.Log
 import java.io.FileOutputStream
 
-abstract class AbstractPdfPrintAdapter(private var context: Context) : PdfPrintBridge() {
+abstract class AbstractPdfPrintAdapter(protected val context: Context) : PdfPrintBridge() {
 
     private var writer: FileOutputStream? = null
     private var cancellationSignal: CancellationSignal? = null
@@ -34,16 +35,14 @@ abstract class AbstractPdfPrintAdapter(private var context: Context) : PdfPrintB
         newAttributes: PrintAttributes?,
         cancellationSignal: CancellationSignal?,
         callback: LayoutResultCallback?,
-        metadata: android.os.Bundle?
+        metadata: Bundle?
     ) {
-        pdfDocument =
-            PrintedPdfDocument(context, newAttributes ?: PrintAttributes.Builder().build())
+        pdfDocument = PrintedPdfDocument(
+            context,
+            newAttributes ?: PrintAttributes.Builder().build()
+        )
 
-        if (cache.isNotEmpty()) {
-            printWithCache()
-        } else {
-            extractByteArray(cancellationSignal, callback)
-        }
+        extractPageCountAndLayoutPdf(cancellationSignal, callback)
     }
 
     override fun onWrite(
@@ -57,7 +56,11 @@ abstract class AbstractPdfPrintAdapter(private var context: Context) : PdfPrintB
             this.cancellationSignal = cancellationSignal
             this.callback = callback
 
-            evaluateJavascript("extractPrintImages()", null)
+            if (cache.isNotEmpty()) {
+                printWithCache()
+            } else {
+                evaluateJavascript("extractPrintImages()", null)
+            }
         } catch (e: Exception) {
             Log.e("AbstractPdfPrintAdapter", "onWrite $e")
             cancellationSignal.cancel()
@@ -120,7 +123,7 @@ abstract class AbstractPdfPrintAdapter(private var context: Context) : PdfPrintB
         pageCount = 0
     }
 
-    private fun extractByteArray(
+    private fun extractPageCountAndLayoutPdf(
         cancellationSignal: CancellationSignal?,
         callback: LayoutResultCallback?
     ) {
