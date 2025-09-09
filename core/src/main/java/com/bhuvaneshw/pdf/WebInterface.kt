@@ -144,6 +144,11 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
+    fun onShowEditorMessage(message: String) = post {
+        pdfViewer.listeners.forEach { it.onShowEditorMessage(message) }
+    }
+
+    @JavascriptInterface
     fun onLoadProperties(
         title: String,
         subject: String,

@@ -46,6 +46,7 @@ interface PdfListener {
     fun onPrintProcessProgress(@FloatRange(0.0, 1.0) progress: Float) {}
     fun onPrintProcessEnd() {}
     fun onPrintCancelled() {}
+    fun onShowEditorMessage(message: String) {}
 
     fun onScaleLimitChange(
         @FloatRange(-4.0, 10.0) minPageScale: Float,

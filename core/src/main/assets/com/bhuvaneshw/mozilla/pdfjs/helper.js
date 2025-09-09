@@ -65,6 +65,14 @@ function doOnLast() {
     });
     printProgressObserver.observe(printProgress, { attributes: true });
 
+    const editorUndoBarMessage = $("#editorUndoBarMessage");
+    const editorUndoBarMessageObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            JWI.onShowEditorMessage(mutation.target.textContent);
+        });
+    });
+    editorUndoBarMessageObserver.observe(editorUndoBarMessage, { childList: true });
+
     const viewerContainer = $("#viewerContainer");
     let singleClickTimer;
     let longClickTimer;

@@ -73,6 +73,7 @@ fun PdfViewer.addListener(
     onPrintProcessProgress: ((progress: Float) -> Unit)? = null,
     onPrintProcessEnd: (() -> Unit)? = null,
     onPrintCancelled: (() -> Unit)? = null,
+    onShowEditorMessage: ((message: String) -> Unit)? = null,
     onScaleLimitChange: ((minPageScale: Float, maxPageScale: Float, defaultPageScale: Float) -> Unit)? = null,
     onActualScaleLimitChange: ((minPageScale: Float, maxPageScale: Float, defaultPageScale: Float) -> Unit)? = null,
     onAlignModeChange: ((requestedMode: PdfViewer.PageAlignMode, appliedMode: PdfViewer.PageAlignMode) -> Unit)? = null,
@@ -229,6 +230,10 @@ fun PdfViewer.addListener(
 
         override fun onPrintCancelled() {
             onPrintCancelled?.invoke()
+        }
+
+        override fun onShowEditorMessage(message: String) {
+            onShowEditorMessage?.invoke(message)
         }
 
         override fun onScaleLimitChange(

@@ -42,6 +42,9 @@ import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.RangeSliderState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -50,6 +53,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -111,7 +115,13 @@ class ComposePdfViewerActivity : ComponentActivity() {
 
         setContent {
             PdfViewerComposeDemoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val snackBarHostState = remember { SnackbarHostState() }
+                val scope = rememberCoroutineScope()
+
+                Scaffold(
+                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
                         MainScreen(
                             fileName = fileName,
@@ -120,6 +130,16 @@ class ComposePdfViewerActivity : ComponentActivity() {
                             setPdfViewer = { pdfViewer = it },
                             downloadPdfListener = downloadPdfListener,
                             imagePickerListener = imagePickerListener,
+                            onShowMessage = { message ->
+                                scope.launch {
+                                    snackBarHostState.currentSnackbarData?.dismiss()
+                                    snackBarHostState.showSnackbar(
+                                        message = message,
+                                        actionLabel = "Dismiss",
+                                        duration = SnackbarDuration.Short,
+                                    )
+                                }
+                            }
                         )
                     }
                 }
@@ -147,6 +167,7 @@ class ComposePdfViewerActivity : ComponentActivity() {
             setPdfViewer = {},
             downloadPdfListener = DownloadPdfListener(""),
             imagePickerListener = ImagePickerListener(this),
+            onShowMessage = {},
         )
     }
 
@@ -192,6 +213,7 @@ private fun Activity.MainScreen(
     setPdfViewer: (PdfViewer?) -> Unit,
     downloadPdfListener: ComposePdfViewerActivity.DownloadPdfListener,
     imagePickerListener: ImagePickerListener,
+    onShowMessage: (String) -> Unit,
 ) {
     val pdfState = rememberPdfState(source = source)
     val toolBarState = rememberToolBarState()
@@ -256,6 +278,10 @@ private fun Activity.MainScreen(
                                     goToPage(originalCurrentPage)
                                 }
                             }
+                        }
+
+                        override fun onShowEditorMessage(message: String) {
+                            onShowMessage(message)
                         }
                     })
                 }

@@ -31,5 +31,6 @@ try {
         onPrintProcessStart() {},
         onPrintProcessEnd() {},
         onPrintProcessProgress() {},
+        onShowEditorMessage() {},
     };
 }
