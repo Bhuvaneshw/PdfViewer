@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.bhuvaneshw.pdf.compose
 
 import android.net.Uri
@@ -93,6 +95,8 @@ class PdfState(
         var inkOpacity by mutableIntStateOf(100); internal set
     }
 
+    internal val onReady = mutableListOf<(PdfViewer) -> Unit>()
+
     fun clearFind() {
         matchState = MatchState.Initialized()
     }
@@ -144,6 +148,8 @@ class PdfState(
         editor.inkThickness = viewer.editor.inkThickness
         editor.inkColor = Color(viewer.editor.inkColor)
         editor.inkOpacity = viewer.editor.inkOpacity
+
+        onReady.forEach { it(viewer) }
     }
 
     internal fun clearPdfViewer() {

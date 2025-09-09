@@ -73,7 +73,10 @@ import com.bhuvaneshw.pdf.compose.CustomOnReadyCallback
 import com.bhuvaneshw.pdf.compose.DefaultOnReadyCallback
 import com.bhuvaneshw.pdf.compose.PdfLoadingState
 import com.bhuvaneshw.pdf.compose.PdfState
+import com.bhuvaneshw.pdf.compose.doubleClickFlow
+import com.bhuvaneshw.pdf.compose.editorMessageFlow
 import com.bhuvaneshw.pdf.compose.rememberPdfState
+import com.bhuvaneshw.pdf.compose.singleClickFlow
 import com.bhuvaneshw.pdf.compose.ui.PdfScrollBar
 import com.bhuvaneshw.pdf.compose.ui.PdfToolBar
 import com.bhuvaneshw.pdf.compose.ui.PdfToolBarMenuItem
@@ -89,6 +92,7 @@ import io.mhssn.colorpicker.ColorPickerType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ComposePdfViewerActivity : ComponentActivity() {
@@ -228,8 +232,37 @@ private fun Activity.MainScreen(
         }
     }
 
-    LaunchedEffect(fullscreen) {
-        setFullscreen(fullscreen)
+    @OptIn(PdfUnstableApi::class)
+    LaunchedEffect(pdfState) {
+        launch {
+            pdfState.singleClickFlow().collectLatest {
+                pdfState.pdfViewer?.callSafely {  // Helpful if you are using scrollSpeedLimit or skip if editing pdf
+                    fullscreen = !fullscreen
+                    setFullscreen(fullscreen)
+                }
+            }
+        }
+
+        launch {
+            pdfState.doubleClickFlow().collectLatest {
+                pdfState.pdfViewer?.apply {
+                    callSafely { // Helpful if you are using scrollSpeedLimit or skip if editing pdf
+                        val originalCurrentPage = currentPage
+
+                        if (!isZoomInMinScale()) zoomToMinimum()
+                        else zoomToMaximum()
+
+                        callIfScrollSpeedLimitIsEnabled {
+                            goToPage(originalCurrentPage)
+                        }
+                    }
+                }
+            }
+        }
+
+        launch {
+            pdfState.editorMessageFlow().collectLatest(onShowMessage)
+        }
     }
 
     DisposableEffect(Unit) {
@@ -258,32 +291,6 @@ private fun Activity.MainScreen(
 
                     addListener(downloadPdfListener)
                     addListener(imagePickerListener)
-                    addListener(object : PdfListener {
-                        @OptIn(PdfUnstableApi::class)
-                        override fun onSingleClick() {
-                            callSafely {  // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                                fullscreen = !fullscreen
-                            }
-                        }
-
-                        @OptIn(PdfUnstableApi::class)
-                        override fun onDoubleClick() {
-                            callSafely { // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                                val originalCurrentPage = currentPage
-
-                                if (!isZoomInMinScale()) zoomToMinimum()
-                                else zoomToMaximum()
-
-                                callIfScrollSpeedLimitIsEnabled {
-                                    goToPage(originalCurrentPage)
-                                }
-                            }
-                        }
-
-                        override fun onShowEditorMessage(message: String) {
-                            onShowMessage(message)
-                        }
-                    })
                 }
             )
         },
