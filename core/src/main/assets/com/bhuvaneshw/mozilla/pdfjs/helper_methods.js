@@ -1,3 +1,4 @@
+// #region open url and extract print images
 function openUrl(args) {
     PDFViewerApplication.open(args)
         .then(() => sendDocumentProperties())
@@ -14,183 +15,8 @@ function openUrl(args) {
     PDFViewerApplication.eventBus.on("pagerendered", callback);
 }
 
-let DOUBLE_CLICK_THRESHOLD = 300;
-let LONG_CLICK_THRESHOLD = 500;
-function doOnLast() {
-    hideAllControls();
-
-    const loadingBar = document.getElementById("loadingBar");
-    observe(loadingBar, { attributes: true, attributeFilter: ["style"], }, () => {
-        const progress = parseInt(getComputedStyle(loadingBar).getPropertyValue("--progressBar-percent"));
-        JWI.onProgressChange(progress);
-    });
-
-    const passwordDialog = $("#passwordDialog");
-    passwordDialog.style.margin = "24px auto";
-    observe(passwordDialog, { attributes: true }, (mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === "attributes" && mutation.attributeName === "open") {
-                JWI.onPasswordDialogChange(passwordDialog.getAttribute("open") !== null);
-            }
-        });
-    });
-
-    const printDialog = $("#printServiceDialog");
-    observe(printDialog, { attributes: true }, (mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === "attributes" && mutation.attributeName === "open") {
-                printDialog.style.display = "none";
-                if (printDialog.open) {
-                    JWI.onPrintProcessStart();
-                } else {
-                    JWI.onPrintProcessEnd();
-                }
-            }
-        });
-    });
-
-    const printProgress = printDialog.querySelector("progress");
-    observe(printProgress, { attributes: true }, (mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === "attributes" && mutation.attributeName === "value") {
-                JWI.onPrintProcessProgress(parseFloat(printProgress.value) / 100);
-            }
-        });
-    });
-
-    const editorUndoBarMessage = $("#editorUndoBarMessage");
-    observe(editorUndoBarMessage, { childList: true }, (mutations) => {
-        mutations.forEach((mutation) => {
-            JWI.onShowEditorMessage(mutation.target.textContent);
-        });
-    });
-
-    const viewerContainer = $("#viewerContainer");
-    let singleClickTimer;
-    let longClickTimer;
-    let isLongClick = false;
-
-    viewerContainer.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (e.detail === 1) {
-            singleClickTimer = setTimeout(() => {
-                if (e.target.tagName === "A") JWI.onLinkClick(e.target.href);
-                else JWI.onSingleClick();
-            }, DOUBLE_CLICK_THRESHOLD);
-        }
-    });
-
-    viewerContainer.addEventListener("dblclick", (e) => {
-        clearTimeout(singleClickTimer);
-        JWI.onDoubleClick();
-    });
-
-    viewerContainer.addEventListener("touchstart", (e) => {
-        isLongClick = false;
-        if (e.touches.length === 1) {
-            longClickTimer = setTimeout(() => {
-                isLongClick = true;
-                JWI.onLongClick();
-            }, LONG_CLICK_THRESHOLD);
-        }
-    });
-
-    viewerContainer.addEventListener("touchend", (e) => {
-        clearTimeout(longClickTimer);
-    });
-
-    viewerContainer.addEventListener("touchmove", (e) => {
-        clearTimeout(longClickTimer);
-    });
-
-    setAriaLabel("Pdf Viewer");
-    setAriaRoleDescription("Region");
-}
-
-function setupHelper() {
-    PDFViewerApplication.findBar.highlightAll.click();
-    PDFViewerApplication.pdfSidebar.close();
-
-    PDFViewerApplication.eventBus.on("scalechanging", (event) => {
-        const { scale } = event;
-        JWI.onScaleChange(scale, PDFViewerApplication.pdfViewer.currentScaleValue);
-    });
-
-    PDFViewerApplication.eventBus.on("pagechanging", (event) => {
-        const { pageNumber } = event;
-        JWI.onPageChange(pageNumber);
-    });
-
-    PDFViewerApplication.eventBus.on("updatefindcontrolstate", (event) => {
-        JWI.onFindMatchChange(event.matchesCount?.current || 0, event.matchesCount?.total || 0);
-    });
-
-    PDFViewerApplication.eventBus.on("updatefindmatchescount", (event) => {
-        JWI.onFindMatchChange(event.matchesCount?.current || 0, event.matchesCount?.total || 0);
-    });
-
-    PDFViewerApplication.eventBus.on("spreadmodechanged", (event) => {
-        JWI.onSpreadModeChange(event.mode);
-    });
-
-    PDFViewerApplication.eventBus.on("scrollmodechanged", (event) => {
-        JWI.onScrollModeChange(event.mode);
-    });
-
-    const viewerContainer = $("#viewerContainer");
-    viewerContainer.addEventListener("scroll", () => {
-        let currentOffset;
-        let totalScrollable;
-        let isHorizontalScroll = PDFViewerApplication.pdfViewer._scrollMode === ScrollMode.HORIZONTAL;
-
-        if (isHorizontalScroll) {
-            currentOffset = viewerContainer.scrollLeft;
-            totalScrollable = viewerContainer.scrollWidth - viewerContainer.clientWidth;
-        } else {
-            currentOffset = viewerContainer.scrollTop;
-            totalScrollable = viewerContainer.scrollHeight - viewerContainer.clientHeight;
-        }
-
-        JWI.onScroll(Math.round(currentOffset), totalScrollable, isHorizontalScroll);
-    });
-
-    const searchInput = document.getElementById("findInput");
-    observe(searchInput, { attributes: true, attributeFilter: ["data-status"], }, (mutationsList) => {
-        mutationsList.forEach((mutation) => {
-            if (mutation.type === "attributes" && mutation.attributeName === "data-status") {
-                const newStatus = searchInput.getAttribute("data-status");
-
-                switch (newStatus) {
-                    case "pending":
-                        JWI.onFindMatchStart();
-                        break;
-                    case "notFound":
-                        JWI.onFindMatchComplete(false);
-                        break;
-                    default:
-                        JWI.onFindMatchComplete(true);
-                }
-            }
-        });
-    });
-}
-
-function hideAllControls() {
-    const ids = ["#sidebarContainer", ".hiddenSmallView", "#editorModeButtons", ".hiddenMediumView", "#secondaryOpenFile", "#viewBookmark"];
-
-    setToolbarEnabled(false);
-    ids.forEach((id) => {
-        $(id).style.display = "none";
-    });
-}
-
-window.originalPrint = window.print;
-window.print = () => {
-    JWI.createPrintJob();
-};
-
 function extractPrintImages() {
-    let pages = $("#printContainer").querySelectorAll("img");
+    let pages = printContainer.querySelectorAll("img");
     JWI.conveyMessage(null, "PRINT_START", null);
 
     pages.forEach((page, index) => {
@@ -207,219 +33,222 @@ function extractPrintImages() {
         JWI.conveyMessage(base64Data, "PAGE_DATA", `${index + 1}`);
     });
 
-    $("#printContainer").textContent = "";
+    printContainer.textContent = "";
     JWI.conveyMessage(null, "PRINT_END", null);
 }
+// #endregion
 
+// #region pdf.js ui elements show/hide
 function setEditorModeButtonsEnabled(enabled) {
-    $("#editorModeButtons").style.display = enabled ? "inline flex" : "none";
+    editorModeButtons.style.display = enabled ? "inline flex" : "none";
 }
 
 function setEditorHighlightButtonEnabled(enabled) {
-    $("#editorHighlight").style.display = enabled ? "inline-block" : "none";
+    editorHighlight.style.display = enabled ? "inline-block" : "none";
 }
 
 function setEditorFreeTextButtonEnabled(enabled) {
-    $("#editorFreeText").style.display = enabled ? "inline-block" : "none";
+    editorFreeText.style.display = enabled ? "inline-block" : "none";
 }
 
 function setEditorStampButtonEnabled(enabled) {
-    $("#editorStamp").style.display = enabled ? "inline-block" : "none";
+    editorStamp.style.display = enabled ? "inline-block" : "none";
 }
 
 function setEditorInkButtonEnabled(enabled) {
-    $("#editorInk").style.display = enabled ? "inline-block" : "none";
+    editorInk.style.display = enabled ? "inline-block" : "none";
 }
 
 function setToolbarViewerMiddleEnabled(enabled) {
-    $("#toolbarViewerMiddle").style.display = enabled ? "flex" : "none";
+    toolbarViewerMiddle.style.display = enabled ? "flex" : "none";
 }
 
 function setToolbarViewerLeftEnabled(enabled) {
-    $("#toolbarViewerLeft").style.display = enabled ? "flex" : "none";
+    toolbarViewerLeft.style.display = enabled ? "flex" : "none";
 }
 
 function setToolbarViewerRightEnabled(enabled) {
-    $("#toolbarViewerRight").style.display = enabled ? "flex" : "none";
+    toolbarViewerRight.style.display = enabled ? "flex" : "none";
 }
 
 function setSidebarToggleButtonEnabled(enabled) {
-    $("#sidebarToggleButton").style.display = enabled ? "flex" : "none";
+    sidebarToggleButton.style.display = enabled ? "flex" : "none";
 }
 
 function setPageNumberContainerEnabled(enabled) {
-    $("#numPages").parentElement.style.display = enabled ? "flex" : "none";
+    numPages.parentElement.style.display = enabled ? "flex" : "none";
 }
 
 function setViewFindButtonEnabled(enabled) {
-    $("#viewFindButton").style.display = enabled ? "flex" : "none";
+    viewFindButton.style.display = enabled ? "flex" : "none";
 }
 
 function setZoomOutButtonEnabled(enabled) {
-    $("#zoomOutButton").style.display = enabled ? "flex" : "none";
+    zoomOutButton.style.display = enabled ? "flex" : "none";
 }
 
 function setZoomInButtonEnabled(enabled) {
-    $("#zoomInButton").style.display = enabled ? "flex" : "none";
+    zoomInButton.style.display = enabled ? "flex" : "none";
 }
 
 function setZoomScaleSelectContainerEnabled(enabled) {
-    $("#scaleSelectContainer").style.display = enabled ? "flex" : "none";
+    scaleSelectContainer.style.display = enabled ? "flex" : "none";
 }
 
 function setSecondaryToolbarToggleButtonEnabled(enabled) {
-    $("#secondaryToolbarToggleButton").style.display = enabled ? "flex" : "none";
+    secondaryToolbarToggleButton.style.display = enabled ? "flex" : "none";
 }
 
 function setToolbarEnabled(enabled) {
-    $(".toolbar").style.display = enabled ? "block" : "none";
-    $("#viewerContainer").style.top = enabled ? "var(--toolbar-height)" : "0px";
-    $("#viewerContainer").style.setProperty("--visible-toolbar-height", enabled ? "var(--toolbar-height)" : "0px");
+    toolbar.style.display = enabled ? "block" : "none";
+    viewerContainer.style.top = enabled ? "var(--toolbar-height)" : "0px";
+    viewerContainer.style.setProperty("--visible-toolbar-height", enabled ? "var(--toolbar-height)" : "0px");
 }
 
 function setSecondaryPrintEnabled(enabled) {
-    $("#secondaryPrint").style.display = enabled ? "flex" : "none";
+    secondaryPrint.style.display = enabled ? "flex" : "none";
 }
 
 function setSecondaryDownloadEnabled(enabled) {
-    $("#secondaryDownload").style.display = enabled ? "flex" : "none";
+    secondaryDownload.style.display = enabled ? "flex" : "none";
 }
 
 function setPresentationModeEnabled(enabled) {
-    $("#presentationMode").style.display = enabled ? "flex" : "none";
+    presentationMode.style.display = enabled ? "flex" : "none";
 }
 
 function setGoToFirstPageEnabled(enabled) {
-    $("#firstPage").style.display = enabled ? "flex" : "none";
+    firstPage.style.display = enabled ? "flex" : "none";
 }
 
 function setGoToLastPageEnabled(enabled) {
-    $("#lastPage").style.display = enabled ? "flex" : "none";
+    lastPage.style.display = enabled ? "flex" : "none";
 }
 
 function setPageRotateCwEnabled(enabled) {
-    $("#pageRotateCw").style.display = enabled ? "flex" : "none";
+    pageRotateCw.style.display = enabled ? "flex" : "none";
 }
 
 function setPageRotateCcwEnabled(enabled) {
-    $("#pageRotateCcw").style.display = enabled ? "flex" : "none";
+    pageRotateCcw.style.display = enabled ? "flex" : "none";
 }
 
 function setCursorSelectToolEnabled(enabled) {
-    $("#cursorSelectTool").style.display = enabled ? "flex" : "none";
+    cursorSelectTool.style.display = enabled ? "flex" : "none";
 }
 
 function setCursorHandToolEnabled(enabled) {
-    $("#cursorHandTool").style.display = enabled ? "flex" : "none";
+    cursorHandTool.style.display = enabled ? "flex" : "none";
 }
 
 function setScrollPageEnabled(enabled) {
-    $("#scrollPage").style.display = enabled ? "flex" : "none";
+    scrollPage.style.display = enabled ? "flex" : "none";
 }
 
 function setScrollVerticalEnabled(enabled) {
-    $("#scrollVertical").style.display = enabled ? "flex" : "none";
+    scrollVertical.style.display = enabled ? "flex" : "none";
 }
 
 function setScrollHorizontalEnabled(enabled) {
-    $("#scrollHorizontal").style.display = enabled ? "flex" : "none";
+    scrollHorizontal.style.display = enabled ? "flex" : "none";
 }
 
 function setScrollWrappedEnabled(enabled) {
-    $("#scrollWrapped").style.display = enabled ? "flex" : "none";
+    scrollWrapped.style.display = enabled ? "flex" : "none";
 }
 
 function setSpreadNoneEnabled(enabled) {
-    $("#spreadNone").style.display = enabled ? "flex" : "none";
+    spreadNone.style.display = enabled ? "flex" : "none";
 }
 
 function setSpreadOddEnabled(enabled) {
-    $("#spreadOdd").style.display = enabled ? "flex" : "none";
+    spreadOdd.style.display = enabled ? "flex" : "none";
 }
 
 function setSpreadEvenEnabled(enabled) {
-    $("#spreadEven").style.display = enabled ? "flex" : "none";
+    spreadEven.style.display = enabled ? "flex" : "none";
 }
 
 function setDocumentPropertiesEnabled(enabled) {
-    $("#documentProperties").style.display = enabled ? "flex" : "none";
+    documentProperties.style.display = enabled ? "flex" : "none";
 }
+// #endregion
 
+// #region pdf.js ui elements click/do functionality
 function downloadFile() {
-    $("#secondaryDownload").click();
+    secondaryDownload.click();
 }
 
 function printFile() {
-    $("#printContainer").textContent = "";
-    $("#secondaryPrint").click();
+    printContainer.textContent = "";
+    secondaryPrint.click();
 }
 
 function cancelPrinting() {
-    $("#printCancel").click();
-    $("#printContainer").textContent = "";
+    printCancel.click();
+    printContainer.textContent = "";
 }
 
 function startPresentationMode() {
-    $("#presentationMode").click();
+    presentationMode.click();
 }
 
 function goToFirstPage() {
-    $("#firstPage").click();
+    firstPage.click();
 }
 
 function goToLastPage() {
-    $("#lastPage").click();
+    lastPage.click();
 }
 
 function selectCursorSelectTool() {
-    $("#cursorSelectTool").click();
+    cursorSelectTool.click();
 }
 
 function selectCursorHandTool() {
-    $("#cursorHandTool").click();
+    cursorHandTool.click();
 }
 
 function selectScrollPage() {
-    $("#scrollPage").click();
+    scrollPage.click();
 }
 
 function selectScrollVertical() {
-    $("#scrollVertical").click();
+    scrollVertical.click();
 }
 
 function selectScrollHorizontal() {
-    $("#scrollHorizontal").click();
+    scrollHorizontal.click();
 }
 
 function selectScrollWrapped() {
-    $("#scrollWrapped").click();
+    scrollWrapped.click();
 }
 
 function selectSpreadNone() {
-    $("#spreadNone").click();
+    spreadNone.click();
 }
 
 function selectSpreadOdd() {
-    $("#spreadOdd").click();
+    spreadOdd.click();
 }
 
 function selectSpreadEven() {
-    $("#spreadEven").click();
+    spreadEven.click();
 }
 
 function showDocumentProperties() {
-    $("#documentProperties").click();
+    documentProperties.click();
 }
 
 function startFind(searchTerm) {
-    const findInput = $("#findInput");
     if (findInput) {
         findInput.value = searchTerm;
 
-        const caseSensitive = $("#findMatchCase")?.checked || false;
-        const entireWord = $("#findEntireWord")?.checked || false;
-        const highlightAll = $("#findHighlightAll")?.checked || false;
-        const matchDiacritics = $("#findMatchDiacritics")?.checked || false;
+        findMatchCase?.checked || false;
+        findEntireWord?.checked || false;
+        findHighlightAll?.checked || false;
+        findMatchDiacritics?.checked || false;
 
         PDFViewerApplication.eventBus.dispatch("find", {
             source: this,
@@ -451,49 +280,24 @@ function stopFind() {
 }
 
 function findNext() {
-    $("#findNextButton").click();
+    findNextButton.click();
 }
 
 function findPrevious() {
-    $("#findPreviousButton").click();
+    findPreviousButton.click();
 }
 
-function setFindHighlightAll(enabled) {
-    $("#findHighlightAll").checked = enabled;
+function submitPassword(password) {
+    password.value = password;
+    passwordSubmit.click();
 }
 
-function setFindMatchCase(enabled) {
-    $("#findMatchCase").checked = enabled;
+function cancelPasswordDialog() {
+    passwordCancel.click();
 }
+// #endregion
 
-function setFindEntireWord(enabled) {
-    $("#findEntireWord").checked = enabled;
-}
-
-function setFindMatchDiacritics(enabled) {
-    $("#findMatchDiacritics").checked = enabled;
-}
-
-function setViewerScrollbar(enabled) {
-    if (enabled) $("#viewerContainer").classList.remove("noScrollbar");
-    else $("#viewerContainer").classList.add("noScrollbar");
-}
-
-function scrollTo(offset) {
-    $("#viewerContainer").scrollTop = offset;
-}
-
-function scrollToRatio(ratio, isHorizontalScroll) {
-    let viewerContainer = $("#viewerContainer");
-    if (isHorizontalScroll) {
-        let totalScrollable = viewerContainer.scrollWidth - viewerContainer.clientWidth;
-        viewerContainer.scrollLeft = totalScrollable * ratio;
-    } else {
-        let totalScrollable = viewerContainer.scrollHeight - viewerContainer.clientHeight;
-        viewerContainer.scrollTop = totalScrollable * ratio;
-    }
-}
-
+// #region pdf.js ui element get content
 function sendDocumentProperties() {
     PDFViewerApplication.pdfDocument.getMetadata().then((info) => {
         JWI.onLoadProperties(
@@ -520,16 +324,7 @@ function sendDocumentProperties() {
 }
 
 function getLabelText() {
-    return $("#passwordText").innerText;
-}
-
-function submitPassword(password) {
-    $("#password").value = password;
-    $("#passwordSubmit").click();
-}
-
-function cancelPasswordDialog() {
-    $("#passwordCancel").click();
+    return passwordText.innerText;
 }
 
 const ScrollMode = {
@@ -592,10 +387,45 @@ function getActualScaleFor(value) {
     }
     return scale;
 }
+// #endregion
+
+// #region pdf.js ui element set content
+function setFindHighlightAll(enabled) {
+    findHighlightAll.checked = enabled;
+}
+
+function setFindMatchCase(enabled) {
+    findMatchCase.checked = enabled;
+}
+
+function setFindEntireWord(enabled) {
+    findEntireWord.checked = enabled;
+}
+
+function setFindMatchDiacritics(enabled) {
+    findMatchDiacritics.checked = enabled;
+}
+
+function setViewerScrollbar(enabled) {
+    if (enabled) viewerContainer.classList.remove("noScrollbar");
+    else viewerContainer.classList.add("noScrollbar");
+}
+
+function scrollTo(offset) {
+    viewerContainer.scrollTop = offset;
+}
+
+function scrollToRatio(ratio, isHorizontalScroll) {
+    if (isHorizontalScroll) {
+        let totalScrollable = viewerContainer.scrollWidth - viewerContainer.clientWidth;
+        viewerContainer.scrollLeft = totalScrollable * ratio;
+    } else {
+        let totalScrollable = viewerContainer.scrollHeight - viewerContainer.clientHeight;
+        viewerContainer.scrollTop = totalScrollable * ratio;
+    }
+}
 
 function enableVerticalSnapBehavior() {
-    let viewerContainer = $("#viewerContainer");
-
     viewerContainer.classList.remove("horizontal-snap");
     viewerContainer.classList.add("vertical-snap");
     viewerContainer.style.scrollSnapType = "y mandatory";
@@ -603,8 +433,6 @@ function enableVerticalSnapBehavior() {
 }
 
 function enableHorizontalSnapBehavior() {
-    let viewerContainer = $("#viewerContainer");
-
     viewerContainer.classList.remove("vertical-snap");
     viewerContainer.classList.add("horizontal-snap");
     viewerContainer.style.scrollSnapType = "x mandatory";
@@ -612,8 +440,6 @@ function enableHorizontalSnapBehavior() {
 }
 
 function removeSnapBehavior() {
-    let viewerContainer = $("#viewerContainer");
-
     viewerContainer.classList.remove("vertical-snap");
     viewerContainer.classList.remove("horizontal-snap");
     viewerContainer.style.scrollSnapType = "none";
@@ -621,8 +447,6 @@ function removeSnapBehavior() {
 }
 
 function centerPage(vertical, horizontal, singlePageArrangemenentEnabled = false) {
-    let viewerContainer = $("#viewerContainer");
-
     if (singlePageArrangemenentEnabled) {
         viewerContainer.classList.add("single-page-arrangement");
         viewerContainer.classList.remove("vertical-center");
@@ -676,7 +500,6 @@ function removeSinglePageArrangement() {
 }
 
 function limitScroll(maxSpeed = 100, flingThreshold = 0.5, canFling = false, adaptiveFling = false) {
-    const viewerContainer = $("#viewerContainer");
     if (!viewerContainer) return;
 
     let lastTouchX = 0;
@@ -809,7 +632,6 @@ function limitScroll(maxSpeed = 100, flingThreshold = 0.5, canFling = false, ada
 }
 
 function removeScrollLimit() {
-    const viewerContainer = $("#viewerContainer");
     if (!viewerContainer || !viewerContainer._scrollHandlers) return;
 
     const { touchStartHandler, touchMoveHandler, touchEndHandler, resizeAndScaleListener } = viewerContainer._scrollHandlers;
@@ -835,7 +657,6 @@ function setScrollToNextPage() {
 
 function setScrollToCurrentPage() {
     let targetPage = PDFViewerApplication.pdfViewer.getPageView(PDFViewerApplication._touchStartCurrentPage - 1);
-    const viewerContainer = $("#viewerContainer");
 
     const isVerticalScroll = PDFViewerApplication.pdfViewer.scrollMode == ScrollMode.VERTICAL;
     const isHorizontalScroll = PDFViewerApplication.pdfViewer.scrollMode == ScrollMode.HORIZONTAL;
@@ -935,107 +756,93 @@ function nearest(currentPoint, point1, point2) {
         return point1;
     } else return point2;
 }
+// #endregion
 
+// #region pdf.js editor ui
 function openTextHighlighter() {
-    let toggleButton = $("#editorHighlightButton");
-    if (toggleButton.classList.contains("toggled")) return;
-    toggleButton.click();
+    if (editorHighlightButton.classList.contains("toggled")) return;
+    editorHighlightButton.click();
 }
 
 function closeTextHighlighter() {
-    let toggleButton = $("#editorHighlightButton");
-    if (!toggleButton.classList.contains("toggled")) return;
-    toggleButton.click();
+    if (!editorHighlightButton.classList.contains("toggled")) return;
+    editorHighlightButton.click();
 }
 
 function openEditorFreeText() {
-    let toggleButton = $("#editorFreeTextButton");
-    if (toggleButton.classList.contains("toggled")) return;
-    toggleButton.click();
+    if (editorFreeTextButton.classList.contains("toggled")) return;
+    editorFreeTextButton.click();
 }
 
 function closeEditorFreeText() {
-    let toggleButton = $("#editorFreeTextButton");
-    if (!toggleButton.classList.contains("toggled")) return;
-    toggleButton.click();
+    if (!editorFreeTextButton.classList.contains("toggled")) return;
+    editorFreeTextButton.click();
 }
 
 function openEditorInk() {
-    let toggleButton = $("#editorInkButton");
-    if (toggleButton.classList.contains("toggled")) return;
-    toggleButton.click();
+    if (editorInkButton.classList.contains("toggled")) return;
+    editorInkButton.click();
 }
 
 function closeEditorInk() {
-    let toggleButton = $("#editorInkButton");
-    if (!toggleButton.classList.contains("toggled")) return;
-    toggleButton.click();
+    if (!editorInkButton.classList.contains("toggled")) return;
+    editorInkButton.click();
 }
 
 function openEditorStamp() {
-    let toggleButton = $("#editorStampButton");
-    if (toggleButton.classList.contains("toggled")) return;
-    toggleButton.click();
+    if (editorStampButton.classList.contains("toggled")) return;
+    editorStampButton.click();
 }
 
 function closeEditorStamp() {
-    let toggleButton = $("#editorStampButton");
-    if (!toggleButton.classList.contains("toggled")) return;
-    toggleButton.click();
+    if (!editorStampButton.classList.contains("toggled")) return;
+    editorStampButton.click();
 }
 
 function setHighlighterThickness(thickness) {
-    let thicknessInput = $("#editorFreeHighlightThickness");
-    thicknessInput.value = thickness;
-    thicknessInput.dispatchEvent(new Event("input"));
-    thicknessInput.dispatchEvent(new Event("change"));
+    editorFreeHighlightThickness.value = thickness;
+    editorFreeHighlightThickness.dispatchEvent(new Event("input"));
+    editorFreeHighlightThickness.dispatchEvent(new Event("change"));
 }
 
 function showAllHighlights() {
-    let toggleButton = $("#editorHighlightShowAll");
-    if (toggleButton.getAttribute("aria-pressed") == "true") return;
-    toggleButton.click();
+    if (editorHighlightShowAll.getAttribute("aria-pressed") == "true") return;
+    editorHighlightShowAll.click();
 }
 
 function hideAllHighlights() {
-    let toggleButton = $("#editorHighlightShowAll");
-    if (toggleButton.getAttribute("aria-pressed") == "false") return;
-    toggleButton.click();
+    if (editorHighlightShowAll.getAttribute("aria-pressed") == "false") return;
+    editorHighlightShowAll.click();
 }
 
 function setFreeTextFontSize(fontSize) {
-    let fontSizeInput = $("#editorFreeTextFontSize");
-    fontSizeInput.value = fontSize;
-    fontSizeInput.dispatchEvent(new Event("input"));
-    fontSizeInput.dispatchEvent(new Event("change"));
+    editorFreeTextFontSize.value = fontSize;
+    editorFreeTextFontSize.dispatchEvent(new Event("input"));
+    editorFreeTextFontSize.dispatchEvent(new Event("change"));
 }
 
 function setFreeTextFontColor(fontColor) {
-    let fontColorInput = $("#editorFreeTextColor");
-    fontColorInput.value = fontColor;
-    fontColorInput.dispatchEvent(new Event("input"));
-    fontColorInput.dispatchEvent(new Event("change"));
+    editorFreeTextColor.value = fontColor;
+    editorFreeTextColor.dispatchEvent(new Event("input"));
+    editorFreeTextColor.dispatchEvent(new Event("change"));
 }
 
 function setInkColor(color) {
-    let colorInput = $("#editorInkColor");
-    colorInput.value = color;
-    colorInput.dispatchEvent(new Event("input"));
-    colorInput.dispatchEvent(new Event("change"));
+    editorInkColor.value = color;
+    editorInkColor.dispatchEvent(new Event("input"));
+    editorInkColor.dispatchEvent(new Event("change"));
 }
 
 function setInkThickness(thickness) {
-    let thicknessInput = $("#editorInkThickness");
-    thicknessInput.value = thickness;
-    thicknessInput.dispatchEvent(new Event("input"));
-    thicknessInput.dispatchEvent(new Event("change"));
+    editorInkThickness.value = thickness;
+    editorInkThickness.dispatchEvent(new Event("input"));
+    editorInkThickness.dispatchEvent(new Event("change"));
 }
 
 function setInkOpacity(opacity) {
-    let opacityInput = $("#editorInkOpacity");
-    opacityInput.value = opacity;
-    opacityInput.dispatchEvent(new Event("input"));
-    opacityInput.dispatchEvent(new Event("change"));
+    editorInkOpacity.value = opacity;
+    editorInkOpacity.dispatchEvent(new Event("input"));
+    editorInkOpacity.dispatchEvent(new Event("change"));
 }
 
 function selectHighlightColor(color) {
@@ -1057,9 +864,8 @@ function selectHighlightColor(color) {
 }
 
 function requestStampInsert(image) {
-    let imageInput = $("#editorStampAddImage");
-    imageInput.value = image;
-    imageInput.dispatchEvent(new Event("input"));
+    editorStampAddImage.value = image;
+    editorStampAddImage.dispatchEvent(new Event("input"));
 }
 
 function undo() {
@@ -1085,27 +891,15 @@ function redo() {
 
     document.dispatchEvent(undoEvent);
 }
+// #endregion
 
+// #region aria label
 function setAriaLabel(ariaLabel) {
-    const viewerContainer = $('#viewerContainer');
     viewerContainer.ariaLabel = ariaLabel;
 }
 
 function setAriaRoleDescription(roleDescription) {
-    const viewerContainer = $('#viewerContainer');
     viewerContainer.role = "region";
     viewerContainer.ariaRoleDescription = roleDescription;
 }
-
-function $(query) {
-    return document.querySelector(query);
-}
-
-function $all(query) {
-    return document.querySelectorAll(query);
-}
-
-function observe(target, options, callback) {
-    const observer = new MutationObserver(callback);
-    observer.observe(target, options);
-}
+// #endregion
