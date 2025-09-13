@@ -1,5 +1,6 @@
 package com.bhuvaneshw.pdf.compose.ui
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -86,6 +87,7 @@ fun PdfViewerContainer(
 fun PdfContainerBoxScope.PdfViewer(
     modifier: Modifier = Modifier,
     containerColor: Color? = null,
+    factory: (context: Context) -> PdfViewer = { PdfViewer(context = it) },
     onCreateViewer: (PdfViewer.() -> Unit)? = null,
     onReady: OnReadyCallback = DefaultOnReadyCallback(),
 ) {
@@ -93,6 +95,7 @@ fun PdfContainerBoxScope.PdfViewer(
         pdfState = pdfState,
         modifier = modifier,
         containerColor = containerColor,
+        factory = factory,
         onCreateViewer = onCreateViewer,
         onReady = onReady,
     )

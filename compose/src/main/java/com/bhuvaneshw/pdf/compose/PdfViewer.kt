@@ -15,7 +15,7 @@ fun PdfViewer(
     pdfState: PdfState,
     modifier: Modifier = Modifier,
     containerColor: Color? = null,
-    factory: ((context: Context) -> PdfViewer)? = null,
+    factory: (context: Context) -> PdfViewer = { PdfViewer(context = it) },
     onCreateViewer: (PdfViewer.() -> Unit)? = null,
     onReady: OnReadyCallback = DefaultOnReadyCallback(),
 ) {
@@ -28,7 +28,7 @@ fun PdfViewer(
 
     AndroidView(
         factory = { context ->
-            (factory?.invoke(context) ?: PdfViewer(context)).also {
+            factory(context).also {
                 if (!it.isInEditMode) {
                     it.highlightEditorColors = pdfState.highlightEditorColors.map { colorPair ->
                         colorPair.first to colorPair.second.toArgb()
@@ -88,7 +88,7 @@ data class CustomOnReadyCallback(
 }
 
 private fun PdfViewer.load(source: PdfSource) {
-    when(source) {
+    when (source) {
         is PdfSource.Asset -> loadFromAsset(source.assetPath)
         is PdfSource.ContentUri -> loadFromContentUri(source.contentUri)
         is PdfSource.File -> loadFromFile(source.file)
