@@ -257,6 +257,15 @@ class PdfViewer @JvmOverloads constructor(
             networkResourceLoader.handler = value
         }
 
+    /**
+     * Enable/disable dom storage, like localStorage (used by Pdf.Js to store history)
+     */
+    var domStorageEnabled: Boolean
+        get() = webView.settings.domStorageEnabled
+        set(value) {
+            webView.settings.domStorageEnabled = value
+        }
+
     val editor = PdfEditor(this)
 
     init {
