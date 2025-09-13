@@ -20,28 +20,23 @@ function doOnLast() {
     hideAllControls();
 
     const loadingBar = document.getElementById("loadingBar");
-    const loadingObserver = new MutationObserver(() => {
+    observe(loadingBar, { attributes: true, attributeFilter: ["style"], }, () => {
         const progress = parseInt(getComputedStyle(loadingBar).getPropertyValue("--progressBar-percent"));
         JWI.onProgressChange(progress);
-    });
-    loadingObserver.observe(loadingBar, {
-        attributes: true,
-        attributeFilter: ["style"],
     });
 
     const passwordDialog = $("#passwordDialog");
     passwordDialog.style.margin = "24px auto";
-    const passwordDialogObserver = new MutationObserver((mutations) => {
+    observe(passwordDialog, { attributes: true }, (mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type === "attributes" && mutation.attributeName === "open") {
                 JWI.onPasswordDialogChange(passwordDialog.getAttribute("open") !== null);
             }
         });
     });
-    passwordDialogObserver.observe(passwordDialog, { attributes: true });
 
     const printDialog = $("#printServiceDialog");
-    const printDialogObserver = new MutationObserver((mutations) => {
+    observe(printDialog, { attributes: true }, (mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type === "attributes" && mutation.attributeName === "open") {
                 printDialog.style.display = "none";
@@ -53,25 +48,22 @@ function doOnLast() {
             }
         });
     });
-    printDialogObserver.observe(printDialog, { attributes: true });
 
     const printProgress = printDialog.querySelector("progress");
-    const printProgressObserver = new MutationObserver((mutations) => {
+    observe(printProgress, { attributes: true }, (mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type === "attributes" && mutation.attributeName === "value") {
                 JWI.onPrintProcessProgress(parseFloat(printProgress.value) / 100);
             }
         });
     });
-    printProgressObserver.observe(printProgress, { attributes: true });
 
     const editorUndoBarMessage = $("#editorUndoBarMessage");
-    const editorUndoBarMessageObserver = new MutationObserver((mutations) => {
+    observe(editorUndoBarMessage, { childList: true }, (mutations) => {
         mutations.forEach((mutation) => {
             JWI.onShowEditorMessage(mutation.target.textContent);
         });
     });
-    editorUndoBarMessageObserver.observe(editorUndoBarMessage, { childList: true });
 
     const viewerContainer = $("#viewerContainer");
     let singleClickTimer;
@@ -163,7 +155,7 @@ function setupHelper() {
     });
 
     const searchInput = document.getElementById("findInput");
-    const observer = new MutationObserver((mutationsList) => {
+    observe(searchInput, { attributes: true, attributeFilter: ["data-status"], }, (mutationsList) => {
         mutationsList.forEach((mutation) => {
             if (mutation.type === "attributes" && mutation.attributeName === "data-status") {
                 const newStatus = searchInput.getAttribute("data-status");
@@ -180,10 +172,6 @@ function setupHelper() {
                 }
             }
         });
-    });
-    observer.observe(searchInput, {
-        attributes: true,
-        attributeFilter: ["data-status"],
     });
 }
 
@@ -1115,4 +1103,9 @@ function $(query) {
 
 function $all(query) {
     return document.querySelectorAll(query);
+}
+
+function observe(target, options, callback) {
+    const observer = new MutationObserver(callback);
+    observer.observe(target, options);
 }
