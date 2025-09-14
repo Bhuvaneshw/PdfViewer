@@ -34,6 +34,18 @@ fun ScrollSpeedLimitScope.callIfScrollSpeedLimitIsEnabled(onEnabled: () -> Unit)
     this.onEnabled = onEnabled
 }
 
+fun PdfEditor.AnnotationEventType.Companion.parse(type: String): PdfEditor.AnnotationEventType {
+    return when (type) {
+        "highlight" -> PdfEditor.AnnotationEventType.Unsaved.Highlight
+        "freetext" -> PdfEditor.AnnotationEventType.Unsaved.FreeText
+        "ink" -> PdfEditor.AnnotationEventType.Unsaved.Ink
+        "stamp" -> PdfEditor.AnnotationEventType.Unsaved.Stamp
+        "downloaded" -> PdfEditor.AnnotationEventType.Saved.Downloaded
+        "printed" -> PdfEditor.AnnotationEventType.Saved.Printed
+        else -> PdfEditor.AnnotationEventType.Unknown(type)
+    }
+}
+
 class ScrollSpeedLimitScope internal constructor(internal var onEnabled: (() -> Unit)? = null)
 
 fun PdfViewer.addListener(
@@ -74,6 +86,7 @@ fun PdfViewer.addListener(
     onPrintProcessEnd: (() -> Unit)? = null,
     onPrintCancelled: (() -> Unit)? = null,
     onShowEditorMessage: ((message: String) -> Unit)? = null,
+    onAnnotationEditor: ((type: PdfEditor.AnnotationEventType) -> Unit)? = null,
     onScaleLimitChange: ((minPageScale: Float, maxPageScale: Float, defaultPageScale: Float) -> Unit)? = null,
     onActualScaleLimitChange: ((minPageScale: Float, maxPageScale: Float, defaultPageScale: Float) -> Unit)? = null,
     onAlignModeChange: ((requestedMode: PdfViewer.PageAlignMode, appliedMode: PdfViewer.PageAlignMode) -> Unit)? = null,
@@ -234,6 +247,10 @@ fun PdfViewer.addListener(
 
         override fun onShowEditorMessage(message: String) {
             onShowEditorMessage?.invoke(message)
+        }
+
+        override fun onAnnotationEditor(type: PdfEditor.AnnotationEventType) {
+            onAnnotationEditor?.invoke(type)
         }
 
         override fun onScaleLimitChange(

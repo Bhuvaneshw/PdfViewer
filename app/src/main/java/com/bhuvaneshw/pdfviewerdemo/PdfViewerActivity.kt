@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfUnstableApi
 import com.bhuvaneshw.pdf.addListener
@@ -32,6 +33,7 @@ class PdfViewerActivity : AppCompatActivity() {
     private lateinit var view: ActivityPdfViewerBinding
     private var fullscreen = false
     private lateinit var pdfSettingsManager: PdfSettingsManager
+    private var selectedColor = Color.WHITE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +71,7 @@ class PdfViewerActivity : AppCompatActivity() {
         }
 
         view.pdfToolBar.alertDialogBuilder = { MaterialAlertDialogBuilder(this) }
-        var selectedColor = Color.WHITE
+        view.pdfToolBar.onBack = onBackPressedDispatcher::onBackPressed
         view.pdfToolBar.pickColor = { onPickColor ->
             ColorPickerDialog.newBuilder()
                 .setColor(selectedColor)
@@ -94,8 +96,14 @@ class PdfViewerActivity : AppCompatActivity() {
         view.container.setAsLoadingIndicator(view.loader)
 
         onBackPressedDispatcher.addCallback(this) {
-            if (view.pdfToolBar.isFindBarVisible()) view.pdfToolBar.setFindBarVisible(false)
-            else finish()
+            when {
+                view.pdfToolBar.isFindBarVisible() -> view.pdfToolBar.setFindBarVisible(false)
+                view.pdfViewer.editor.hasUnsavedChanges -> showSaveDialog()
+                else -> {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
         }
 
         view.pdfViewer.run {
@@ -111,6 +119,19 @@ class PdfViewerActivity : AppCompatActivity() {
                 onProgressChange = { progress ->
                     view.progressBar.isIndeterminate = false
                     view.progressBar.progress = (progress * 100).toInt()
+                },
+                onAnnotationEditor = { type ->
+                    when (type) {
+                        is PdfEditor.AnnotationEventType.Saved -> {
+                            view.pdfToolBar.setFileName(fileName)
+                        }
+
+                        is PdfEditor.AnnotationEventType.Unsaved -> {
+                            view.pdfToolBar.setFileName("*$fileName")
+                        }
+
+                        else -> {}
+                    }
                 }
             )
         }
@@ -151,6 +172,19 @@ class PdfViewerActivity : AppCompatActivity() {
     override fun onDestroy() {
         pdfSettingsManager.save(view.pdfViewer)
         super.onDestroy()
+    }
+
+    private fun showSaveDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Document modified!")
+            .setMessage("Do you want to save the document before exiting?")
+            .setPositiveButton("Save") { _, _ ->
+                view.pdfViewer.downloadFile()
+            }
+            .setNegativeButton("Exit") { _, _ ->
+                finish()
+            }
+            .show()
     }
 
     inner class DownloadPdfListener(private val pdfTitle: String) : PdfListener {

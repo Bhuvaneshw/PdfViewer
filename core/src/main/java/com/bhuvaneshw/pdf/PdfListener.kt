@@ -47,6 +47,7 @@ interface PdfListener {
     fun onPrintProcessEnd() {}
     fun onPrintCancelled() {}
     fun onShowEditorMessage(message: String) {}
+    fun onAnnotationEditor(type: PdfEditor.AnnotationEventType) {}
 
     fun onScaleLimitChange(
         @FloatRange(-4.0, 10.0) minPageScale: Float,

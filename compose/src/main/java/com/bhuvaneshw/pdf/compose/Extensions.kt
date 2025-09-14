@@ -7,6 +7,7 @@ import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import com.bhuvaneshw.pdf.PdfDocumentProperties
+import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.WebViewError
@@ -288,6 +289,14 @@ fun PdfState.editorMessageFlow(): Flow<String> = flowIt { emit ->
     object : PdfListener {
         override fun onShowEditorMessage(message: String) {
             emit(message)
+        }
+    }
+}
+
+fun PdfState.annotationEditorFlow(): Flow<PdfEditor.AnnotationEventType> = flowIt { emit ->
+    object : PdfListener {
+        override fun onAnnotationEditor(type: PdfEditor.AnnotationEventType) {
+            emit(type)
         }
     }
 }

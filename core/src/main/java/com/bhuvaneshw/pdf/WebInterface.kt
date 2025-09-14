@@ -136,6 +136,7 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     @JavascriptInterface
     fun onPrintProcessEnd() = post {
         pdfViewer.listeners.forEach { it.onPrintProcessEnd() }
+        onAnnotationEditor("printed")
     }
 
     @JavascriptInterface
@@ -146,6 +147,16 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     @JavascriptInterface
     fun onShowEditorMessage(message: String) = post {
         pdfViewer.listeners.forEach { it.onShowEditorMessage(message) }
+    }
+
+    @JavascriptInterface
+    fun onAnnotationEditor(typeString: String) = post {
+        val type = PdfEditor.AnnotationEventType.parse(typeString)
+
+        if (type !is PdfEditor.AnnotationEventType.Unknown)
+            pdfViewer.editor.hasUnsavedChanges = type !is PdfEditor.AnnotationEventType.Saved
+
+        pdfViewer.listeners.forEach { it.onAnnotationEditor(type) }
     }
 
     @JavascriptInterface
@@ -219,7 +230,10 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
             0
         )
 
-        post { pdfViewer.listeners.forEach { it.onSavePdf(pdfAsBytes) } }
+        post {
+            pdfViewer.listeners.forEach { it.onSavePdf(pdfAsBytes) }
+            onAnnotationEditor("downloaded")
+        }
     }
 
     fun getBase64StringFromBlobUrl(blobUrl: String): String? {

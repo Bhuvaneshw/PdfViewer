@@ -8,8 +8,15 @@ function openUrl(args) {
         });
 
     let callback = (event) => {
-        const { pageNumber } = event;
+        // const { pageNumber } = event;
         PDFViewerApplication.eventBus.off("pagerendered", callback);
+
+        PDFViewerApplication.pdfDocument.annotationStorage.originalOnAnnotationEditor = PDFViewerApplication.pdfDocument.annotationStorage.onAnnotationEditor;
+        PDFViewerApplication.pdfDocument.annotationStorage.onAnnotationEditor = (type) => {
+            PDFViewerApplication.pdfDocument.annotationStorage.originalOnAnnotationEditor(type);
+            JWI.onAnnotationEditor(type);
+        };
+
         JWI.onLoadSuccess(PDFViewerApplication.pagesCount);
     };
     PDFViewerApplication.eventBus.on("pagerendered", callback);

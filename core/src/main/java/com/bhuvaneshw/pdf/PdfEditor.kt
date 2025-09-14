@@ -100,6 +100,7 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
             pdfViewer.dispatchInkOpacity(value)
         }
 
+    var hasUnsavedChanges: Boolean = false; internal set
     val isEditing: Boolean get() = textHighlighterOn || freeTextOn || inkOn || stampOn
 
     fun undo() {
@@ -112,4 +113,21 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
         pdfViewer.webView callDirectly "redo"()
     }
 
+    sealed interface AnnotationEventType {
+        sealed interface Unsaved : AnnotationEventType {
+            data object Highlight : Unsaved
+            data object FreeText : Unsaved
+            data object Ink : Unsaved
+            data object Stamp : Unsaved
+        }
+
+        sealed interface Saved : AnnotationEventType {
+            data object Downloaded : Saved
+            data object Printed : Saved
+        }
+
+        data class Unknown(val type: String) : AnnotationEventType
+
+        companion object
+    }
 }

@@ -32,5 +32,6 @@ try {
         onPrintProcessEnd() {},
         onPrintProcessProgress() {},
         onShowEditorMessage() {},
+        onAnnotationEditor() {},
     };
 }

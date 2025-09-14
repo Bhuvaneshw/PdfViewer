@@ -50,6 +50,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +63,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfUnstableApi
 import com.bhuvaneshw.pdf.PdfUnstablePrintApi
@@ -73,6 +75,7 @@ import com.bhuvaneshw.pdf.compose.CustomOnReadyCallback
 import com.bhuvaneshw.pdf.compose.DefaultOnReadyCallback
 import com.bhuvaneshw.pdf.compose.PdfLoadingState
 import com.bhuvaneshw.pdf.compose.PdfState
+import com.bhuvaneshw.pdf.compose.annotationEditorFlow
 import com.bhuvaneshw.pdf.compose.doubleClickFlow
 import com.bhuvaneshw.pdf.compose.editorMessageFlow
 import com.bhuvaneshw.pdf.compose.rememberPdfState
@@ -93,6 +96,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 
 class ComposePdfViewerActivity : ComponentActivity() {
@@ -221,7 +225,26 @@ private fun Activity.MainScreen(
 ) {
     val pdfState = rememberPdfState(source = source)
     val toolBarState = rememberToolBarState()
+    val toolbarTitle by pdfState
+        .annotationEditorFlow()
+        .scan(initial = fileName) { previousTitle, type ->
+            when (type) {
+                is PdfEditor.AnnotationEventType.Saved -> {
+                    fileName
+                }
+
+                is PdfEditor.AnnotationEventType.Unsaved -> {
+                    "*$fileName"
+                }
+
+                else -> {
+                    previousTitle
+                }
+            }
+        }
+        .collectAsState(fileName)
     var fullscreen by remember { mutableStateOf(false) }
+    var showSaveDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(pdfState.loadingState) {
         pdfState.loadingState.let {
@@ -273,9 +296,11 @@ private fun Activity.MainScreen(
     }
 
     BackHandler {
-        if (toolBarState.isFindBarOpen)
-            toolBarState.isFindBarOpen = false
-        else finish()
+        when {
+            toolBarState.isFindBarOpen -> toolBarState.isFindBarOpen = false
+            pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> showSaveDialog = true
+            else -> finish()
+        }
     }
 
     PdfViewerContainer(
@@ -304,9 +329,13 @@ private fun Activity.MainScreen(
                 var showZoomLimitDialog by remember { mutableStateOf(false) }
 
                 PdfToolBar(
-                    title = fileName,
+                    title = toolbarTitle,
                     toolBarState = toolBarState,
-                    onBack = { finish() },
+                    onBack = {
+                        if (pdfState.pdfViewer?.editor?.hasUnsavedChanges == true)
+                            showSaveDialog = true
+                        else finish()
+                    },
                     contentColor = MaterialTheme.colorScheme.onBackground,
                     showEditor = true,
                     dropDownMenu = { onDismiss, defaultMenus ->
@@ -372,6 +401,23 @@ private fun Activity.MainScreen(
             }
         }
     )
+
+    if (showSaveDialog) {
+        AlertDialog(
+            onDismissRequest = { showSaveDialog = false },
+            title = { Text(text = "Document modified!") },
+            text = { Text(text = "Do you want to save the document before exiting?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showSaveDialog = false
+                        pdfState.pdfViewer?.downloadFile()
+                    }
+                ) { Text("Exit") }
+            },
+            dismissButton = { TextButton(onClick = { showSaveDialog = false }) { Text("Exit") } },
+        )
+    }
 }
 
 @OptIn(PdfUnstableApi::class)
