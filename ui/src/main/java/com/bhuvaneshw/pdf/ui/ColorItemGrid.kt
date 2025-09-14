@@ -12,7 +12,7 @@ import androidx.annotation.ColorInt
 class ColorItemGrid internal constructor(
     context: Context,
     private val highlightEditorColors: List<Pair<String, Int>>,
-    @ColorInt private val borderColor: Int,
+    @param:ColorInt private val borderColor: Int,
     private val onSelectColor: (color: Int) -> Unit
 ) : GridView(context) {
 

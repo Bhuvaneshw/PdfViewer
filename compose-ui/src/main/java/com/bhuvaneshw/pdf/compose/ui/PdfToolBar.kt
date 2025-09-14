@@ -845,9 +845,9 @@ private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
                 .weight(1f),
-            decorationBox = {
+            decorationBox = { textField ->
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
-                    it()
+                    textField()
                     this@Row.AnimatedVisibility(
                         visible = searchTerm.isEmpty(),
                         enter = slideIn { IntOffset(0, -it.height) } + fadeIn(),
@@ -994,9 +994,9 @@ private fun GoToPageDialog(pdfState: PdfState, onDismiss: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 6.dp),
-                decorationBox = {
+                decorationBox = { textField ->
                     Box(Modifier.fillMaxWidth()) {
-                        it()
+                        textField()
                         AnimatedVisibility(
                             visible = pageNumber.isEmpty(),
                             enter = slideIn { IntOffset(0, -it.height) } + fadeIn(),

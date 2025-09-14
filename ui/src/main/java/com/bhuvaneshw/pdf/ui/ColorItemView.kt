@@ -20,16 +20,19 @@ class ColorItemView @JvmOverloads constructor(
             field = value
             postInvalidate()
         }
+
     @ColorInt
     var borderColor: Int = Color.BLACK
         set(value) {
             field = value
             postInvalidate()
         }
+
     private val fillPaint = Paint().apply {
         style = Paint.Style.FILL
         isAntiAlias = true
     }
+
     private val borderPaint = Paint().apply {
         style = Paint.Style.STROKE
         strokeWidth = 5f
