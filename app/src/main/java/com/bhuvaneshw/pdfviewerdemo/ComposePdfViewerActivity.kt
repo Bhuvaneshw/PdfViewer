@@ -50,7 +50,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -96,7 +95,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 
 class ComposePdfViewerActivity : ComponentActivity() {
@@ -225,24 +223,7 @@ private fun Activity.MainScreen(
 ) {
     val pdfState = rememberPdfState(source = source)
     val toolBarState = rememberToolBarState()
-    val toolbarTitle by pdfState
-        .annotationEditorFlow()
-        .scan(initial = fileName) { previousTitle, type ->
-            when (type) {
-                is PdfEditor.AnnotationEventType.Saved -> {
-                    fileName
-                }
-
-                is PdfEditor.AnnotationEventType.Unsaved -> {
-                    "*$fileName"
-                }
-
-                else -> {
-                    previousTitle
-                }
-            }
-        }
-        .collectAsState(fileName)
+    var toolbarTitle by remember { mutableStateOf(fileName) }
     var fullscreen by remember { mutableStateOf(false) }
     var showSaveDialog by remember { mutableStateOf(false) }
 
@@ -285,6 +266,16 @@ private fun Activity.MainScreen(
 
         launch {
             pdfState.editorMessageFlow().collectLatest(onShowMessage)
+        }
+
+        launch {
+            pdfState.annotationEditorFlow().collectLatest { type ->
+                toolbarTitle = when (type) {
+                    is PdfEditor.AnnotationEventType.Saved -> fileName
+                    is PdfEditor.AnnotationEventType.Unsaved -> "*$fileName"
+                    else -> toolbarTitle
+                }
+            }
         }
     }
 
@@ -413,9 +404,13 @@ private fun Activity.MainScreen(
                         showSaveDialog = false
                         pdfState.pdfViewer?.downloadFile()
                     }
-                ) { Text("Exit") }
+                ) { Text("Save") }
             },
-            dismissButton = { TextButton(onClick = { showSaveDialog = false }) { Text("Exit") } },
+            dismissButton = {
+                TextButton(onClick = {
+                    showSaveDialog = false; finish()
+                }) { Text("Exit") }
+            },
         )
     }
 }
