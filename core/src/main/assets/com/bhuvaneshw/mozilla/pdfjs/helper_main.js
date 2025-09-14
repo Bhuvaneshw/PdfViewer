@@ -1,5 +1,6 @@
 // #region dom elements
 const viewerContainer = lazy("#viewerContainer"),
+    viewer = lazy("#viewer"),
     printContainer = lazy("#printContainer"),
     printCancel = lazy("#printCancel"),
     editorModeButtons = lazy("#editorModeButtons"),

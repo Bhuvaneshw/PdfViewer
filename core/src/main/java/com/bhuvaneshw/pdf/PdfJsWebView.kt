@@ -91,8 +91,8 @@ internal fun PdfViewer.PdfJsWebView() = WebView(context).apply {
                 it.onReceivedError(
                     WebViewError(
                         errorCode = errorCode,
-                        description = description?.toString(),
-                        failingUrl = failingUrl?.toString(),
+                        description = description,
+                        failingUrl = failingUrl,
                     )
                 )
             }

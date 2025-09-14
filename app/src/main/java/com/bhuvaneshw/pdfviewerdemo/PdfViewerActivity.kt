@@ -60,7 +60,8 @@ class PdfViewerActivity : AppCompatActivity() {
 //            minPageScale = PdfViewer.Zoom.PAGE_WIDTH.floatValue
 //            maxPageScale = 5f
 //            defaultPageScale = PdfViewer.Zoom.PAGE_WIDTH.floatValue
-            editor.highlightColor = Color.BLUE
+//            editor.highlightColor = Color.BLUE
+            editor.applyHighlightColorOnTextSelection = true
             pdfSettingsManager.restore(this)
             load(filePath)
             if (filePath.isNotBlank())
@@ -97,7 +98,10 @@ class PdfViewerActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this) {
             when {
-                view.pdfToolBar.isFindBarVisible() -> view.pdfToolBar.setFindBarVisible(false)
+                view.pdfToolBar.handleBackPressed() -> {
+                    // Handled by toolbar
+                }
+
                 view.pdfViewer.editor.hasUnsavedChanges -> showSaveDialog()
                 else -> {
                     isEnabled = false
@@ -107,7 +111,7 @@ class PdfViewerActivity : AppCompatActivity() {
         }
 
         view.pdfViewer.run {
-            highlightEditorColors = listOf("blue" to Color.BLUE, "black" to Color.BLACK)
+//            highlightEditorColors = listOf("blue" to Color.BLUE, "black" to Color.BLACK)
             addListener(
                 onPageLoadFailed = {
                     toast(it.formatToString())

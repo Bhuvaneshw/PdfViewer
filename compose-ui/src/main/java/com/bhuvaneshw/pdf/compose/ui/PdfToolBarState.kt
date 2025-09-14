@@ -16,4 +16,20 @@ class PdfToolBarState {
     var isEditorFreeTextOn by mutableStateOf(false)
     var isEditorInkOn by mutableStateOf(false)
     var isEditorStampOn by mutableStateOf(false)
+
+    fun handleBackPressed(): Boolean {
+        when {
+            isTextHighlighterOn -> isTextHighlighterOn = false
+            isEditorFreeTextOn -> isEditorFreeTextOn = false
+            isEditorInkOn -> isEditorInkOn = false
+            isEditorStampOn -> isEditorStampOn = false
+
+            isEditorOpen -> isEditorOpen = false
+            isFindBarOpen -> isFindBarOpen = false
+
+            else -> return false
+        }
+
+        return true
+    }
 }

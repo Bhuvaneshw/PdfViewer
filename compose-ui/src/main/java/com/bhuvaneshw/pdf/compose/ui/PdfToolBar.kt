@@ -347,6 +347,9 @@ private fun PdfToolBarScope.Editor(
 
     LaunchedEffect(toolBarState.isTextHighlighterOn) {
         pdfState.pdfViewer?.editor?.textHighlighterOn = toolBarState.isTextHighlighterOn
+        if (!toolBarState.isTextHighlighterOn) {
+            pdfState.pdfViewer?.removeTextSelection()
+        }
     }
     LaunchedEffect(toolBarState.isEditorFreeTextOn) {
         pdfState.pdfViewer?.editor?.freeTextOn = toolBarState.isEditorFreeTextOn
@@ -399,7 +402,7 @@ private fun PdfToolBarScope.Editor(
             StampOptions(contentColor)
         }
 
-        if(toolBarState.isNothingOn()) {
+        if (toolBarState.isNothingOn()) {
             Text(
                 text = "Edit",
                 style = MaterialTheme.typography.titleMedium,
@@ -416,7 +419,7 @@ private fun PdfToolBarScope.Editor(
 
 @Suppress("NOTHING_TO_INLINE")
 private inline fun PdfToolBarState.isNothingOn(): Boolean {
-    return !(isTextHighlighterOn || isEditorFreeTextOn|| isEditorInkOn || isEditorStampOn)
+    return !(isTextHighlighterOn || isEditorFreeTextOn || isEditorInkOn || isEditorStampOn)
 }
 
 @Composable
@@ -1348,16 +1351,8 @@ internal fun defaultToolBarBackIcon(
             icon = Icons.AutoMirrored.Default.ArrowBack,
             contentDescription = "Back",
             onClick = {
-                when {
-                    toolBarState.isTextHighlighterOn -> toolBarState.isTextHighlighterOn = false
-                    toolBarState.isEditorFreeTextOn -> toolBarState.isEditorFreeTextOn = false
-                    toolBarState.isEditorInkOn -> toolBarState.isEditorInkOn = false
-                    toolBarState.isEditorStampOn -> toolBarState.isEditorStampOn = false
-
-                    toolBarState.isEditorOpen -> toolBarState.isEditorOpen = false
-                    toolBarState.isFindBarOpen -> toolBarState.isFindBarOpen = false
-
-                    else -> onBack?.invoke()
+                if (!toolBarState.handleBackPressed()) {
+                    onBack?.invoke()
                 }
             },
             isEnabled = true,

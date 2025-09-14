@@ -100,6 +100,7 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
             pdfViewer.dispatchInkOpacity(value)
         }
 
+    var applyHighlightColorOnTextSelection = false
     var hasUnsavedChanges: Boolean = false; internal set
     val isEditing: Boolean get() = textHighlighterOn || freeTextOn || inkOn || stampOn
 

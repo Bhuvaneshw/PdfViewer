@@ -13,7 +13,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.view.ActionMode
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.webkit.WebView
 import android.widget.LinearLayout
@@ -543,9 +546,76 @@ class PdfViewer @JvmOverloads constructor(
             ?.createSharableUri(context, authority, currentSource ?: return null)
     }
 
+    @JvmOverloads
+    fun setTextSelectionColor(
+        @ColorInt color: Int,
+        @IntRange(0, 255) alpha: Int = 64,
+    ) {
+        val finalColor = Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color))
+        webView callDirectly "setTextSelectionColor"(finalColor.toJsHex().toJsString())
+    }
+
+    fun resetTextSelectionColor() {
+        webView callDirectly "removeTextSelectionColor"()
+    }
+
+    fun removeTextSelection() {
+        webView callDirectly "window.getSelection().removeAllRanges"()
+    }
+
     override fun setLayerType(layerType: Int, paint: Paint?) {
         super.setLayerType(layerType, paint)
         webView.setLayerType(layerType, paint)
+    }
+
+    override fun startActionModeForChild(
+        originalView: View?,
+        callback: ActionMode.Callback?,
+        type: Int
+    ): ActionMode? {
+        if (editor.run { applyHighlightColorOnTextSelection && textHighlighterOn }) {
+            setTextSelectionColor(editor.highlightColor)
+            return super.startActionModeForChild(
+                originalView,
+                textHighlightSelectionMode(callback),
+                type
+            )
+        }
+
+        return super.startActionModeForChild(originalView, callback, type)
+    }
+
+    override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode? {
+        if (editor.run { applyHighlightColorOnTextSelection && textHighlighterOn }) {
+            setTextSelectionColor(editor.highlightColor)
+            return super.startActionMode(textHighlightSelectionMode(callback), type)
+        }
+
+        return super.startActionMode(callback, type)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun textHighlightSelectionMode(callback: ActionMode.Callback?): ActionMode.Callback {
+        return object : ActionMode.Callback by callback ?: simpleActionModeCallback, PdfListener {
+            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                menu?.clear()
+                mode?.finish()
+
+                setTextSelectionColor(editor.highlightColor)
+                addListener(this)
+
+                return true
+            }
+
+            override fun onDestroyActionMode(mode: ActionMode?) {
+                resetTextSelectionColor()
+                removeListener(this)
+            }
+
+            override fun onEditorHighlightColorChange(highlightColor: Int) {
+                setTextSelectionColor(highlightColor)
+            }
+        }
     }
 
     internal fun loadPage() {
@@ -981,4 +1051,10 @@ class PdfViewer @JvmOverloads constructor(
         }
     }
 
+    private val simpleActionModeCallback = object : ActionMode.Callback {
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = false
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?) = true
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?) = false
+        override fun onDestroyActionMode(mode: ActionMode?) {}
+    }
 }

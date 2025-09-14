@@ -288,7 +288,9 @@ private fun Activity.MainScreen(
 
     BackHandler {
         when {
-            toolBarState.isFindBarOpen -> toolBarState.isFindBarOpen = false
+            toolBarState.handleBackPressed() -> {
+                // Handled by toolbar
+            }
             pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> showSaveDialog = true
             else -> finish()
         }
@@ -304,6 +306,7 @@ private fun Activity.MainScreen(
                     pdfSettingsManager?.restore(this)
                     setPdfViewer(this)
                     pdfPrintAdapter = DefaultPdfPrintAdapter(context)
+                    editor.applyHighlightColorOnTextSelection = true
 
                     addListener(downloadPdfListener)
                     addListener(imagePickerListener)

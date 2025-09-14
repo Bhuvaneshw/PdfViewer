@@ -765,6 +765,14 @@ function nearest(currentPoint, point1, point2) {
         return point1;
     } else return point2;
 }
+
+function setTextSelectionColor(color) {
+    viewer.style.setProperty('--selection-color', color);
+}
+
+function removeTextSelectionColor() {
+    viewer.style.removeProperty('--selection-color');
+}
 // #endregion
 
 // #region pdf.js editor ui

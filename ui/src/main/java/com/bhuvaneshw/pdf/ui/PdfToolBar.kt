@@ -315,30 +315,8 @@ open class PdfToolBar @JvmOverloads constructor(
     @SuppressLint("SetTextI18n")
     private fun initListeners() {
         back.setOnClickListener {
-            when {
-                isHighlightBarVisible() -> {
-                    setHighlightBarVisible(false)
-                    setEditorBarVisible(true)
-                }
-
-                isFreeTextBarVisible() -> {
-                    setFreeTextBarVisible(false)
-                    setEditorBarVisible(true)
-                }
-
-                isInkBarVisible() -> {
-                    setInkBarVisible(false)
-                    setEditorBarVisible(true)
-                }
-
-                isStampBarVisible() -> {
-                    setStampBarVisible(false)
-                    setEditorBarVisible(true)
-                }
-
-                isEditorBarVisible() -> setEditorBarVisible(false)
-                isFindBarVisible() -> setFindBarVisible(false)
-                else -> onBack?.invoke()
+            if (!handleBackPressed()) {
+                onBack?.invoke()
             }
         }
 
@@ -512,6 +490,40 @@ open class PdfToolBar @JvmOverloads constructor(
                 inkColor.color = color
             }
         }
+    }
+
+    fun handleBackPressed(): Boolean {
+        when {
+            isHighlightBarVisible() -> {
+                if (pdfViewer.editor.applyHighlightColorOnTextSelection) {
+                    pdfViewer.resetTextSelectionColor()
+                    pdfViewer.removeTextSelection()
+                }
+                setHighlightBarVisible(false)
+                setEditorBarVisible(true)
+            }
+
+            isFreeTextBarVisible() -> {
+                setFreeTextBarVisible(false)
+                setEditorBarVisible(true)
+            }
+
+            isInkBarVisible() -> {
+                setInkBarVisible(false)
+                setEditorBarVisible(true)
+            }
+
+            isStampBarVisible() -> {
+                setStampBarVisible(false)
+                setEditorBarVisible(true)
+            }
+
+            isEditorBarVisible() -> setEditorBarVisible(false)
+            isFindBarVisible() -> setFindBarVisible(false)
+            else -> return false
+        }
+
+        return true
     }
 
     private fun initSecondaryMenu() {
