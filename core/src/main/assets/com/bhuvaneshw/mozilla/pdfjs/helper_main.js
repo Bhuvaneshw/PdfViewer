@@ -71,7 +71,7 @@ window.print = () => {
 function doOnLast() {
     hideAllControls();
 
-    const loadingBar = document.getElementById("loadingBar");
+    const loadingBar = $("#loadingBar");
     observe(loadingBar, { attributes: true, attributeFilter: ["style"], }, () => {
         const progress = parseInt(getComputedStyle(loadingBar).getPropertyValue("--progressBar-percent"));
         JWI.onProgressChange(progress);
@@ -95,7 +95,7 @@ function doOnLast() {
                 if (printDialog.open) {
                     JWI.onPrintProcessStart();
                 } else {
-                    JWI.onPrintProcessEnd();
+                    JWI.onPrintProcessEnd(printContainer.isCancelled ?? false);
                 }
             }
         });

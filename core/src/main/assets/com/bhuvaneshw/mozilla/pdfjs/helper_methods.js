@@ -187,11 +187,13 @@ function downloadFile() {
 }
 
 function printFile() {
+    printContainer.isCancelled = false;
     printContainer.textContent = "";
     secondaryPrint.click();
 }
 
 function cancelPrinting() {
+    printContainer.isCancelled = true;
     printCancel.click();
     printContainer.textContent = "";
 }

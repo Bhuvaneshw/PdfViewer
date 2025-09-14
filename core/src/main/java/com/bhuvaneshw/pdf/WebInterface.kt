@@ -134,9 +134,13 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
-    fun onPrintProcessEnd() = post {
-        pdfViewer.listeners.forEach { it.onPrintProcessEnd() }
-        onAnnotationEditor("printed")
+    fun onPrintProcessEnd(isCancelled: Boolean) = post {
+        if (isCancelled) {
+            pdfViewer.listeners.forEach { it.onPrintCancelled() }
+        } else {
+            pdfViewer.listeners.forEach { it.onPrintProcessEnd() }
+            onAnnotationEditor("printed")
+        }
     }
 
     @JavascriptInterface
