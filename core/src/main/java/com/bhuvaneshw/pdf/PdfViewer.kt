@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -269,6 +270,9 @@ class PdfViewer @JvmOverloads constructor(
             webView.settings.domStorageEnabled = value
         }
 
+    var actionModeCallbackWrapper: (ActionMode.Callback?) -> ActionMode.Callback =
+        ::customSelectionModeCallback
+
     val editor = PdfEditor(this)
 
     init {
@@ -474,7 +478,7 @@ class PdfViewer @JvmOverloads constructor(
     }
 
     /**
-     * @param defaultFileName forwarded to [com.bhuvaneshw.pdf.print.PdfPrintAdapter.defaultFileName] when it is not null
+     * @param defaultFileName forwarded to [PdfPrintAdapter.defaultFileName] when it is not null
      */
     @JvmOverloads
     fun printFile(defaultFileName: String? = null) {
@@ -573,43 +577,59 @@ class PdfViewer @JvmOverloads constructor(
         callback: ActionMode.Callback?,
         type: Int
     ): ActionMode? {
-        if (editor.run { applyHighlightColorOnTextSelection && textHighlighterOn }) {
-            setTextSelectionColor(editor.highlightColor)
-            return super.startActionModeForChild(
-                originalView,
-                textHighlightSelectionMode(callback),
-                type
-            )
-        }
-
-        return super.startActionModeForChild(originalView, callback, type)
+        return super.startActionModeForChild(
+            originalView,
+            actionModeCallbackWrapper(callback),
+            type
+        )
     }
 
     override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode? {
-        if (editor.run { applyHighlightColorOnTextSelection && textHighlighterOn }) {
-            setTextSelectionColor(editor.highlightColor)
-            return super.startActionMode(textHighlightSelectionMode(callback), type)
-        }
-
-        return super.startActionMode(callback, type)
+        return super.startActionMode(actionModeCallbackWrapper(callback), type)
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun textHighlightSelectionMode(callback: ActionMode.Callback?): ActionMode.Callback {
-        return object : ActionMode.Callback by callback ?: simpleActionModeCallback, PdfListener {
+    private fun customSelectionModeCallback(callback: ActionMode.Callback?): ActionMode.Callback {
+        val actionModeCallback = callback ?: simpleActionModeCallback
+
+        return object : ActionMode.Callback2(), PdfListener {
+            override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) =
+                actionModeCallback.onActionItemClicked(mode, item)
+
+            override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?) =
+                actionModeCallback.onPrepareActionMode(mode, menu)
+
             override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                menu?.clear()
-                mode?.finish()
+                if (editor.run { applyHighlightColorOnTextSelection && textHighlighterOn }) {
+                    setTextSelectionColor(editor.highlightColor)
+                    menu?.clear()
+                    mode?.finish()
 
-                setTextSelectionColor(editor.highlightColor)
-                addListener(this)
+                    setTextSelectionColor(editor.highlightColor)
+                    addListener(this)
+                    return true
+                }
 
-                return true
+                return actionModeCallback.onCreateActionMode(mode, menu)
             }
 
             override fun onDestroyActionMode(mode: ActionMode?) {
-                resetTextSelectionColor()
-                removeListener(this)
+                if (editor.run { applyHighlightColorOnTextSelection && textHighlighterOn }) {
+                    resetTextSelectionColor()
+                    removeListener(this)
+                }
+
+                webView setDirectly "isContextMenuActive"(false)
+                actionModeCallback.onDestroyActionMode(mode)
+            }
+
+            override fun onGetContentRect(
+                mode: ActionMode?,
+                view: View?,
+                outRect: Rect?
+            ) {
+                if (actionModeCallback is ActionMode.Callback2)
+                    actionModeCallback.onGetContentRect(mode, view, outRect)
+                else super.onGetContentRect(mode, view, outRect)
             }
 
             override fun onEditorHighlightColorChange(highlightColor: Int) {

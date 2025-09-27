@@ -63,6 +63,7 @@ const viewerContainer = lazy("#viewerContainer"),
 
 let DOUBLE_CLICK_THRESHOLD = 300;
 let LONG_CLICK_THRESHOLD = 500;
+let isContextMenuActive = false;
 
 window.originalPrint = window.print;
 window.print = () => {
@@ -122,9 +123,15 @@ function doOnLast() {
     let longClickTimer;
     let isLongClick = false;
 
+    viewerContainer.addEventListener("contextmenu", (e) => {
+        isContextMenuActive = true;
+    });
+
     viewerContainer.addEventListener("click", (e) => {
         e.preventDefault();
-        if (e.detail === 1) {
+        if (isContextMenuActive) {
+            isContextMenuActive = false;
+        } else if (e.detail === 1) {
             singleClickTimer = setTimeout(() => {
                 if (e.target.tagName === "A") JWI.onLinkClick(e.target.href);
                 else JWI.onSingleClick();
