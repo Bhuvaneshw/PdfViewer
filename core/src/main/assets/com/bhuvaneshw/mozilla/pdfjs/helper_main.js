@@ -119,6 +119,35 @@ function doOnLast() {
         });
     });
 
+    const editorModeButtons = $('#editorModeButtons');
+    let prevEditorState = {};
+    observe(editorModeButtons, { attributes: true, subtree: true }, (mutations) => {
+        const state = {};
+        mutations.forEach(mutation => {
+            if (mutation.type === 'attributes') {
+                switch (mutation.target.id) {
+                    case 'editorHighlightButton':
+                        state['editorHighlightButton'] = mutation.target.classList.contains('toggled');
+                        break;
+                    case 'editorFreeTextButton':
+                        state['editorFreeTextButton'] = mutation.target.classList.contains('toggled');
+                        break;
+                    case 'editorInkButton':
+                        state['editorInkButton'] = mutation.target.classList.contains('toggled');
+                        break;
+                    case 'editorStampButton':
+                        state['editorStampButton'] = mutation.target.classList.contains('toggled');
+                        break;
+                    default: break;
+                }
+            }
+        })
+        if (Object.keys(state).length == 4 && !isSame(prevEditorState, state)){
+            prevEditorState = state;
+            JWI.onEditorStateChange(JSON.stringify(state));
+        }
+    })
+
     let singleClickTimer;
     let longClickTimer;
     let isLongClick = false;
@@ -278,4 +307,11 @@ function $all(query) {
 function observe(target, options, callback) {
     const observer = new MutationObserver(callback);
     observer.observe(target, options);
+}
+
+function isSame(prev, curr) {
+  const keys = Object.keys(prev);
+  if (keys.length !== Object.keys(curr).length) return false;
+
+  return keys.every(key => prev[key] === curr[key]);
 }

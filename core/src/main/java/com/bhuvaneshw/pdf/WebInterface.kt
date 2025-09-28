@@ -8,7 +8,9 @@ import android.webkit.JavascriptInterface
 import com.bhuvaneshw.pdf.PdfViewer.Companion.PDF_VIEWER_URL
 import com.bhuvaneshw.pdf.PdfViewer.PageScrollMode
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
+import com.bhuvaneshw.pdf.js.getBoolean
 import com.bhuvaneshw.pdf.js.toJsHex
+import org.json.JSONObject
 
 @Suppress("Unused")
 internal class WebInterface(private val pdfViewer: PdfViewer) {
@@ -161,6 +163,19 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
             pdfViewer.editor.hasUnsavedChanges = type !is PdfEditor.AnnotationEventType.Saved
 
         pdfViewer.listeners.forEach { it.onAnnotationEditor(type) }
+    }
+
+    @JavascriptInterface
+    fun onEditorStateChange(stateString: String) = post {
+        val jsonState = JSONObject(stateString)
+        val state = PdfEditor.EditorModeState(
+            isTextHighlighterOn = jsonState.getBoolean("editorHighlightButton", false),
+            isEditorFreeTextOn = jsonState.getBoolean("editorFreeTextButton", false),
+            isEditorInkOn = jsonState.getBoolean("editorInkButton", false),
+            isEditorStampOn = jsonState.getBoolean("editorStampButton", false),
+        )
+
+        pdfViewer.listeners.forEach { it.onEditorModeStateChange(state) }
     }
 
     @JavascriptInterface

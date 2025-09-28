@@ -29,6 +29,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isVisible
 import com.bhuvaneshw.pdf.PdfDocumentProperties
+import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
@@ -157,6 +158,10 @@ open class PdfToolBar @JvmOverloads constructor(
                     Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
                 findProgressBar.visibility = GONE
             }
+
+            override fun onEditorModeStateChange(state: PdfEditor.EditorModeState) {
+                updateEditorBarWithState(state)
+            }
         })
 
         find.isEnabled = false
@@ -200,9 +205,12 @@ open class PdfToolBar @JvmOverloads constructor(
         freeTextBar.visibility = GONE
         inkBar.visibility = GONE
         stampBar.visibility = GONE
-        pdfViewer.editor.textHighlighterOn = false
-        pdfViewer.editor.freeTextOn = false
-        pdfViewer.editor.inkOn = false
+        if (pdfViewer.isInitialized) {
+            pdfViewer.editor.textHighlighterOn = false
+            pdfViewer.editor.freeTextOn = false
+            pdfViewer.editor.inkOn = false
+            pdfViewer.editor.stampOn = false
+        }
     }
 
     fun isEditorBarVisible() = editorBar.isVisible
@@ -284,6 +292,17 @@ open class PdfToolBar @JvmOverloads constructor(
         } else {
             undo.visibility = GONE
             redo.visibility = GONE
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateEditorBarWithState(state: PdfEditor.EditorModeState) {
+        when {
+            state.isTextHighlighterOn -> setHighlightBarVisible(true)
+            state.isEditorFreeTextOn -> setFreeTextBarVisible(true)
+            state.isEditorInkOn -> setInkBarVisible(true)
+            state.isEditorStampOn -> setStampBarVisible(true)
+            else -> setEditorBarVisible(true)
         }
     }
 

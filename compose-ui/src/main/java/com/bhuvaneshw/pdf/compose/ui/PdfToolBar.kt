@@ -82,6 +82,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import com.bhuvaneshw.pdf.PdfEditor
+import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
 import com.bhuvaneshw.pdf.compose.MatchState
@@ -107,6 +109,22 @@ fun PdfToolBar(
         pdfState = pdfState,
         toolBarState = toolBarState,
     )
+
+    DisposableEffect(pdfState.pdfViewer) {
+        val listener = object : PdfListener {
+            override fun onEditorModeStateChange(state: PdfEditor.EditorModeState) {
+                toolBarState.isTextHighlighterOn = state.isTextHighlighterOn
+                toolBarState.isEditorFreeTextOn = state.isEditorFreeTextOn
+                toolBarState.isEditorInkOn = state.isEditorInkOn
+                toolBarState.isEditorStampOn = state.isEditorStampOn
+            }
+        }
+        pdfState.pdfViewer?.addListener(listener)
+
+        onDispose {
+            pdfState.pdfViewer?.removeListener(listener)
+        }
+    }
 
     Row(
         modifier = modifier

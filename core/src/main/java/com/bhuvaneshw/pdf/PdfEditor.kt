@@ -131,4 +131,11 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
 
         companion object
     }
+
+    data class EditorModeState(
+        val isTextHighlighterOn: Boolean = false,
+        val isEditorFreeTextOn: Boolean = false,
+        val isEditorInkOn: Boolean = false,
+        val isEditorStampOn: Boolean = false
+    )
 }

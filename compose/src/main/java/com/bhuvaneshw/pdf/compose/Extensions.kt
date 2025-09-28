@@ -301,6 +301,14 @@ fun PdfState.annotationEditorFlow(): Flow<PdfEditor.AnnotationEventType> = flowI
     }
 }
 
+fun PdfState.editorModeStateFlow(): Flow<PdfEditor.EditorModeState> = flowIt { emit ->
+    object : PdfListener {
+        override fun onEditorModeStateChange(state: PdfEditor.EditorModeState) {
+            emit(state)
+        }
+    }
+}
+
 fun PdfState.scaleLimitFlow(): Flow<Triple<Float, Float, Float>> = flowIt { emit ->
     object : PdfListener {
         override fun onScaleLimitChange(

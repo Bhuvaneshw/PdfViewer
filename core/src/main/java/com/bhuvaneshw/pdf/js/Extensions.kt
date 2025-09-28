@@ -1,6 +1,8 @@
 package com.bhuvaneshw.pdf.js
 
 import android.webkit.WebView
+import org.json.JSONException
+import org.json.JSONObject
 
 internal infix fun WebView.with(jsObject: JsObject): Pair<WebView, JsObject> {
     return this to jsObject
@@ -71,4 +73,12 @@ internal fun Int.toJsHex(includeAlpha: Boolean = true): String {
 
     return if (includeAlpha) String.format("#%02X%02X%02X%02X", red, green, blue, alpha)
     else String.format("#%02X%02X%02X", red, green, blue)
+}
+
+internal fun JSONObject.getBoolean(name: String, default: Boolean): Boolean {
+    return try {
+        getBoolean(name)
+    } catch (_: JSONException) {
+        default
+    }
 }
