@@ -154,7 +154,7 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
-    fun onAnnotationEditor(typeString: String) = post {
+    fun onAnnotationEditor(typeString: String?) = post {
         val type = PdfEditor.AnnotationEventType.parse(typeString)
 
         if (type !is PdfEditor.AnnotationEventType.Unknown)

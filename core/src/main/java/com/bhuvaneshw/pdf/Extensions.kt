@@ -34,7 +34,7 @@ fun ScrollSpeedLimitScope.callIfScrollSpeedLimitIsEnabled(onEnabled: () -> Unit)
     this.onEnabled = onEnabled
 }
 
-fun PdfEditor.AnnotationEventType.Companion.parse(type: String): PdfEditor.AnnotationEventType {
+fun PdfEditor.AnnotationEventType.Companion.parse(type: String?): PdfEditor.AnnotationEventType {
     return when (type) {
         "highlight" -> PdfEditor.AnnotationEventType.Unsaved.Highlight
         "freetext" -> PdfEditor.AnnotationEventType.Unsaved.FreeText

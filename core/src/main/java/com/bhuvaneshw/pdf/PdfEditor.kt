@@ -127,7 +127,7 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
             data object Printed : Saved
         }
 
-        data class Unknown(val type: String) : AnnotationEventType
+        data class Unknown(val type: String?) : AnnotationEventType
 
         companion object
     }
