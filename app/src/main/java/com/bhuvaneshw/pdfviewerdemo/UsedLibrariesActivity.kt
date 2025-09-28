@@ -11,8 +11,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bhuvaneshw.pdfviewerdemo.ui.theme.PdfViewerComposeDemoTheme
+import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
+import com.mikepenz.aboutlibraries.util.withContext
+import kotlinx.collections.immutable.toImmutableList
 
 class UsedLibrariesActivity : AppCompatActivity() {
 
@@ -29,7 +33,19 @@ class UsedLibrariesActivity : AppCompatActivity() {
                     },
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
+                    val context = LocalContext.current
+
+                    val libs = Libs
+                        .Builder()
+                        .withContext(context)
+                        .build()
+
                     LibrariesContainer(
+                        libraries = libs.copy(
+                            libraries = libs.libraries
+                                .distinctBy { it.name }
+                                .toImmutableList()
+                        ),
                         modifier = Modifier
                             .padding(innerPadding)
                             .fillMaxSize(),
