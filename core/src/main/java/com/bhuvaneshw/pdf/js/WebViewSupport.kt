@@ -9,6 +9,7 @@ object WebViewSupport {
         val version = getWebViewVersion(context)
 
         // https://github.com/mozilla/pdf.js/wiki/frequently-asked-questions#modern-build
+        // https://docs.signageos.io/hc/en-us/articles/4405381554578-Browser-WebKit-and-Chromium-versions-by-each-Platform#h_01HABYXXZMDMS644M0BXH43GYD
         return when {
             version == null -> CheckResult.NO_WEBVIEW_FOUND
             version < 110 -> CheckResult.REQUIRES_UPDATE
