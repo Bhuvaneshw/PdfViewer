@@ -859,6 +859,7 @@ private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
             }),
             singleLine = true,
             textStyle = TextStyle(fontSize = 16.sp, color = contentColor),
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
