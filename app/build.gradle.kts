@@ -15,7 +15,7 @@ android {
         applicationId = "com.bhuvaneshw.pdfviewerdemo"
         minSdk = 23
         targetSdk = 36
-        versionCode = 110
+        versionCode = 112
         versionName = "1.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
