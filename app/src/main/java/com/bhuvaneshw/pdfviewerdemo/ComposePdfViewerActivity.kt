@@ -241,8 +241,10 @@ private fun Activity.MainScreen(
         launch {
             pdfState.singleClickFlow().collectLatest {
                 pdfState.pdfViewer?.callSafely {  // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                    fullscreen = !fullscreen
-                    setFullscreen(fullscreen)
+                    if (!toolBarState.isEditorOpen) {
+                        fullscreen = !fullscreen
+                        setFullscreen(fullscreen)
+                    }
                 }
             }
         }
@@ -251,13 +253,15 @@ private fun Activity.MainScreen(
             pdfState.doubleClickFlow().collectLatest {
                 pdfState.pdfViewer?.apply {
                     callSafely { // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                        val originalCurrentPage = currentPage
+                        if (!toolBarState.isEditorOpen) {
+                            val originalCurrentPage = currentPage
 
-                        if (!isZoomInMinScale()) zoomToMinimum()
-                        else zoomToMaximum()
+                            if (!isZoomInMinScale()) zoomToMinimum()
+                            else zoomToMaximum()
 
-                        callIfScrollSpeedLimitIsEnabled {
-                            goToPage(originalCurrentPage)
+                            callIfScrollSpeedLimitIsEnabled {
+                                goToPage(originalCurrentPage)
+                            }
                         }
                     }
                 }
@@ -291,6 +295,7 @@ private fun Activity.MainScreen(
             toolBarState.handleBackPressed() -> {
                 // Handled by toolbar
             }
+
             pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> showSaveDialog = true
             else -> finish()
         }

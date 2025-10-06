@@ -144,9 +144,11 @@ class PdfViewerActivity : AppCompatActivity() {
             @OptIn(PdfUnstableApi::class)
             override fun onSingleClick() {
                 view.pdfViewer.callSafely { // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                    fullscreen = !fullscreen
-                    setFullscreen(fullscreen)
-                    view.container.animateToolBar(!fullscreen)
+                    if (!view.pdfToolBar.isEditorBarVisible()) {
+                        fullscreen = !fullscreen
+                        setFullscreen(fullscreen)
+                        view.container.animateToolBar(!fullscreen)
+                    }
                 }
             }
 
@@ -154,13 +156,15 @@ class PdfViewerActivity : AppCompatActivity() {
             override fun onDoubleClick() {
                 view.pdfViewer.run {
                     callSafely { // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                        val originalCurrentPage = currentPage
+                        if (!view.pdfToolBar.isEditorBarVisible()) {
+                            val originalCurrentPage = currentPage
 
-                        if (!isZoomInMinScale()) zoomToMinimum()
-                        else zoomToMaximum()
+                            if (!isZoomInMinScale()) zoomToMinimum()
+                            else zoomToMaximum()
 
-                        callIfScrollSpeedLimitIsEnabled {
-                            goToPage(originalCurrentPage)
+                            callIfScrollSpeedLimitIsEnabled {
+                                goToPage(originalCurrentPage)
+                            }
                         }
                     }
                 }
