@@ -302,7 +302,7 @@ open class PdfToolBar @JvmOverloads constructor(
             state.isEditorFreeTextOn -> setFreeTextBarVisible(true)
             state.isEditorInkOn -> setInkBarVisible(true)
             state.isEditorStampOn -> setStampBarVisible(true)
-            else -> setEditorBarVisible(true)
+            else -> setEditorBarVisible(isEditorBarVisible())
         }
     }
 
