@@ -296,8 +296,8 @@ function findPrevious() {
     findPreviousButton.click();
 }
 
-function submitPassword(password) {
-    password.value = password;
+function submitPassword(inpPassword) {
+    password.value = inpPassword;
     passwordSubmit.click();
 }
 

@@ -198,7 +198,7 @@ class UiSettings internal constructor(private val webView: WebView) {
         }
 
         fun submitPassword(password: String) {
-            webView callDirectly "onPasswordDialogChange"(false)
+            webView callDirectly "JWI.onPasswordDialogChange"(false)
             webView callDirectly "submitPassword"(password.toJsString())
         }
 
