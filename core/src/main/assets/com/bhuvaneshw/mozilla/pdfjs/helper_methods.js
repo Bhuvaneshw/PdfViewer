@@ -254,10 +254,10 @@ function startFind(searchTerm) {
     if (findInput) {
         findInput.value = searchTerm;
 
-        findMatchCase?.checked || false;
-        findEntireWord?.checked || false;
-        findHighlightAll?.checked || false;
-        findMatchDiacritics?.checked || false;
+        const caseSensitive = findMatchCase?.checked || false;
+        const entireWord = findEntireWord?.checked || false;
+        const highlightAll = findHighlightAll?.checked || false;
+        const matchDiacritics = findMatchDiacritics?.checked || false;
 
         PDFViewerApplication.eventBus.dispatch("find", {
             source: this,
