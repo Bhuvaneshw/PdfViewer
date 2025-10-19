@@ -1,0 +1,59 @@
+name: Generate and Publish Dokka Docs
+
+on:
+  release:
+    types: [published]    # triggers on creating a release
+  workflow_dispatch:      # allows manual trigger
+
+permissions:
+  contents: write         # needed to push to gh-pages
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Set up JDK
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # 3️⃣ Cache Gradle
+      - name: Cache Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      # 4️⃣ Build Dokka for all modules
+      - name: Generate Dokka documentation
+        run: ./gradlew dokkaGenerate
+
+      # 5️⃣ Prepare versioned output
+      - name: Prepare versioned docs
+        run: |
+          # Use tag from release (e.g., v1.0.0)
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "Publishing docs for version: $VERSION"
+
+          # Create folders
+          mkdir -p docs/versioned/$VERSION
+          cp -r build/dokka/* docs/versioned/$VERSION/
+
+          # Also update /latest
+          rm -rf docs/latest
+          mkdir -p docs/latest
+          cp -r build/dokka/* docs/latest/
+        shell: bash
+
+      # 6️⃣ Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          keep_files: true
