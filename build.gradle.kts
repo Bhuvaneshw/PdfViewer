@@ -4,5 +4,15 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.about.libraries) apply false
-    alias(libs.plugins.kotlin.dokka) apply false
+    alias(libs.plugins.kotlin.dokka)
+}
+
+
+dependencies {
+    dokka(project(":core"))
+    dokka(project(":ui"))
+    dokka(project(":compose"))
+    dokka(project(":compose-ui"))
+//    dokka(project(":icc"))
+//    dokka(project(":jp2"))
 }
