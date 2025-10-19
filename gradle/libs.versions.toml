@@ -17,8 +17,10 @@ composeBom = "2025.08.00"
 lifecycleRuntimeKtx = "2.9.2"
 aboutLibraries = "12.2.4"
 webkit = "1.14.0"
+dokka = "2.1.0"
 
 [libraries]
+android-documentation-plugin = { module = "org.jetbrains.dokka:android-documentation-plugin", version.ref = "dokka" }
 rangeseekbar = { module = "com.github.MohammedAlaaMorsi:RangeSeekBar", version.ref = "rangeseekbar" }
 colorpicker = { module = "com.jaredrummler:colorpicker", version.ref = "colorpicker" }
 colorpicker-compose = { module = "io.mhssn:colorpicker", version.ref = "colorpickerCompose" }
@@ -56,3 +58,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 about-libraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
+kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

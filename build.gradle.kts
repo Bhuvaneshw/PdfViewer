@@ -4,4 +4,5 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.about.libraries) apply false
+    alias(libs.plugins.kotlin.dokka) apply false
 }

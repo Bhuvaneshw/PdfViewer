@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.dokka)
     id("maven-publish")
 }
 
@@ -51,6 +52,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
+    dokkaPlugin(libs.android.documentation.plugin)
 
     implementation(project(":core"))
     implementation(project(":compose"))
