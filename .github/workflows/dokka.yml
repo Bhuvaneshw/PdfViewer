@@ -27,6 +27,9 @@ jobs:
       # 3️⃣ Cache Gradle
       - name: Cache Gradle
         uses: gradle/actions/setup-gradle@v3
+        
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
 
       # 4️⃣ Build Dokka for all modules
       - name: Generate Dokka documentation
