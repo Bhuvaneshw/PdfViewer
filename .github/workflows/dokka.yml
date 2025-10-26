@@ -2,7 +2,7 @@ name: Generate and Publish Dokka Docs
 
 on:
   release:
-    types: [published]    # run when a GitHub release is published
+    types: [published]
   workflow_dispatch:
     inputs:
       version:
@@ -11,7 +11,7 @@ on:
         default: "manual"
 
 permissions:
-  contents: write  # required to push to gh-pages
+  contents: write
 
 jobs:
   build-docs:
@@ -31,7 +31,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build Dokka HTML MultiModule
-        run: ./gradlew dokkaHtmlMultiModule
+        run: |
+          chmod +x ./gradlew
+          ./gradlew dokkaHtmlMultiModule
 
       - name: Prepare versioned output
         id: prep
@@ -43,7 +45,7 @@ jobs:
             VERSION=${{ github.event.inputs.version }}
           fi
 
-          # Strip 'v' prefix if someone accidentally adds it
+          # Remove 'v' prefix if someone adds it accidentally
           VERSION=${VERSION#v}
 
           echo "Using version: $VERSION"
