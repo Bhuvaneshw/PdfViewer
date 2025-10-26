@@ -2,57 +2,65 @@ name: Generate and Publish Dokka Docs
 
 on:
   release:
-    types: [published]    # triggers on creating a release
-  workflow_dispatch:      # allows manual trigger
+    types: [published]    # run when a GitHub release is published
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version for manual run (e.g., 1.2.0)"
+        required: true
+        default: "manual"
 
 permissions:
-  contents: write         # needed to push to gh-pages
+  contents: write  # required to push to gh-pages
 
 jobs:
   build-docs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up JDK
-      - name: Set up Java
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      # 3️⃣ Cache Gradle
       - name: Cache Gradle
         uses: gradle/actions/setup-gradle@v3
-        
-      - name: Make Gradle wrapper executable
-        run: chmod +x gradlew
 
-      # 4️⃣ Build Dokka for all modules
-      - name: Generate Dokka documentation
-        run: ./gradlew dokkaGenerate
+      - name: Build Dokka HTML MultiModule
+        run: ./gradlew dokkaHtmlMultiModule
 
-      # 5️⃣ Prepare versioned output
-      - name: Prepare versioned docs
+      - name: Prepare versioned output
+        id: prep
+        shell: bash
         run: |
-          # Use tag from release (e.g., v1.0.0)
-          VERSION=${GITHUB_REF#refs/tags/}
-          echo "Publishing docs for version: $VERSION"
+          if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=${{ github.event.inputs.version }}
+          fi
 
-          # Create folders
+          # Strip 'v' prefix if someone accidentally adds it
+          VERSION=${VERSION#v}
+
+          echo "Using version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
           mkdir -p docs/versioned/$VERSION
-          cp -r build/dokka/* docs/versioned/$VERSION/
+          cp -r build/dokka/html/* docs/versioned/$VERSION/
 
           # Also update /latest
           rm -rf docs/latest
           mkdir -p docs/latest
-          cp -r build/dokka/* docs/latest/
-        shell: bash
+          cp -r build/dokka/html/* docs/latest/
 
-      # 6️⃣ Deploy to GitHub Pages
+      - name: Add index redirect
+        run: |
+          echo '<meta http-equiv="refresh" content="0; url=latest/">' > docs/index.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
