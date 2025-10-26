@@ -52,12 +52,12 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
           mkdir -p docs/versioned/$VERSION
-          cp -r build/dokka/* docs/versioned/$VERSION/
+          cp -r build/dokka/html/* docs/versioned/$VERSION/
 
           # Also update /latest
           rm -rf docs/latest
           mkdir -p docs/latest
-          cp -r build/dokka/* docs/latest/
+          cp -r build/dokka/html/* docs/latest
 
       - name: Add index redirect
         run: |
