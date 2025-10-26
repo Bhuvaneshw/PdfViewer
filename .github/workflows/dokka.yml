@@ -33,7 +33,7 @@ jobs:
       - name: Build Dokka HTML MultiModule
         run: |
           chmod +x ./gradlew
-          ./gradlew dokkaHtmlMultiModule
+          ./gradlew dokkaGenerate
 
       - name: Prepare versioned output
         id: prep
