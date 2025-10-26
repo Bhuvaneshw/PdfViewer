@@ -70,3 +70,4 @@ jobs:
           publish_dir: ./docs
           publish_branch: gh-pages
           keep_files: true
+          commit_message: "docs: update v${{ steps.prep.outputs.version }}"
