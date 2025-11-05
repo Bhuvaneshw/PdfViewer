@@ -16,6 +16,10 @@ import android.util.Base64
 import android.util.Log
 import java.io.FileOutputStream
 
+/**
+ * An abstract implementation of [PdfPrintBridge] that handles the common logic for printing a PDF document.
+ * Subclasses must implement the rendering logic for each page.
+ */
 abstract class PdfPrintAdapter(protected val context: Context) : PdfPrintBridge() {
 
     /**
@@ -23,6 +27,11 @@ abstract class PdfPrintAdapter(protected val context: Context) : PdfPrintBridge(
      * It appears in the save dialog but does not guarantee that the user will save the file with this name.
      */
     var defaultFileName: String = "PdfDocument.pdf"
+
+    /**
+     * Whether the printing process is currently active.
+     * This is `true` after [onStart] is called and `false` after [onFinish] is called.
+     */
     var isPrinting: Boolean = false; private set
 
     private var writer: FileOutputStream? = null
@@ -110,8 +119,26 @@ abstract class PdfPrintAdapter(protected val context: Context) : PdfPrintBridge(
         }
     }
 
+    /**
+     * Called before the rendering of the PDF pages begins.
+     * This is a good place to set up any resources needed for rendering.
+     */
     abstract fun onRenderStart()
+
+    /**
+     * Called after all PDF pages have been rendered and written to the output.
+     * This is a good place to clean up any resources used during rendering.
+     */
     abstract fun onRenderEnd()
+
+    /**
+     * Called for each page that needs to be rendered.
+     * Final page should be drawn onto the [canvas].
+     *
+     * @param canvas The canvas to draw on for the current page.
+     * @param info Information about the page being rendered.
+     * @param bitmap The actual rendered image of the PDF page content.
+     */
     abstract fun onRenderPage(
         canvas: Canvas,
         info: PdfDocument.PageInfo,

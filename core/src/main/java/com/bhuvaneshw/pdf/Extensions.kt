@@ -8,9 +8,23 @@ import android.webkit.WebChromeClient.FileChooserParams
 import com.bhuvaneshw.pdf.setting.PdfSettingsManager
 import com.bhuvaneshw.pdf.setting.SharedPreferencePdfSettingsSaver
 
+/**
+ * Creates a [PdfSettingsManager] that stores settings in shared preferences.
+ *
+ * @param name The name of the shared preferences file.
+ * @param mode The operating mode.
+ * @return A [PdfSettingsManager] instance.
+ */
 fun Context.sharedPdfSettingsManager(name: String, mode: Int = Context.MODE_PRIVATE) =
     PdfSettingsManager(SharedPreferencePdfSettingsSaver(this, name, mode))
 
+/**
+ * Calls a block of code safely, handling scroll speed limits and editing state.
+ *
+ * @param checkScrollSpeedLimit Whether to check the scroll speed limit.
+ * @param checkEditing Whether to check if the editor is in editing mode.
+ * @param block The block of code to execute.
+ */
 @PdfUnstableApi
 fun PdfViewer.callSafely(
     checkScrollSpeedLimit: Boolean = true,
@@ -30,10 +44,21 @@ fun PdfViewer.callSafely(
     } else block.invoke(scope)
 }
 
+/**
+ * Calls the provided function if the scroll speed limit is enabled.
+ *
+ * @param onEnabled The function to call.
+ */
 fun ScrollSpeedLimitScope.callIfScrollSpeedLimitIsEnabled(onEnabled: () -> Unit) {
     this.onEnabled = onEnabled
 }
 
+/**
+ * Parses a string to a [PdfEditor.AnnotationEventType].
+ *
+ * @param type The string to parse.
+ * @return The parsed [PdfEditor.AnnotationEventType].
+ */
 fun PdfEditor.AnnotationEventType.Companion.parse(type: String?): PdfEditor.AnnotationEventType {
     return when (type) {
         "highlight" -> PdfEditor.AnnotationEventType.Unsaved.Highlight
@@ -46,8 +71,28 @@ fun PdfEditor.AnnotationEventType.Companion.parse(type: String?): PdfEditor.Anno
     }
 }
 
+/**
+ * A scope for managing scroll speed limits.
+ *
+ * @property onEnabled A function to be called when the scroll speed limit is enabled.
+ */
 class ScrollSpeedLimitScope internal constructor(internal var onEnabled: (() -> Unit)? = null)
 
+/**
+ * Adds a listener to the `PdfViewer` with individual lambda functions for each event.
+ *
+ * This is a convenience function that creates a `PdfListener` and sets the provided lambdas
+ * without needing to implement all callbacks.
+ *
+ * Example
+ * ```kotlin
+ * pdfViewer.addListener(onPageLoadSuccess = { pagesCount ->
+ *  // do stuff
+ * })
+ * ```
+ *
+ * @see PdfListener
+ */
 fun PdfViewer.addListener(
     onPageLoadStart: (() -> Unit)? = null,
     onPageLoadSuccess: ((pagesCount: Int) -> Unit)? = null,

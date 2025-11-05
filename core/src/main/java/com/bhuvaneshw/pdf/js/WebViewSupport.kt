@@ -3,8 +3,17 @@ package com.bhuvaneshw.pdf.js
 import android.content.Context
 import androidx.webkit.WebViewCompat
 
+/**
+ * Provides information about the WebView support on the device.
+ */
 object WebViewSupport {
 
+    /**
+     * Checks the WebView version and returns the result.
+     *
+     * @param context The context to use for checking the WebView package.
+     * @return A [CheckResult] indicating the status of the WebView.
+     */
     fun check(context: Context): CheckResult {
         val version = getWebViewVersion(context)
 
@@ -29,10 +38,28 @@ object WebViewSupport {
         }
     }
 
+    /**
+     * The result of the WebView check.
+     */
     enum class CheckResult {
+        /**
+         * The WebView version is sufficient.
+         */
         NO_ACTION_REQUIRED,
+
+        /**
+         * The WebView version is too old and must be updated.
+         */
         REQUIRES_UPDATE,
+
+        /**
+         * The WebView version is old and an update is recommended.
+         */
         UPDATE_RECOMMENDED,
+
+        /**
+         * No WebView package was found on the device.
+         */
         NO_WEBVIEW_FOUND
     }
 }
