@@ -91,6 +91,29 @@ import com.bhuvaneshw.pdf.compose.PdfState
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
+/**
+ * A composable function that provides a toolbar for the PDF viewer that provides various controls
+ * for navigation, finding text, editing, and more.
+ *
+ * @param pdfState The state of the PDF viewer.
+ * @param title The title to be displayed on the toolbar.
+ * @param modifier The modifier to be applied to the toolbar.
+ * @param toolBarState The state of the toolbar.
+ * @param onBack A lambda to be invoked when the back button is pressed.
+ * @param fileName A lambda that returns the name of the file.
+ * @param contentColor The color of the content on the toolbar.
+ * @param backIcon A composable that represents the back icon.
+ * @param showEditor A boolean to indicate whether to show the editor tools.
+ * @param pickColor A lambda to be invoked when a color is picked.
+ * @param dropDownMenu A composable that represents the dropdown menu.
+ *
+ * @see com.bhuvaneshw.pdf.compose.PdfState
+ * @see com.bhuvaneshw.pdf.compose.ui.PdfToolBarState
+ * @see com.bhuvaneshw.pdf.compose.ui.PdfToolBarBackIcon
+ * @see com.bhuvaneshw.pdf.compose.ui.PickColor
+ * @see com.bhuvaneshw.pdf.compose.ui.PdfToolBarMenu
+ * @see com.bhuvaneshw.pdf.compose.PdfViewer
+ */
 @Composable
 fun PdfToolBar(
     pdfState: PdfState,
@@ -1386,8 +1409,21 @@ internal fun defaultToolBarDropDownMenu(): PdfToolBarMenu {
     }
 }
 
+/**
+ * A typealias for a composable that represents the back icon on the toolbar.
+ */
 typealias PdfToolBarBackIcon = @Composable PdfToolBarScope.() -> Unit
+
+/**
+ * A typealias for a composable that represents the dropdown menu on the toolbar.
+ *
+ * @see com.bhuvaneshw.pdf.compose.ui.PdfToolBarMenuItem
+ */
 typealias PdfToolBarMenu = @Composable (onDismiss: () -> Unit, defaultMenus: @Composable (filtered: List<PdfToolBarMenuItem>) -> Unit) -> Unit
+
+/**
+ * A typealias for a function that picks a color.
+ */
 typealias PickColor = ((color: Color) -> Unit) -> Unit
 
 @Composable

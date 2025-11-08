@@ -44,6 +44,23 @@ import com.bhuvaneshw.pdf.compose.PdfState
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
+/**
+ * A composable that displays a scrollbar for the PDF viewer that can be dragged to navigate through pages.
+ * It can be either vertical or horizontal, and shows the current page number.
+ *
+ * @param pdfState The state of the PDF viewer.
+ * @param parentSize The size of the parent container.
+ * @param modifier The modifier to be applied to the scrollbar.
+ * @param contentColor The color of the content on the scrollbar.
+ * @param handleColor The color of the scrollbar handle.
+ * @param interactiveScrolling If true, the [com.bhuvaneshw.pdf.compose.PdfViewer] will scroll as the user drags the scrollbar handle.
+ * If false, the [com.bhuvaneshw.pdf.compose.PdfViewer] will only scroll when the user releases the handle.
+ * @param useVerticalScrollBarForHorizontalMode If true, a vertical scrollbar is used even when the PDF is in a horizontal scroll mode.
+ * @param animationSpec The animation specification for the scrollbar's fade-in and fade-out animations.
+ *
+ * @see com.bhuvaneshw.pdf.compose.PdfState
+ * @see com.bhuvaneshw.pdf.compose.PdfViewer
+ */
 @Composable
 fun PdfContainerBoxScope.PdfScrollBar(
     pdfState: PdfState,

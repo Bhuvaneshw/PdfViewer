@@ -44,7 +44,23 @@ import com.bhuvaneshw.pdf.compose.DefaultOnReadyCallback
 import com.bhuvaneshw.pdf.compose.OnReadyCallback
 import com.bhuvaneshw.pdf.compose.PdfPrintState
 import com.bhuvaneshw.pdf.compose.PdfState
+import com.bhuvaneshw.pdf.compose.ui.PdfScrollBar as ActualPdfScrollBar
+import com.bhuvaneshw.pdf.compose.ui.PdfToolBar as ActualPdfToolBar
 
+/**
+ * A container view that orchestrates interactions between a [PdfViewer], [ActualPdfToolBar], and [ActualPdfScrollBar].
+ * It manages the display of a PDF viewer, a toolbar, a scrollbar, loading indicators, and dialogs for passwords and printing.
+ *
+ * @param pdfState The state of the PDF viewer, containing information about the document, page number, etc.
+ * @param pdfViewer A composable that renders the PDF viewer within a [PdfContainerBoxScope].
+ * @param modifier The modifier to be applied to the container.
+ * @param pdfToolBar An optional composable for displaying a toolbar within a [PdfContainerBoxScope].
+ * @param pdfScrollBar An optional composable for displaying a scrollbar within a [PdfContainerBoxScope].
+ * @param loadingIndicator An optional composable to show while the PDF is loading within a [PdfContainerBoxScope].
+ * @param passwordDialogEnabled Whether to show the password dialog if the PDF is encrypted.
+ * @param printDialogEnabled Whether to show the print dialog when printing.
+ * @see com.bhuvaneshw.pdf.compose.PdfViewer
+ */
 @Composable
 fun PdfViewerContainer(
     pdfState: PdfState,
@@ -83,6 +99,16 @@ fun PdfViewerContainer(
         PrintDialog(pdfState)
 }
 
+/**
+ * This is a wrapper around [com.bhuvaneshw.pdf.compose.PdfViewer] within a [PdfContainerBoxScope].
+ *
+ * @param modifier The modifier to be applied to the viewer.
+ * @param containerColor The background color of the PDF viewer.
+ * @param factory A factory function to create a [PdfViewer] instance.
+ * @param onCreateViewer A callback that is invoked when the [PdfViewer] is created.
+ * @param onReady A callback that is invoked when the PDF document is loaded and ready.
+ * @see com.bhuvaneshw.pdf.compose.PdfViewer
+ */
 @Composable
 fun PdfContainerBoxScope.PdfViewer(
     modifier: Modifier = Modifier,
@@ -101,6 +127,21 @@ fun PdfContainerBoxScope.PdfViewer(
     )
 }
 
+/**
+ * This is a wrapper around [ActualPdfToolBar] within a [PdfContainerBoxScope].
+ *
+ * @param title The title to be displayed on the toolbar.
+ * @param modifier The modifier to be applied to the toolbar.
+ * @param toolBarState The state of the toolbar, such as visibility of search and edit modes.
+ * @param onBack An optional callback to be invoked when the back button is pressed.
+ * @param fileName A function that returns the name of the file to be used for printing or sharing.
+ * @param contentColor The color of the toolbar content.
+ * @param backIcon The back icon to be displayed on the toolbar.
+ * @param showEditor Whether to show the editor tools on the toolbar.
+ * @param pickColor A function to be invoked when a color is picked from the editor.
+ * @param dropDownMenu The dropdown menu to be displayed on the toolbar.
+ * @see ActualPdfToolBar
+ */
 @Composable
 fun PdfContainerScope.PdfToolBar(
     title: String,
@@ -114,7 +155,7 @@ fun PdfContainerScope.PdfToolBar(
     pickColor: ((onPickColor: (color: Color) -> Unit) -> Unit)? = null,
     dropDownMenu: PdfToolBarMenu = defaultToolBarDropDownMenu(),
 ) {
-    PdfToolBar(
+    ActualPdfToolBar(
         pdfState = pdfState,
         title = title,
         modifier = modifier,
@@ -129,6 +170,17 @@ fun PdfContainerScope.PdfToolBar(
     )
 }
 
+/**
+ * This is a wrapper around [ActualPdfScrollBar] within a [PdfContainerBoxScope].
+ *
+ * @param parentSize The size of the parent container.
+ * @param modifier The modifier to be applied to the scrollbar.
+ * @param contentColor The color of the scrollbar track.
+ * @param handleColor The color of the scrollbar handle.
+ * @param interactiveScrolling Whether the scrollbar should be interactive.
+ * @param useVerticalScrollBarForHorizontalMode Whether to use a vertical scrollbar for horizontal scrolling mode.
+ * @see ActualPdfScrollBar
+ */
 @Composable
 fun PdfContainerBoxScope.PdfScrollBar(
     parentSize: IntSize,
@@ -138,7 +190,7 @@ fun PdfContainerBoxScope.PdfScrollBar(
     interactiveScrolling: Boolean = true,
     useVerticalScrollBarForHorizontalMode: Boolean = false,
 ) {
-    PdfScrollBar(
+    ActualPdfScrollBar(
         pdfState = pdfState,
         parentSize = parentSize,
         modifier = modifier,
