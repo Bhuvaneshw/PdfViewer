@@ -1,0 +1,88 @@
+name: Generate and Publish Dokka Docs
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version for manual run (e.g., 1.0.0)"
+        required: true
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Cache Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Setup version
+        id: setup_version
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+            SOURCE="tag"
+          else
+            VERSION=${{ github.event.inputs.version }}
+            SOURCE="input"
+          fi
+          VERSION=${VERSION#v}
+          echo "Using version $VERSION from $SOURCE"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Pull existing gh-pages
+        shell: bash
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code https://x-access-token:${{ secrets.GH_ACTION_FULL_REPO }}@github.com/${{ github.repository }} gh-pages; then
+            git clone --branch gh-pages --single-branch https://x-access-token:${{ secrets.GH_ACTION_FULL_REPO }}@github.com/${{ github.repository }} gh-pages
+            mkdir -p build/docs/v
+            cp -r gh-pages/v/* build/docs/v/ 2>/dev/null || true
+          else
+            mkdir -p build/docs/v
+          fi
+
+      - name: Build Dokka HTML Docs
+        run: |
+          chmod +x ./gradlew
+          ./gradlew dokkaGenerate -Prelease-version=${{ steps.setup_version.outputs.version }} -PdocsDir=build/docs/v
+
+      - name: Setup folder structure
+        id: prep
+        shell: bash
+        run: |
+          VERSION=${{ steps.setup_version.outputs.version }}
+          mkdir -p docs/v/$VERSION
+          cp -r build/docs/v/$VERSION/* docs/v/$VERSION/
+#          rm -rf docs/latest
+#          mkdir -p docs/latest
+#          cp -r build/docs/v/$VERSION/* docs/latest/
+
+      - name: Add index redirect
+        run: |
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=v/${{ steps.setup_version.outputs.version }}/\">" > docs/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GH_ACTION_FULL_REPO }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          keep_files: true
+          commit_message: "docs: update v${{ steps.setup_version.outputs.version }}"

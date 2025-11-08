@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.dokka)
     id("maven-publish")
 }
 
@@ -44,6 +45,15 @@ android {
 dependencies {
     implementation(libs.androidx.annotation.jvm)
     implementation(libs.androidx.webkit)
+}
+
+dokka {
+    dokkaSourceSets.configureEach {
+        includes.from(project.files(), "module.md")
+    }
+    pluginsConfiguration.html {
+        footerMessage.set("By Bhuvaneshwaran")
+    }
 }
 
 afterEvaluate {
