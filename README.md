@@ -14,7 +14,7 @@ A lightweight **Android PDF Viewer Library** powered by Mozilla's [PDF.js](https
 You can download apk from [here](/app/release/app-release.apk)
 
 --------------------------------------
-Docs for v1.1.2 will be updated in future!
+Docs for v1.1.2 will be updated in future! Preview can be found at [https://bhuvaneshw.github.io/PdfViewer](https://bhuvaneshw.github.io/PdfViewer)
 --------------------------------------
 
 ## Contents
