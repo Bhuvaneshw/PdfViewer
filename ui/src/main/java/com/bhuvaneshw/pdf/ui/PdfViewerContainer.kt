@@ -25,8 +25,7 @@ import kotlin.random.Random
 /**
  * A container view that orchestrates interactions between a [PdfViewer], [PdfToolBar], and [PdfScrollBar].
  *
- * This layout simplifies the setup of a PDF viewing screen by automatically managing the positioning
- * and interaction of its child views.
+ * It manages the display of a PDF viewer, a toolbar, a scrollbar, loading indicators, and dialogs for passwords and printing.
  *
  * @see com.bhuvaneshw.pdf.PdfViewer
  * @see PdfToolBar
