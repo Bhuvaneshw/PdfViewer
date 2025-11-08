@@ -2,7 +2,6 @@
 
 package com.bhuvaneshw.pdf.compose
 
-import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
@@ -14,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.core.net.toUri
 import com.bhuvaneshw.pdf.PdfDocumentProperties
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfUnstableApi
@@ -318,27 +316,6 @@ class PdfState(
         override fun onPrintCancelled() {
             this@PdfState.printState = PdfPrintState.Cancelled
         }
-    }
-}
-
-sealed class PdfSource {
-
-    data class Asset(val assetPath: String) : PdfSource()
-
-    data class ContentUri(val contentUri: Uri) : PdfSource() {
-        constructor(contentUri: String) : this(contentUri.toUri())
-    }
-
-    data class File(val file: java.io.File) : PdfSource() {
-        constructor(filePath: String) : this(java.io.File(filePath))
-    }
-
-    data class Plain(val source: String) : PdfSource() {
-        constructor(source: Uri) : this(source.toString())
-    }
-
-    data class Url(val url: String) : PdfSource() {
-        constructor(url: Uri) : this(url.toString())
     }
 }
 

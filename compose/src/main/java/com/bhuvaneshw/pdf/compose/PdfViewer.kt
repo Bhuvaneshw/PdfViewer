@@ -65,34 +65,3 @@ fun PdfViewer(
         modifier = modifier
     )
 }
-
-sealed interface OnReadyCallback {
-    fun onReady(pdfViewer: PdfViewer, loadSource: () -> Unit)
-}
-
-data class DefaultOnReadyCallback(
-    private val callback: (PdfViewer.() -> Unit)? = null
-) : OnReadyCallback {
-    override fun onReady(pdfViewer: PdfViewer, loadSource: () -> Unit) {
-        loadSource()
-        callback?.invoke(pdfViewer)
-    }
-}
-
-data class CustomOnReadyCallback(
-    private val callback: PdfViewer.(loadSource: () -> Unit) -> Unit
-) : OnReadyCallback {
-    override fun onReady(pdfViewer: PdfViewer, loadSource: () -> Unit) {
-        callback(pdfViewer, loadSource)
-    }
-}
-
-private fun PdfViewer.load(source: PdfSource) {
-    when (source) {
-        is PdfSource.Asset -> loadFromAsset(source.assetPath)
-        is PdfSource.ContentUri -> loadFromContentUri(source.contentUri)
-        is PdfSource.File -> loadFromFile(source.file)
-        is PdfSource.Plain -> load(source.source)
-        is PdfSource.Url -> loadFromUrl(source.url)
-    }
-}
