@@ -22,19 +22,62 @@ import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import kotlin.random.Random
 
+/**
+ * A container view that orchestrates interactions between a [PdfViewer], [PdfToolBar], and [PdfScrollBar].
+ *
+ * This layout simplifies the setup of a PDF viewing screen by automatically managing the positioning
+ * and interaction of its child views.
+ *
+ * @see com.bhuvaneshw.pdf.PdfViewer
+ * @see PdfToolBar
+ * @see PdfScrollBar
+ */
 class PdfViewerContainer : RelativeLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
             : super(context, attrs, defStyleAttr)
 
+    /**
+     * The [PdfViewer] instance contained within this layout. It is automatically detected when added as a child.
+     * @see com.bhuvaneshw.pdf.PdfViewer
+     */
     var pdfViewer: PdfViewer? = null; private set
+
+    /**
+     * The [PdfToolBar] instance for this container. It is automatically detected when added as a child.
+     */
     var pdfToolBar: PdfToolBar? = null; private set
+
+    /**
+     * The [PdfScrollBar] instance for this container. It is automatically detected when added as a child.
+     */
     var pdfScrollBar: PdfScrollBar? = null; private set
+
+    /**
+     * A builder for creating [AlertDialog] instances used for password prompts and print dialogs.
+     * This allows for customization of the dialogs' appearance.
+     */
     var alertDialogBuilder: () -> AlertDialog.Builder = { AlertDialog.Builder(context) }
+
+    /**
+     * Determines whether the password dialog is shown when a protected PDF is loaded.
+     * Defaults to `true`.
+     * @see com.bhuvaneshw.pdf.PdfListener.onPasswordDialogChange
+     */
     var passwordDialogEnabled: Boolean = true
+
+    /**
+     * Determines whether the print dialog is shown when printing is initiated.
+     * Defaults to `true`.
+     * @see com.bhuvaneshw.pdf.PdfListener.onPrintProcessStart
+     */
     var printDialogEnabled: Boolean = true
 
+    /**
+     * Adds a child view. This method is overridden to automatically detect and configure
+     * [PdfViewer], [PdfToolBar], and [PdfScrollBar] children.
+     */
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
         when (child) {
             is PdfViewer -> {
@@ -91,6 +134,13 @@ class PdfViewerContainer : RelativeLayout {
         }
     }
 
+    /**
+     * Designates a view to be shown as a loading indicator while a PDF is loading.
+     *
+     * @param view The view to show and hide based on the loading state.
+     * @see com.bhuvaneshw.pdf.PdfListener.onPageLoadStart
+     * @see com.bhuvaneshw.pdf.PdfListener.onPageLoadSuccess
+     */
     fun setAsLoadingIndicator(view: View) {
         pdfViewer?.addListener(object : PdfListener {
             override fun onPageLoadStart() {
@@ -220,6 +270,9 @@ class PdfViewerContainer : RelativeLayout {
         }
     }
 
+    /**
+     * Immediately shows the [PdfToolBar] if it exists.
+     */
     fun showToolBar() {
         pdfToolBar?.let {
             pdfViewer?.let { viewer ->
@@ -236,6 +289,9 @@ class PdfViewerContainer : RelativeLayout {
         }
     }
 
+    /**
+     * Immediately hides the [PdfToolBar] if it exists.
+     */
     fun hideToolBar() {
         pdfToolBar?.let {
             pdfViewer?.let { viewer ->
@@ -252,6 +308,13 @@ class PdfViewerContainer : RelativeLayout {
         }
     }
 
+    /**
+     * Animates the showing or hiding of the [PdfToolBar].
+     *
+     * @param show `true` to show the toolbar, `false` to hide it.
+     * @param animDuration The duration of the animation in milliseconds.
+     * @param onEnd A callback to invoke when the animation ends.
+     */
     fun animateToolBar(
         show: Boolean,
         animDuration: Long = 150L,

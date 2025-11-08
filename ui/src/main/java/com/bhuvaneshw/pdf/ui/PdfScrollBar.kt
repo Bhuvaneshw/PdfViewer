@@ -20,6 +20,12 @@ import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.roundToInt
 
+/**
+ * A scrollbar for the PDF viewer that can be dragged to navigate through pages.
+ * It can be either vertical or horizontal, and shows the current page number.
+ *
+ * @see com.bhuvaneshw.pdf.PdfViewer
+ */
 class PdfScrollBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -39,7 +45,15 @@ class PdfScrollBar @JvmOverloads constructor(
     private var timerTask: TimerTask? = null
     private var isSetupDone = false
     private val scrollModeChangeListeners = mutableListOf<(isHorizontalScroll: Boolean) -> Unit>()
+
+    /**
+     * If true, the vertical scrollbar will be used even when the PDF is in horizontal scroll mode.
+     */
     var useVerticalScrollBarForHorizontalMode = false
+
+    /**
+     * True if the PDF is currently in horizontal scroll mode.
+     */
     var isHorizontalScroll = false
         private set(value) {
             val newValue = value && !useVerticalScrollBarForHorizontalMode
@@ -48,12 +62,31 @@ class PdfScrollBar @JvmOverloads constructor(
             applyScrollMode(newValue)
         }
 
+    /**
+     * The delay in milliseconds after which the scrollbar will hide automatically.
+     */
     var hideDelayMillis = 2000L
+
+    /**
+     * The duration of the show/hide animation in milliseconds.
+     */
     var animationDuration = 250L
+
+    /**
+     * If true, the [PdfViewer] will scroll as the user drags the scrollbar handle.
+     * If false, the [PdfViewer] will only scroll when the user releases the handle.
+     */
     var interactiveScrolling = true
 
+    /**
+     * The [TextView] that displays the current page number.
+     */
     val pageNumberInfo: TextView
         get() = root.findViewById(R.id.page_number_info)
+
+    /**
+     * The [ImageView] that serves as the draggable handle of the scrollbar.
+     */
     val dragHandle: ImageView
         get() = root.findViewById(R.id.drag_handle)
 
@@ -85,6 +118,15 @@ class PdfScrollBar @JvmOverloads constructor(
         else visibility = GONE
     }
 
+    /**
+     * Sets up the scrollbar with the given [PdfViewer].
+     *
+     * @param pdfViewer The [PdfViewer] to attach the scrollbar to.
+     * @param toolBar An optional [PdfToolBar] to adjust the scrollbar position.
+     * @param force If true, the setup will be forced even if it has been done before.
+     * @see com.bhuvaneshw.pdf.PdfViewer
+     * @see PdfToolBar
+     */
     @SuppressLint("ClickableViewAccessibility")
     fun setupWith(pdfViewer: PdfViewer, toolBar: PdfToolBar? = null, force: Boolean = false) {
         if (isSetupDone && !force) return
@@ -175,14 +217,30 @@ class PdfScrollBar @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Adds a listener that will be notified when the scroll mode changes.
+     *
+     * @param listener The listener to add.
+     */
     fun addScrollModeChangeListener(listener: (isHorizontalScroll: Boolean) -> Unit) {
         scrollModeChangeListeners.add(listener)
     }
 
+    /**
+     * Removes a previously added scroll mode change listener.
+     *
+     * @param listener The listener to remove.
+     */
     fun removeScrollModeChangeListener(listener: (isHorizontalScroll: Boolean) -> Unit) {
         scrollModeChangeListeners.remove(listener)
     }
 
+    /**
+     * Sets the color of the scrollbar content and handle.
+     *
+     * @param contentColor The color of the page number text and drag handle icon.
+     * @param handleColor The background color of the page number and drag handle.
+     */
     fun setContentColor(@ColorInt contentColor: Int, @ColorInt handleColor: Int) {
         rootVertical.findViewById<TextView>(R.id.page_number_info).setTextColor(contentColor)
         rootHorizontal.findViewById<TextView>(R.id.page_number_info).setTextColor(contentColor)
@@ -247,7 +305,7 @@ class PdfScrollBar @JvmOverloads constructor(
         scrollModeChangeListeners.forEach { it(isHorizontalScroll) }
     }
 
-    inner class DragListenerX(
+    private inner class DragListenerX(
         private var targetView: View,
         private val parentWidth: Int,
         private val onScrollChange: (x: Float) -> Unit,
@@ -290,7 +348,7 @@ class PdfScrollBar @JvmOverloads constructor(
         }
     }
 
-    inner class DragListenerY(
+    private inner class DragListenerY(
         private var targetView: View,
         private val parentHeight: Int,
         private val topHeight: Int,
