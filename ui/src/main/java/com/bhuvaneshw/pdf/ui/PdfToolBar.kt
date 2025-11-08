@@ -682,11 +682,20 @@ open class PdfToolBar @JvmOverloads constructor(
     }
 
     /**
-     * Handles the back press event. This will close any open sub-toolbars (like find, edit, etc.)
+     * Handles the back press event to dismiss UI elements managed by this view.
      * in a specific order.
      *
-     * @return True if the back press was handled by the toolbar, false otherwise. If false,
-     * the containing Activity/Fragment should handle the back press (e.g., by finishing).
+     * This function should be called when the user presses the back button. It determines
+     * which UI element to close based on a priority order. For instance, an active editor tool
+     * is closed before the editor itself.
+     *
+     * The order of closing is:
+     * 1. Active editor tool (highlighter, free text, ink, stamp)
+     * 2. Annotation editor
+     * 3. Find bar
+     *
+     * @return `true` if the back press was consumed and a UI element was closed, `false` otherwise.
+     *         If `false` is returned, the caller should handle the back press further (e.g., by closing the screen).
      */
     fun handleBackPressed(): Boolean {
         when {
