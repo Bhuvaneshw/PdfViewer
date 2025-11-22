@@ -106,12 +106,13 @@ import kotlin.math.roundToInt
  * @param showEditor A boolean to indicate whether to show the editor tools.
  * @param pickColor A lambda to be invoked when a color is picked.
  * @param dropDownMenu A composable that represents the dropdown menu.
+ * @param onPlaceIcons A composable that places editor and find icons. Additional icons can be added using this.
  *
- * @see com.bhuvaneshw.pdf.compose.PdfState
- * @see com.bhuvaneshw.pdf.compose.ui.PdfToolBarState
- * @see com.bhuvaneshw.pdf.compose.ui.PdfToolBarBackIcon
- * @see com.bhuvaneshw.pdf.compose.ui.PickColor
- * @see com.bhuvaneshw.pdf.compose.ui.PdfToolBarMenu
+ * @see PdfState
+ * @see PdfToolBarState
+ * @see PdfToolBarBackIcon
+ * @see PickColor
+ * @see PdfToolBarMenu
  * @see com.bhuvaneshw.pdf.compose.PdfViewer
  */
 @Composable
@@ -127,6 +128,7 @@ fun PdfToolBar(
     showEditor: Boolean = false,
     pickColor: PickColor? = null,
     dropDownMenu: PdfToolBarMenu = defaultToolBarDropDownMenu(),
+    onPlaceIcons: PlaceIcons = defaultIconsPosition(),
 ) {
     val toolBarScope = PdfToolBarScope(
         pdfState = pdfState,
@@ -191,23 +193,26 @@ fun PdfToolBar(
         }
 
         if (!toolBarScope.toolBarState.isFindBarOpen && !toolBarState.isEditorOpen) {
-            if (showEditor) {
+            onPlaceIcons({
+                if (showEditor) {
+                    toolBarScope.ToolBarIcon(
+                        icon = Icons.Default.Edit,
+                        contentDescription = "Edit",
+                        isEnabled = !pdfState.loadingState.isLoading,
+                        onClick = { toolBarState.isEditorOpen = true },
+                        tint = contentColor ?: Color.Unspecified,
+                    )
+                }
+            }, {
                 toolBarScope.ToolBarIcon(
-                    icon = Icons.Default.Edit,
-                    contentDescription = "Edit",
+                    icon = Icons.Default.Search,
+                    contentDescription = "Find",
                     isEnabled = !pdfState.loadingState.isLoading,
-                    onClick = { toolBarState.isEditorOpen = true },
+                    onClick = { toolBarState.isFindBarOpen = true },
                     tint = contentColor ?: Color.Unspecified,
                 )
-            }
+            })
 
-            toolBarScope.ToolBarIcon(
-                icon = Icons.Default.Search,
-                contentDescription = "Search",
-                isEnabled = !pdfState.loadingState.isLoading,
-                onClick = { toolBarState.isFindBarOpen = true },
-                tint = contentColor ?: Color.Unspecified,
-            )
             Box {
                 var showMoreOptions by remember { mutableStateOf(false) }
 
@@ -1417,6 +1422,11 @@ internal fun defaultToolBarDropDownMenu(): PdfToolBarMenu {
     }
 }
 
+internal fun defaultIconsPosition(): PlaceIcons = { editorIcon, findIcon ->
+    editorIcon()
+    findIcon()
+}
+
 /**
  * A typealias for a composable that represents the back icon on the toolbar.
  */
@@ -1425,7 +1435,7 @@ typealias PdfToolBarBackIcon = @Composable PdfToolBarScope.() -> Unit
 /**
  * A typealias for a composable that represents the dropdown menu on the toolbar.
  *
- * @see com.bhuvaneshw.pdf.compose.ui.PdfToolBarMenuItem
+ * @see PdfToolBarMenuItem
  */
 typealias PdfToolBarMenu = @Composable (onDismiss: () -> Unit, defaultMenus: @Composable (filtered: List<PdfToolBarMenuItem>) -> Unit) -> Unit
 
@@ -1433,6 +1443,13 @@ typealias PdfToolBarMenu = @Composable (onDismiss: () -> Unit, defaultMenus: @Co
  * A typealias for a function that picks a color.
  */
 typealias PickColor = ((color: Color) -> Unit) -> Unit
+
+/**
+ * A typealias for a function that places editor and find icons.
+ * @param editorIcon A composable that represents the editor icon.
+ * @param findIcon A composable that represents the find icon.
+ */
+typealias PlaceIcons = @Composable (editorIcon: @Composable () -> Unit, findIcon: @Composable () -> Unit) -> Unit
 
 @Composable
 private fun DropdownMenuItem(

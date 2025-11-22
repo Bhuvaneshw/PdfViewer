@@ -140,6 +140,7 @@ fun PdfContainerBoxScope.PdfViewer(
  * @param showEditor Whether to show the editor tools on the toolbar.
  * @param pickColor A function to be invoked when a color is picked from the editor.
  * @param dropDownMenu The dropdown menu to be displayed on the toolbar.
+ * @param onPlaceIcons A composable that places editor and find icons. Additional icons can be added using this.
  * @see ActualPdfToolBar
  */
 @Composable
@@ -154,6 +155,7 @@ fun PdfContainerScope.PdfToolBar(
     showEditor: Boolean = false,
     pickColor: ((onPickColor: (color: Color) -> Unit) -> Unit)? = null,
     dropDownMenu: PdfToolBarMenu = defaultToolBarDropDownMenu(),
+    onPlaceIcons: PlaceIcons = defaultIconsPosition(),
 ) {
     ActualPdfToolBar(
         pdfState = pdfState,
@@ -167,6 +169,7 @@ fun PdfContainerScope.PdfToolBar(
         showEditor = showEditor,
         pickColor = pickColor,
         dropDownMenu = dropDownMenu,
+        onPlaceIcons = onPlaceIcons,
     )
 }
 
