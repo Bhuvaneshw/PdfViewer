@@ -243,7 +243,20 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:visibility="gone" />
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/add_stamp"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="?android:actionBarItemBackground"
+                        android:contentDescription="add stamp"
+                        android:padding="8dp"
+                        android:src="@drawable/outline_add_24" />
+
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/highlight"

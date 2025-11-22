@@ -648,6 +648,14 @@ private fun PdfToolBarScope.StampOptions(contentColor: Color) {
         Spacer(Modifier.weight(1f))
 
         UndoRedoButtons()
+
+        ToolBarIcon(
+            painter = painterResource(R.drawable.outline_add_24),
+            contentDescription = "Add Stamp",
+            isEnabled = true,
+            tint = MaterialTheme.colorScheme.onBackground,
+            onClick = { pdfState.pdfViewer?.editor?.clickAddStamp() }
+        )
     }
 }
 

@@ -184,6 +184,9 @@ open class PdfToolBar @JvmOverloads constructor(
     /** The view to show and change the ink color. */
     val inkColor: ColorItemView = root.findViewById(R.id.ink_color)
 
+    /** The button to open file picker */
+    val addStamp: ImageView = root.findViewById(R.id.add_stamp)
+
     init {
         initListeners()
 
@@ -678,6 +681,10 @@ open class PdfToolBar @JvmOverloads constructor(
                 pdfViewer.editor.inkColor = color
                 inkColor.color = color
             }
+        }
+
+        addStamp.setOnClickListener {
+            pdfViewer.editor.clickAddStamp()
         }
     }
 
