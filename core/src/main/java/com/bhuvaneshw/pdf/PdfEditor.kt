@@ -1,6 +1,8 @@
 package com.bhuvaneshw.pdf
 
 import android.graphics.Color
+import android.os.SystemClock
+import android.view.MotionEvent
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import com.bhuvaneshw.pdf.PdfViewer.Companion.defaultHighlightEditorColors
@@ -168,6 +170,45 @@ class PdfEditor internal constructor(private val pdfViewer: PdfViewer) {
     fun redo() {
         pdfViewer.checkViewer()
         pdfViewer.webView callDirectly "redo"()
+    }
+
+    /**
+     * Simulates a click on the 'Add Stamp' button within the PdfViewer.
+     *
+     * Due to WebView security policies, the file picker cannot be opened directly via JavaScript.
+     * This method works around this by dispatching touch events to the WebView, simulating a user
+     * click on the 'Add Stamp' button.
+     *
+     * Note: The Add Stamp button is resized to 1px x 1px and positioned on top right corner of the viewer.
+     *
+     * @param distanceFromRight The distance from the right edge of the view to simulate the click.
+     * @param distanceFromTop The distance from the top edge of the view to simulate the click.
+     */
+    @JvmOverloads
+    fun clickAddStamp(distanceFromRight: Float = 1f, distanceFromTop: Float = 1f) {
+        val x = pdfViewer.width - distanceFromRight
+        val y = distanceFromTop
+
+        val downTime = SystemClock.uptimeMillis()
+        val eventTime = SystemClock.uptimeMillis() + 100
+        val metaState = 0
+
+        val motionEventDown = MotionEvent.obtain(
+            downTime, eventTime,
+            MotionEvent.ACTION_DOWN,
+            x, y,
+            metaState
+        )
+
+        val motionEventUp = MotionEvent.obtain(
+            downTime, eventTime,
+            MotionEvent.ACTION_UP,
+            x, y,
+            metaState
+        )
+
+        pdfViewer.dispatchTouchEvent(motionEventDown)
+        pdfViewer.dispatchTouchEvent(motionEventUp)
     }
 
     /**
