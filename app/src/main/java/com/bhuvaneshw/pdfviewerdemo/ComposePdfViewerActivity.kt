@@ -346,7 +346,7 @@ private fun Activity.MainScreen(
                             defaultMenus = defaultMenus
                         )
                     },
-                    pickColor = { onPickColor ->
+                    pickColor = { _, onPickColor ->
                         onPickColorCallback = onPickColor
                     },
                 )

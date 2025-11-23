@@ -153,7 +153,7 @@ fun PdfContainerScope.PdfToolBar(
     contentColor: Color? = null,
     backIcon: (PdfToolBarBackIcon)? = defaultToolBarBackIcon(contentColor, onBack),
     showEditor: Boolean = false,
-    pickColor: ((onPickColor: (color: Color) -> Unit) -> Unit)? = null,
+    pickColor: PickColor? = null,
     dropDownMenu: PdfToolBarMenu = defaultToolBarDropDownMenu(),
     onPlaceIcons: PlaceIcons = defaultIconsPosition(),
 ) {

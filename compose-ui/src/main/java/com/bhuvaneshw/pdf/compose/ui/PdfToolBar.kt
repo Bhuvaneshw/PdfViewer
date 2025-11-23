@@ -568,7 +568,7 @@ private fun PdfToolBarScope.FreeTextOptions(
             selectedColor = pdfState.editor.freeFontColor,
             borderColor = contentColor,
             onClick = {
-                pickColor?.invoke { color ->
+                pickColor?.invoke(pdfState.editor.freeFontColor) { color ->
                     pdfState.pdfViewer?.editor?.freeFontColor = color.toArgb()
                 }
             },
@@ -626,7 +626,7 @@ private fun PdfToolBarScope.InkOptions(
             selectedColor = pdfState.editor.inkColor,
             borderColor = contentColor,
             onClick = {
-                pickColor?.invoke { color ->
+                pickColor?.invoke(pdfState.editor.inkColor) { color ->
                     pdfState.pdfViewer?.editor?.inkColor = color.toArgb()
                 }
             },
@@ -1442,7 +1442,7 @@ typealias PdfToolBarMenu = @Composable (onDismiss: () -> Unit, defaultMenus: @Co
 /**
  * A typealias for a function that picks a color.
  */
-typealias PickColor = ((color: Color) -> Unit) -> Unit
+typealias PickColor = (previousColor: Color, (color: Color) -> Unit) -> Unit
 
 /**
  * A typealias for a function that places editor and find icons.
