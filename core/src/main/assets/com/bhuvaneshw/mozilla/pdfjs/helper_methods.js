@@ -920,3 +920,13 @@ function setAriaRoleDescription(roleDescription) {
     viewerContainer.ariaRoleDescription = roleDescription;
 }
 // #endregion
+
+// #region page functions
+function getInnerHtmlOfPage(pageNumber) {
+    return PDFViewerApplication.pdfViewer.getPageView(pageNumber - 1).textLayer.div.innerHTML;
+}
+
+function getInnerTextOfPage(pageNumber) {
+    return PDFViewerApplication.pdfViewer.getPageView(pageNumber - 1).textLayer.div.innerText;
+}
+// #endregion

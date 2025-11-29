@@ -2,19 +2,98 @@ package com.bhuvaneshw.pdf.setting
 
 import android.webkit.WebView
 import com.bhuvaneshw.pdf.PdfEditorModeApi
+import com.bhuvaneshw.pdf.PdfException
 import com.bhuvaneshw.pdf.js.PdfFindBar
 import com.bhuvaneshw.pdf.js.PdfSideBar
 import com.bhuvaneshw.pdf.js.call
 import com.bhuvaneshw.pdf.js.callDirectly
+import com.bhuvaneshw.pdf.js.decode
+import com.bhuvaneshw.pdf.js.encode
+import com.bhuvaneshw.pdf.js.evaluate
 import com.bhuvaneshw.pdf.js.invoke
 import com.bhuvaneshw.pdf.js.set
 import com.bhuvaneshw.pdf.js.toJsString
 import com.bhuvaneshw.pdf.js.with
+import kotlinx.coroutines.delay
 
 /**
  * Manages UI settings for the PDF viewer.
  */
 class UiSettings internal constructor(private val webView: WebView) {
+
+    /**
+     * Settings for the left section of the main toolbar.
+     */
+    val toolbarLeft = ToolbarLeft()
+
+    /**
+     * Settings for the middle section of the main toolbar.
+     */
+    val toolbarMiddle = ToolbarMiddle()
+
+    /**
+     * Settings for the right section of the main toolbar.
+     */
+    val toolbarRight = ToolbarRight()
+
+    /**
+     * Settings for the secondary toolbar.
+     */
+    val toolBarSecondary = ToolbarSecondary()
+
+    /**
+     * Interacts with the password dialog.
+     */
+    val passwordDialog = PasswordDialog()
+
+    /**
+     * Interacts with the print dialog.
+     */
+    val printDialog = PrintDialog()
+
+    /**
+     * Shows or hides the entire toolbar.
+     */
+    var toolbarEnabled: Boolean = false
+        set(value) {
+            field = value
+            webView callDirectly "setToolbarEnabled"(value)
+        }
+
+    /**
+     * Opens or closes the sidebar.
+     */
+    var isSideBarOpen: Boolean = false
+        set(value) {
+            field = value
+            webView with PdfSideBar call if (value) "open"() else "close"()
+            webView with PdfSideBar set "sidebarContainer.style.display"((if (value) "" else "none").toJsString())
+        }
+
+    /**
+     * Opens or closes the find bar.
+     */
+    var isFindBarOpen: Boolean = false
+        set(value) {
+            field = value
+            webView with PdfFindBar call if (value) "open"() else "close"()
+        }
+
+    /**
+     * Shows or hides the viewer's scrollbar.
+     */
+    var viewerScrollbar: Boolean = true
+        set(value) {
+            field = value
+            webView.isVerticalScrollBarEnabled = value
+            webView.isHorizontalScrollBarEnabled = value
+            webView callDirectly "setViewerScrollbar"(value)
+        }
+
+    /**
+     * Manages pages of the PDF.
+     */
+    val pages = Pages()
 
     /**
      * Settings for the editor mode UI.
@@ -380,72 +459,69 @@ class UiSettings internal constructor(private val webView: WebView) {
     }
 
     /**
-     * Settings for the left section of the main toolbar.
+     * Manages pages of the PDF.
      */
-    val toolbarLeft = ToolbarLeft()
+    inner class Pages internal constructor() {
+        /**
+         * Gets the page with the given number.
+         *
+         * @param pageNumber The page number to get.
+         * @return The [Page] with the given number.
+         * @throws PdfException If the page number is invalid.
+         */
+        suspend operator fun get(pageNumber: Int): Page {
+            val count = webView evaluate "PDFViewerApplication.pagesCount"
+            val pagesCount = count?.toInt() ?: throw PdfException("Unable to get pages count")
+            if (pageNumber !in 1..pagesCount) throw PdfException("Invalid page number")
+
+            return Page(pageNumber)
+        }
+    }
 
     /**
-     * Settings for the middle section of the main toolbar.
+     * Represents a single page of the PDF.
+     *
+     * @property pageNumber The page number.
      */
-    val toolbarMiddle = ToolbarMiddle()
+    inner class Page internal constructor(val pageNumber: Int) {
 
-    /**
-     * Settings for the right section of the main toolbar.
-     */
-    val toolbarRight = ToolbarRight()
+        /**
+         * Gets the inner text of the page.
+         *
+         * @param scroll If true, scrolls to the page before getting the text.
+         * @return The inner text of the page.
+         */
+        @JvmOverloads
+        suspend fun innerText(scroll: Boolean = false): String? {
+            if (scroll) scrollToIt()
 
-    /**
-     * Settings for the secondary toolbar.
-     */
-    val toolBarSecondary = ToolbarSecondary()
-
-    /**
-     * Interacts with the password dialog.
-     */
-    val passwordDialog = PasswordDialog()
-
-    /**
-     * Interacts with the print dialog.
-     */
-    val printDialog = PrintDialog()
-
-    /**
-     * Shows or hides the entire toolbar.
-     */
-    var toolbarEnabled: Boolean = false
-        set(value) {
-            field = value
-            webView callDirectly "setToolbarEnabled"(value)
+            val encodedResult = webView evaluate "getInnerTextOfPage($pageNumber)".encode()
+            return encodedResult?.decode()
         }
 
-    /**
-     * Opens or closes the sidebar.
-     */
-    var isSideBarOpen: Boolean = false
-        set(value) {
-            field = value
-            webView with PdfSideBar call if (value) "open"() else "close"()
-            webView with PdfSideBar set "sidebarContainer.style.display"((if (value) "" else "none").toJsString())
+        /**
+         * Gets the inner HTML of the page.
+         *
+         * @param scroll If true, scrolls to the page before getting the HTML.
+         * @return The inner HTML of the page.
+         */
+        @JvmOverloads
+        suspend fun innerHtml(scroll: Boolean = false): String? {
+            if (scroll) scrollToIt()
+
+            val encodedResult = webView evaluate "getInnerHtmlOfPage($pageNumber)".encode()
+            return encodedResult?.decode()
         }
 
-    /**
-     * Opens or closes the find bar.
-     */
-    var isFindBarOpen: Boolean = false
-        set(value) {
-            field = value
-            webView with PdfFindBar call if (value) "open"() else "close"()
+        /**
+         * Scrolls to this page.
+         *
+         * @param delayMs The delay in milliseconds after scrolling.
+         */
+        @JvmOverloads
+        suspend fun scrollToIt(delayMs: Long = 200) {
+            webView evaluate "PDFViewerApplication.page = $pageNumber"
+            delay(delayMs)
         }
-
-    /**
-     * Shows or hides the viewer's scrollbar.
-     */
-    var viewerScrollbar: Boolean = true
-        set(value) {
-            field = value
-            webView.isVerticalScrollBarEnabled = value
-            webView.isHorizontalScrollBarEnabled = value
-            webView callDirectly "setViewerScrollbar"(value)
-        }
-
+    }
 }

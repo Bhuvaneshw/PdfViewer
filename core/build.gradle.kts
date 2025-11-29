@@ -42,9 +42,11 @@ android {
         }
     }
 }
+
 dependencies {
     implementation(libs.androidx.annotation.jvm)
     implementation(libs.androidx.webkit)
+    implementation(libs.androidx.core.ktx)
 }
 
 dokka {
