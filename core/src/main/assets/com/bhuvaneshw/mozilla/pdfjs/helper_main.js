@@ -142,7 +142,7 @@ function doOnLast() {
                 }
             }
         })
-        if (Object.keys(state).length == 4 && !isSame(prevEditorState, state)){
+        if (Object.keys(state).length == 4 && !isSame(prevEditorState, state)) {
             prevEditorState = state;
             JWI.onEditorStateChange(JSON.stringify(state));
         }
@@ -207,6 +207,11 @@ function setupHelper() {
     PDFViewerApplication.eventBus.on("pagechanging", (event) => {
         const { pageNumber } = event;
         JWI.onPageChange(pageNumber);
+    });
+
+    PDFViewerApplication.eventBus.on("pagerendered", (event) => {
+        const { pageNumber } = event;
+        JWI.onPageRendered(pageNumber);
     });
 
     PDFViewerApplication.eventBus.on("updatefindcontrolstate", (event) => {
@@ -310,8 +315,8 @@ function observe(target, options, callback) {
 }
 
 function isSame(prev, curr) {
-  const keys = Object.keys(prev);
-  if (keys.length !== Object.keys(curr).length) return false;
+    const keys = Object.keys(prev);
+    if (keys.length !== Object.keys(curr).length) return false;
 
-  return keys.every(key => prev[key] === curr[key]);
+    return keys.every(key => prev[key] === curr[key]);
 }

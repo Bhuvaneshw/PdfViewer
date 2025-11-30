@@ -54,6 +54,11 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
+    fun onPageRendered(pageNumber: Int) = post {
+        pdfViewer.listeners.forEach { it.onPageRendered(pageNumber) }
+    }
+
+    @JavascriptInterface
     fun onScaleChange(scale: Float, scaleValue: String) =
         post({ pdfViewer.currentPageScale != scale || pdfViewer.currentPageScaleValue != scaleValue }) {
             pdfViewer.currentPageScale = scale

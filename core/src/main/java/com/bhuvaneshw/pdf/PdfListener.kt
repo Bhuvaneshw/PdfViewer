@@ -50,6 +50,12 @@ interface PdfListener {
     fun onPageChange(pageNumber: Int) {}
 
     /**
+     * Called when a page is rendered..
+     * @param pageNumber The page number.
+     */
+    fun onPageRendered(pageNumber: Int) {}
+
+    /**
      * Called when the zoom scale of the PDF document changes.
      * @param scale The new scale factor.
      */

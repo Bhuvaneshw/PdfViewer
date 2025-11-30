@@ -73,6 +73,20 @@ fun PdfState.pageNumberFlow(): Flow<Int> = flowIt { emit ->
 }
 
 /**
+ * A flow that emits the page number when a page is rendered.
+ *
+ * @return A flow of the rendered page number.
+ * @see PdfListener.onPageRendered
+ */
+fun PdfState.pageRenderedFlow(): Flow<Int> = flowIt { emit ->
+    object : PdfListener {
+        override fun onPageRendered(pageNumber: Int) {
+            emit(pageNumber)
+        }
+    }
+}
+
+/**
  * A flow that emits the current scale of the PDF document.
  *
  * @return A flow of the current scale.

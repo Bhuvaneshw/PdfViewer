@@ -12,6 +12,7 @@ try {
         onLoadFailed() {},
         onLoadSuccess() {},
         onProgressChange() {},
+        onPageRendered() {},
         onPasswordDialogChange() {},
         onLinkClick() {},
         onSingleClick() {},
