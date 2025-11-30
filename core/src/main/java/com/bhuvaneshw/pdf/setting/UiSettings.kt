@@ -14,7 +14,6 @@ import com.bhuvaneshw.pdf.js.invoke
 import com.bhuvaneshw.pdf.js.set
 import com.bhuvaneshw.pdf.js.toJsString
 import com.bhuvaneshw.pdf.js.with
-import kotlinx.coroutines.delay
 
 /**
  * Manages UI settings for the PDF viewer.
@@ -488,13 +487,9 @@ class UiSettings internal constructor(private val webView: WebView) {
         /**
          * Gets the inner text of the page.
          *
-         * @param scroll If true, scrolls to the page before getting the text.
-         * @return The inner text of the page.
+         *  @return The inner text of the page.
          */
-        @JvmOverloads
-        suspend fun innerText(scroll: Boolean = false): String? {
-            if (scroll) scrollToIt()
-
+        suspend fun innerText(): String? {
             val encodedResult = webView evaluate "getInnerTextOfPage($pageNumber)".encode()
             return encodedResult?.decode()
         }
@@ -502,26 +497,31 @@ class UiSettings internal constructor(private val webView: WebView) {
         /**
          * Gets the inner HTML of the page.
          *
-         * @param scroll If true, scrolls to the page before getting the HTML.
          * @return The inner HTML of the page.
          */
-        @JvmOverloads
-        suspend fun innerHtml(scroll: Boolean = false): String? {
-            if (scroll) scrollToIt()
-
+        suspend fun innerHtml(): String? {
             val encodedResult = webView evaluate "getInnerHtmlOfPage($pageNumber)".encode()
             return encodedResult?.decode()
         }
 
-        /**
-         * Scrolls to this page.
-         *
-         * @param delayMs The delay in milliseconds after scrolling.
-         */
-        @JvmOverloads
-        suspend fun scrollToIt(delayMs: Long = 200) {
-            webView evaluate "PDFViewerApplication.page = $pageNumber"
-            delay(delayMs)
+        suspend fun getRenderingState(): PageRenderingState {
+            val state =
+                (webView evaluate "PDFViewerApplication.pdfViewer.getPageView(${pageNumber - 1}).renderingState;")
+                    ?: return PageRenderingState.UNKNOWN
+
+            return try {
+                PageRenderingState.entries[state.toInt()]
+            } catch (_: Exception) {
+                PageRenderingState.UNKNOWN
+            }
         }
+    }
+
+    enum class PageRenderingState {
+        INITIAL,
+        RUNNING,
+        PAUSED,
+        FINISHED,
+        UNKNOWN
     }
 }
