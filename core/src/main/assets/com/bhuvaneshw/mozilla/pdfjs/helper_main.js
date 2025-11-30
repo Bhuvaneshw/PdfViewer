@@ -211,7 +211,22 @@ function setupHelper() {
 
     PDFViewerApplication.eventBus.on("pagerendered", (event) => {
         const { pageNumber } = event;
-        JWI.onPageRendered(pageNumber);
+        const pageDiv = PDFViewerApplication.pdfViewer.getPageView(pageNumber - 1).div;
+        const textLayer = pageDiv.querySelector(".textLayer");
+
+        if (textLayer) {
+            JWI.onPageRendered(pageNumber);
+            return;
+        }
+
+        observe(pageDiv, { childList: true }, (mutations, observer) => {
+            const textLayer = pageDiv.querySelector(".textLayer");
+
+            if (textLayer) {
+                observer.disconnect();
+                JWI.onPageRendered(pageNumber);
+            }
+        });
     });
 
     PDFViewerApplication.eventBus.on("updatefindcontrolstate", (event) => {
