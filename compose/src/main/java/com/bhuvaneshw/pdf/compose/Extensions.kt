@@ -11,6 +11,7 @@ import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.WebViewError
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -103,13 +104,34 @@ fun PdfState.scaleFlow(): Flow<Float> = flowIt { emit ->
 /**
  * A flow that emits the PDF document to be saved as a byte array.
  *
+ * This function corresponds to the legacy save behavior, where only the raw PDF bytes
+ * were emitted without any filename or MIME type information. It is now deprecated in
+ * favor of [downloadFlow], which provides a richer data structure for downloads.
+ *
  * @return A flow of the PDF as a byte array.
  * @see PdfListener.onSavePdf
+ * @deprecated Use [downloadFlow] instead, which emits the file bytes along with filename and MIME type.
  */
+@Deprecated("This flow is deprecated. Use downloadFlow() instead.", ReplaceWith("downloadFlow()"))
 fun PdfState.savePdfFlow(): Flow<ByteArray> = flowIt { emit ->
     object : PdfListener {
+        @Suppress("OVERRIDE_DEPRECATION")
         override fun onSavePdf(pdfAsBytes: ByteArray) {
             emit(pdfAsBytes)
+        }
+    }
+}
+
+/**
+ * A flow that emits information about a file download triggered from the PDF viewer.
+ *
+ * @return A flow emitting a [Triple] containing `(fileBytes, fileName, mimeType)`.
+ * @see PdfListener.onDownload
+ */
+fun PdfState.downloadFlow(): Flow<Triple<ByteArray, String?, String?>> = flowIt { emit ->
+    object : PdfListener {
+        override fun onDownload(fileBytes: ByteArray, fileName: String?, mimeType: String?) {
+            emit(Triple(fileBytes, fileName, mimeType))
         }
     }
 }
@@ -609,6 +631,34 @@ fun PdfState.showFileChooserFlow(handled: () -> Boolean): Flow<Pair<ValueCallbac
             }
         }
     }
+
+/**
+ * A flow that emits the document outline.
+ *
+ * @return A flow of the document outline.
+ * @see PdfListener.onLoadOutline
+ */
+fun PdfState.outlineFlow(): Flow<List<SideBarTreeItem>> = flowIt { emit ->
+    object : PdfListener {
+        override fun onLoadOutline(outline: List<SideBarTreeItem>) {
+            emit(outline)
+        }
+    }
+}
+
+/**
+ * A flow that emits the document attachments.
+ *
+ * @return A flow of the document attachments.
+ * @see PdfListener.onLoadAttachments
+ */
+fun PdfState.attachmentsFlow(): Flow<List<SideBarTreeItem>> = flowIt { emit ->
+    object : PdfListener {
+        override fun onLoadAttachments(attachments: List<SideBarTreeItem>) {
+            emit(attachments)
+        }
+    }
+}
 
 internal fun PdfViewer.load(source: PdfSource) {
     when (source) {
