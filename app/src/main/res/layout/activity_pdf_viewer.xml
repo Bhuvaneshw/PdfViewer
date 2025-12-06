@@ -30,6 +30,13 @@
         app:handleColor="@color/md_theme_background"
         app:useVerticalScrollBarForHorizontalMode="false" />
 
+    <com.bhuvaneshw.pdf.ui.PdfOutlineView
+        android:id="@+id/pdfOutlineView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/md_theme_background"
+        app:contentColor="@color/md_theme_onBackground" />
+
     <LinearLayout
         android:id="@+id/loader"
         android:layout_width="match_parent"

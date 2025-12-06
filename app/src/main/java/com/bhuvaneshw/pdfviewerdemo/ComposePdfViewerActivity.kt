@@ -2,6 +2,7 @@ package com.bhuvaneshw.pdfviewerdemo
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -20,10 +21,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
@@ -32,6 +35,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -41,12 +45,14 @@ import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.RangeSliderState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -60,6 +66,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bhuvaneshw.pdf.PdfEditor
@@ -123,12 +130,15 @@ class ComposePdfViewerActivity : ComponentActivity() {
             PdfViewerComposeDemoTheme {
                 val snackBarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
+                val isLandscape =
+                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
                 Scaffold(
                     snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    contentWindowInsets = if (isLandscape) WindowInsets.safeContent else ScaffoldDefaults.contentWindowInsets
                 ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         MainScreen(
                             fileName = fileName,
                             source = filePath,
@@ -145,7 +155,8 @@ class ComposePdfViewerActivity : ComponentActivity() {
                                         duration = SnackbarDuration.Short,
                                     )
                                 }
-                            }
+                            },
+                            modifier = Modifier.padding(innerPadding)
                         )
                     }
                 }
@@ -197,13 +208,19 @@ class ComposePdfViewerActivity : ComponentActivity() {
             }
         }
 
-        override fun onSavePdf(pdfAsBytes: ByteArray) {
-            bytes = pdfAsBytes
+        override fun onDownload(
+            fileBytes: ByteArray,
+            fileName: String?,
+            mimeType: String?
+        ) {
+            bytes = fileBytes
 
             saveFileLauncher.launch(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/pdf"
-                putExtra(Intent.EXTRA_TITLE, pdfTitle)
+                type = mimeType ?: "application/pdf"
+                putExtra(
+                    Intent.EXTRA_TITLE, if (mimeType == "application/pdf") pdfTitle else fileName
+                )
             })
         }
     }
@@ -220,12 +237,15 @@ private fun Activity.MainScreen(
     downloadPdfListener: ComposePdfViewerActivity.DownloadPdfListener,
     imagePickerListener: ImagePickerListener,
     onShowMessage: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val pdfState = rememberPdfState(source = source)
     val toolBarState = rememberToolBarState()
+    val outlineDrawerState = rememberDrawerState(DrawerValue.Closed)
     var toolbarTitle by remember { mutableStateOf(fileName) }
     var fullscreen by remember { mutableStateOf(false) }
     var showSaveDialog by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(pdfState.loadingState) {
         pdfState.loadingState.let {
@@ -296,6 +316,10 @@ private fun Activity.MainScreen(
                 // Handled by toolbar
             }
 
+            outlineDrawerState.isOpen -> {
+                scope.launch { outlineDrawerState.close() }
+            }
+
             pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> showSaveDialog = true
             else -> finish()
         }
@@ -303,6 +327,7 @@ private fun Activity.MainScreen(
 
     PdfViewerContainer(
         pdfState = pdfState,
+        outlineDrawerState = outlineDrawerState,
         pdfViewer = {
             PdfViewer(
                 modifier = Modifier.fillMaxSize(),
@@ -398,7 +423,8 @@ private fun Activity.MainScreen(
                     Text(text = "Loading...")
                 }
             }
-        }
+        },
+        modifier = modifier,
     )
 
     if (showSaveDialog) {

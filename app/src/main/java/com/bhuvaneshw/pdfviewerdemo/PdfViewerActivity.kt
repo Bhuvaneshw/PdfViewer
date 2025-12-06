@@ -42,11 +42,19 @@ class PdfViewerActivity : AppCompatActivity() {
         view = ActivityPdfViewerBinding.inflate(layoutInflater)
         setContentView(view.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(view.container) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(view.container.mainView) { v, insets ->
+            val systemBars =
+                insets.getInsets(WindowInsetsCompat.Type.systemBars() + WindowInsetsCompat.Type.displayCutout())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        ViewCompat.setOnApplyWindowInsetsListener(view.pdfOutlineView) { v, insets ->
+            val systemBars =
+                insets.getInsets(WindowInsetsCompat.Type.systemBars() + WindowInsetsCompat.Type.displayCutout())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         pdfSettingsManager = sharedPdfSettingsManager("PdfSettings", MODE_PRIVATE)
             .also { it.includeAll() }
 
@@ -100,6 +108,10 @@ class PdfViewerActivity : AppCompatActivity() {
             when {
                 view.pdfToolBar.handleBackPressed() -> {
                     // Handled by toolbar
+                }
+
+                view.container.handleBackPressed() -> {
+                    // Handled by container
                 }
 
                 view.pdfViewer.editor.hasUnsavedChanges -> showSaveDialog()
@@ -215,13 +227,19 @@ class PdfViewerActivity : AppCompatActivity() {
             }
         }
 
-        override fun onSavePdf(pdfAsBytes: ByteArray) {
-            bytes = pdfAsBytes
+        override fun onDownload(
+            fileBytes: ByteArray,
+            fileName: String?,
+            mimeType: String?
+        ) {
+            bytes = fileBytes
 
             saveFileLauncher.launch(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/pdf"
-                putExtra(Intent.EXTRA_TITLE, pdfTitle)
+                type = mimeType ?: "application/pdf"
+                putExtra(
+                    Intent.EXTRA_TITLE, if (mimeType == "application/pdf") pdfTitle else fileName
+                )
             })
         }
     }
