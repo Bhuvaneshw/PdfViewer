@@ -5,6 +5,7 @@ import android.net.Uri
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient.FileChooserParams
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 import com.bhuvaneshw.pdf.setting.PdfSettingsManager
 import com.bhuvaneshw.pdf.setting.SharedPreferencePdfSettingsSaver
 
@@ -103,6 +104,7 @@ fun PdfViewer.addListener(
     onPageRendered: ((pageNumber: Int) -> Unit)? = null,
     onScaleChange: ((scale: Float) -> Unit)? = null,
     onSavePdf: ((pdfAsBytes: ByteArray) -> Unit)? = null,
+    onDownload: ((fileBytes: ByteArray, fileName: String?, mimeType: String?) -> Unit)? = null,
     onFindMatchStart: (() -> Unit)? = null,
     onFindMatchChange: ((current: Int, total: Int) -> Unit)? = null,
     onFindMatchComplete: ((found: Boolean) -> Unit)? = null,
@@ -139,6 +141,8 @@ fun PdfViewer.addListener(
     onAlignModeChange: ((requestedMode: PdfViewer.PageAlignMode, appliedMode: PdfViewer.PageAlignMode) -> Unit)? = null,
     onScrollSpeedLimitChange: ((requestedLimit: PdfViewer.ScrollSpeedLimit, appliedLimit: PdfViewer.ScrollSpeedLimit) -> Unit)? = null,
     onShowFileChooser: ((filePathCallback: ValueCallback<Array<out Uri?>?>?, fileChooserParams: FileChooserParams?) -> Boolean)? = null,
+    onLoadOutline: ((outline: List<SideBarTreeItem>) -> Unit)? = null,
+    onLoadAttachments: ((attachments: List<SideBarTreeItem>) -> Unit)? = null,
 ) {
     addListener(object : PdfListener {
         override fun onPageLoadStart() {
@@ -173,8 +177,17 @@ fun PdfViewer.addListener(
             onScaleChange?.invoke(scale)
         }
 
+        @Suppress("OVERRIDE_DEPRECATION")
         override fun onSavePdf(pdfAsBytes: ByteArray) {
             onSavePdf?.invoke(pdfAsBytes)
+        }
+
+        override fun onDownload(
+            fileBytes: ByteArray,
+            fileName: String?,
+            mimeType: String?
+        ) {
+            onDownload?.invoke(fileBytes, fileName, mimeType)
         }
 
         override fun onFindMatchStart() {
@@ -343,6 +356,14 @@ fun PdfViewer.addListener(
             fileChooserParams: FileChooserParams?
         ): Boolean {
             return onShowFileChooser?.invoke(filePathCallback, fileChooserParams) == true
+        }
+
+        override fun onLoadOutline(outline: List<SideBarTreeItem>) {
+            onLoadOutline?.invoke(outline)
+        }
+
+        override fun onLoadAttachments(attachments: List<SideBarTreeItem>) {
+            onLoadAttachments?.invoke(attachments)
         }
     })
 }

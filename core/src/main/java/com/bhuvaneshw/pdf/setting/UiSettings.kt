@@ -95,6 +95,18 @@ class UiSettings internal constructor(private val webView: WebView) {
     val pages = Pages()
 
     /**
+     * Performs a click on a tree item in the sidebar.
+     *
+     * @param itemId The ID of the tree item to click.
+     * @return `true` if the click was handled, `false` otherwise.
+     * @see com.bhuvaneshw.pdf.model.SideBarTreeItem
+     */
+    suspend fun performSidebarTreeItemClick(itemId: String): Boolean {
+        val result = webView evaluate "performTreeItemClick(`$itemId`)"
+        return result == "true"
+    }
+
+    /**
      * Settings for the editor mode UI.
      */
     @PdfEditorModeApi
@@ -517,11 +529,33 @@ class UiSettings internal constructor(private val webView: WebView) {
         }
     }
 
+    /**
+     * Represents the rendering state of a page.
+     */
     enum class PageRenderingState {
+        /**
+         * The page is not yet rendered.
+         */
         INITIAL,
+
+        /**
+         * The page is currently rendering.
+         */
         RUNNING,
+
+        /**
+         * The page rendering is paused.
+         */
         PAUSED,
+
+        /**
+         * The page is finished rendering.
+         */
         FINISHED,
+
+        /**
+         * The rendering state is unknown.
+         */
         UNKNOWN
     }
 }

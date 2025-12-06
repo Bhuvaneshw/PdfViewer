@@ -36,6 +36,7 @@ import com.bhuvaneshw.pdf.js.toJsHex
 import com.bhuvaneshw.pdf.js.toJsRgba
 import com.bhuvaneshw.pdf.js.toJsString
 import com.bhuvaneshw.pdf.js.with
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 import com.bhuvaneshw.pdf.print.PdfPrintAdapter
 import com.bhuvaneshw.pdf.resource.AssetResourceLoader
 import com.bhuvaneshw.pdf.resource.ContentResourceLoader
@@ -174,8 +175,37 @@ class PdfViewer @JvmOverloads constructor(
      * It is updated each time a new document is opened.
      *
      * @see PdfDocumentProperties
+     * @see PdfListener.onLoadProperties
      */
     var properties: PdfDocumentProperties? = null; internal set
+
+    /**
+     * Gets the outline (table of contents) of the currently loaded PDF document.
+     *
+     * This property provides a hierarchical representation of the document's structure,
+     * such as chapters, sections, and bookmarks. Each entry is represented as a [SideBarTreeItem].
+     *
+     * The value is `null` until the document is fully loaded and its outline has been parsed.
+     * It is refreshed every time a new PDF is opened.
+     *
+     * @see SideBarTreeItem
+     * @see PdfListener.onLoadOutline
+     */
+    var outline: List<SideBarTreeItem>? = null; internal set
+
+    /**
+     * Gets the list of embedded file attachments in the currently loaded PDF document.
+     *
+     * This property includes only the files that are explicitly embedded in the PDF as
+     * attachments. These may include documents, images, or other binary files.
+     *
+     * The value is `null` until the document is loaded and its embedded attachments (if any)
+     * have been extracted. It updates automatically whenever a new PDF is opened.
+     *
+     * @see SideBarTreeItem
+     * @see PdfListener.onLoadAttachments
+     */
+    var attachments: List<SideBarTreeItem>? = null; internal set
 
     /**
      * Defines the list of colors available in the highlight editor's color palette.

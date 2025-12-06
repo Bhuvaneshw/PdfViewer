@@ -930,3 +930,62 @@ function getInnerTextOfPage(pageNumber) {
     return PDFViewerApplication.pdfViewer.getPageView(pageNumber - 1).textLayer.div.innerText;
 }
 // #endregion
+
+// #region sidebar functions
+function loadOutline() {
+    const outlineDiv = $("#outlineView");
+    const outline = [];
+
+    iterateTreeElements(outline, outlineDiv.children, 'outlineItem');
+
+    console.log(outline)
+    JWI.onOutlineLoaded(JSON.stringify(outline));
+}
+
+function loadAttachments() {
+    const attachmentsDiv = $("#attachmentsView");
+    const attachments = [];
+
+    iterateTreeElements(attachments, attachmentsDiv.children, 'attachmentItem');
+
+    console.log(attachments)
+    JWI.onAttachmentsLoaded(JSON.stringify(attachments));
+}
+
+function iterateTreeElements(outlineArray, elements, idPrefix) {
+    for (let element of elements) {
+        if (element.classList.contains("treeItem")) {
+            const linkElement = element.querySelector("a");
+            const title = linkElement?.textContent;
+            const dest = linkElement?.href;
+
+            linkElement.id = `${idPrefix}-${Math.random().toString(36).substring(2, 9)}`;
+
+            const outlineItem = {
+                title: title,
+                dest: dest,
+                children: [],
+                id: linkElement.id,
+            };
+
+            const childItemsContainer = element.querySelector(".treeItems");
+            if (childItemsContainer) {
+                iterateTreeElements(outlineItem.children, childItemsContainer.children, idPrefix);
+            }
+
+            outlineArray.push(outlineItem);
+        }
+    }
+}
+
+function performTreeItemClick(itemId) {
+    const itemElement = $(`#${itemId}`);
+
+    if (itemElement) {
+        itemElement.click();
+        return true;
+    }
+
+    return false;
+}
+// #endregion

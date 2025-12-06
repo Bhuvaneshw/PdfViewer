@@ -35,5 +35,7 @@ try {
         onShowEditorMessage() {},
         onAnnotationEditor() {},
         onEditorStateChange() {},
+        onOutlineLoaded() {},
+        onAttachmentsLoaded() {}
     };
 }

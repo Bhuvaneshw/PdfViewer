@@ -7,6 +7,7 @@ import android.webkit.WebChromeClient.FileChooserParams
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 
 /**
  * Interface for listening to events from the PDF viewer.
@@ -65,7 +66,21 @@ interface PdfListener {
      * Called to save the PDF document.
      * @param pdfAsBytes The byte array of the PDF document.
      */
+    @Deprecated("This callback is deprecated. Use onDownload() instead.", ReplaceWith("onDownload(fileBytes, fileName, mimeType)"))
     fun onSavePdf(pdfAsBytes: ByteArray) {}
+
+    /**
+     * Called when download action is triggered.
+     *
+     * This callback is invoked when saving the PDF file itself as well as when saving embedded attachments.
+     *
+     * @param fileBytes The PDF/attachment file content as a `ByteArray`.
+     * @param fileName The name of the file (e.g., "document.pdf"). This is often derived from the
+     *                 source URL or content disposition headers and may be `null` if not available.
+     * @param mimeType The MIME type of the file (e.g., "application/pdf"). This can be `null` if not
+     *                 available.
+     */
+    fun onDownload(fileBytes: ByteArray, fileName: String?, mimeType: String?) {}
 
     /**
      * Called when a find operation starts.
@@ -319,5 +334,19 @@ interface PdfListener {
         filePathCallback: ValueCallback<Array<out Uri?>?>?,
         fileChooserParams: FileChooserParams?
     ): Boolean = false
+
+    /**
+     * Called when the document outline is loaded.
+     * @param outline The list of outline items.
+     * @see SideBarTreeItem
+     */
+    fun onLoadOutline(outline: List<SideBarTreeItem>) {}
+
+    /**
+     * Called when the document attachments are loaded.
+     * @param attachments The list of attachment items.
+     * @see SideBarTreeItem
+     */
+    fun onLoadAttachments(attachments: List<SideBarTreeItem>) {}
 
 }

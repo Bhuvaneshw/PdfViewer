@@ -10,6 +10,8 @@ import com.bhuvaneshw.pdf.PdfViewer.PageScrollMode
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
 import com.bhuvaneshw.pdf.js.getBoolean
 import com.bhuvaneshw.pdf.js.toJsHex
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
+import kotlinx.serialization.json.Json
 import org.json.JSONObject
 
 @Suppress("Unused")
@@ -184,6 +186,20 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
+    fun onOutlineLoaded(outlineJson: String) = post {
+        val outline: List<SideBarTreeItem> = Json.decodeFromString(outlineJson)
+        pdfViewer.outline = outline
+        pdfViewer.listeners.forEach { it.onLoadOutline(outline) }
+    }
+
+    @JavascriptInterface
+    fun onAttachmentsLoaded(attachmentJson: String) = post {
+        val attachments: List<SideBarTreeItem> = Json.decodeFromString(attachmentJson)
+        pdfViewer.attachments = attachments
+        pdfViewer.listeners.forEach { it.onLoadAttachments(attachments) }
+    }
+
+    @JavascriptInterface
     fun onLoadProperties(
         title: String,
         subject: String,
@@ -248,32 +264,41 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
-    fun getBase64FromBlobData(base64Data: String) {
-        val pdfAsBytes: ByteArray = Base64.decode(
+    fun handleBase64Data(base64Data: String, fileName: String?, mimeType: String?) {
+        val fileBytes: ByteArray = Base64.decode(
             base64Data.replaceFirst("^data:application/pdf;base64,".toRegex(), ""),
             0
         )
 
         post {
-            pdfViewer.listeners.forEach { it.onSavePdf(pdfAsBytes) }
-            onAnnotationEditor("downloaded")
+            if (mimeType == "application/pdf" ||
+                fileName?.endsWith(".pdf", ignoreCase = true) == true
+            ) {
+                // TODO: Remove onSavePdf in future
+                pdfViewer.listeners.forEach {
+                    @Suppress("DEPRECATION")
+                    it.onSavePdf(fileBytes)
+                }
+                onAnnotationEditor("downloaded")
+            }
+            pdfViewer.listeners.forEach { it.onDownload(fileBytes, fileName, mimeType) }
         }
     }
 
-    fun getBase64StringFromBlobUrl(blobUrl: String): String? {
+    fun getBase64StringFromBlobUrl(blobUrl: String, fileName: String?, mimeType: String?): String? {
         if (blobUrl.startsWith("blob")) {
             return "var xhr = new XMLHttpRequest();" +
-                    "xhr.open('GET', '" + blobUrl + "', true);" +
-                    "xhr.setRequestHeader('Content-type','application/pdf');" +
+                    "xhr.open('GET', `$blobUrl`, true);" +
+                    "xhr.setRequestHeader('Content-type',`${mimeType ?: "application/pdf"}`);" +
                     "xhr.responseType = 'blob';" +
                     "xhr.onload = function(e) {" +
                     "    if (this.status == 200) {" +
-                    "        var blobPdf = this.response;" +
+                    "        var blobResponse = this.response;" +
                     "        var reader = new FileReader();" +
-                    "        reader.readAsDataURL(blobPdf);" +
+                    "        reader.readAsDataURL(blobResponse);" +
                     "        reader.onloadend = function() {" +
                     "            base64data = reader.result;" +
-                    "            JWI.getBase64FromBlobData(base64data);" +
+                    "            JWI.handleBase64Data(base64data, `$fileName`, `$mimeType`);" +
                     "        }" +
                     "    }" +
                     "};" +

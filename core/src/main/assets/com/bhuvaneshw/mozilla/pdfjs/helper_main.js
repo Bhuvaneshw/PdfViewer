@@ -245,6 +245,14 @@ function setupHelper() {
         JWI.onScrollModeChange(event.mode);
     });
 
+    PDFViewerApplication.eventBus.on("outlineloaded", (e) => {
+        loadOutline();
+    });
+
+    PDFViewerApplication.eventBus.on("attachmentsloaded", (e) => {
+        loadAttachments();
+    });
+
     viewerContainer.addEventListener("scroll", () => {
         let currentOffset;
         let totalScrollable;
