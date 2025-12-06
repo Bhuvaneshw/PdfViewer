@@ -63,5 +63,15 @@ enum class PdfToolBarMenuItem(internal val displayName: String) {
     /**
      * Menu item to view document properties.
      */
-    PROPERTIES("Properties")
+    PROPERTIES("Properties"),
+
+    /**
+     * Menu item to view the document outline.
+     */
+    OUTLINE("Outline"),
+
+    /**
+     * Menu item to view the document attachments.
+     */
+    ATTACHMENTS("Attachments"),
 }

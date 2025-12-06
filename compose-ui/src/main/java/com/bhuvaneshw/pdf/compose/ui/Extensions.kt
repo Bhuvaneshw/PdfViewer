@@ -1,5 +1,6 @@
 package com.bhuvaneshw.pdf.compose.ui
 
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -42,7 +43,7 @@ internal fun Long.formatToSize(): String {
 internal fun String.formatToDate(): String {
     val cleanDate = if (this.startsWith("D:")) this.substring(2) else this
     if (cleanDate.length < 14) return this
-    val rawDate = cleanDate.substring(0, 14)
+    val rawDate = cleanDate.take(14)
 
     val parser = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
     val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a", Locale.getDefault())
@@ -66,4 +67,29 @@ internal enum class Zoom(internal val value: String) {
     PAGE_FIT("page-fit"),
     PAGE_WIDTH("page-width"),
     ACTUAL_SIZE("page-actual")
+}
+
+internal data class OutlineNode(
+    val item: SideBarTreeItem,
+    val depth: Int,
+    val isExpanded: Boolean,
+)
+
+internal fun flattenTree(
+    items: List<SideBarTreeItem>,
+    depth: Int,
+    expanded: Map<String, Boolean>
+): List<OutlineNode> {
+    val result = mutableListOf<OutlineNode>()
+
+    for (item in items) {
+        val isExpanded = expanded[item.id] == true
+        result += OutlineNode(item, depth, isExpanded)
+
+        if (item.children.isNotEmpty() && isExpanded) {
+            result += flattenTree(item.children, depth + 1, expanded)
+        }
+    }
+
+    return result
 }

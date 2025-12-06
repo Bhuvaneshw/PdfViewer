@@ -58,6 +58,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -88,7 +89,9 @@ import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
 import com.bhuvaneshw.pdf.compose.MatchState
 import com.bhuvaneshw.pdf.compose.PdfState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
@@ -107,6 +110,7 @@ import kotlin.math.roundToInt
  * @param pickColor A lambda to be invoked when a color is picked.
  * @param dropDownMenu A composable that represents the dropdown menu.
  * @param onPlaceIcons A composable that places editor and find icons. Additional icons can be added using this.
+ * @param openOutlineView A lambda invoked to open the outline view.
  *
  * @see PdfState
  * @see PdfToolBarState
@@ -129,7 +133,9 @@ fun PdfToolBar(
     pickColor: PickColor? = null,
     dropDownMenu: PdfToolBarMenu = defaultToolBarDropDownMenu(),
     onPlaceIcons: PlaceIcons = defaultIconsPosition(),
+    openOutlineView: (() -> Unit)? = null,
 ) {
+    val scope = rememberCoroutineScope()
     val toolBarScope = PdfToolBarScope(
         pdfState = pdfState,
         toolBarState = toolBarState,
@@ -224,6 +230,7 @@ fun PdfToolBar(
                 var showAlignMode by remember { mutableStateOf(false) }
                 var showSnapPage by remember { mutableStateOf(false) }
                 var showDocumentProperties by remember { mutableStateOf(false) }
+                var showAttachments by remember { mutableStateOf(false) }
                 val onDismiss = { showMoreOptions = false }
 
                 toolBarScope.ToolBarIcon(
@@ -340,6 +347,24 @@ fun PdfToolBar(
                                     onDismiss()
                                 }
                             )
+                            openOutlineView?.let {
+                                DropdownMenuItem(
+                                    menuItem = PdfToolBarMenuItem.OUTLINE,
+                                    filteredItem = filteredItem,
+                                    onClick = {
+                                        openOutlineView()
+                                        onDismiss()
+                                    }
+                                )
+                            }
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.ATTACHMENTS,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    showAttachments = true
+                                    onDismiss()
+                                }
+                            )
                         }
                     }
                 }
@@ -376,6 +401,13 @@ fun PdfToolBar(
                         pdfState = pdfState,
                         fileName = fileName,
                         onDismiss = { showDocumentProperties = false },
+                    )
+                if (showAttachments)
+                    AttachmentsDialog(
+                        pdfState = pdfState,
+                        scope = scope,
+                        onDismiss = { showAttachments = false },
+                        contentColor = contentColor,
                     )
             }
         }
@@ -1315,6 +1347,44 @@ private fun DocumentPropertiesDialog(
                 propertyItem("Keywords", properties.keywords)
                 propertyItem("Pdf Version", properties.pdfFormatVersion)
                 propertyItem("Fast Webview", properties.isLinearized.toString())
+            }
+        }
+    )
+}
+
+@Composable
+private fun AttachmentsDialog(
+    pdfState: PdfState,
+    scope: CoroutineScope,
+    onDismiss: () -> Unit,
+    contentColor: Color? = null,
+) {
+    val attachments = pdfState.pdfViewer?.attachments ?: run { onDismiss(); return }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "Attachments",
+                style = MaterialTheme.typography.titleLarge,
+            )
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(text = "Close") } },
+        text = {
+            if (attachments.isEmpty()) {
+                Text(
+                    text = "No attachments!", modifier = Modifier.padding(8.dp),
+                    color = contentColor ?: Color.Unspecified,
+                )
+            } else {
+                PdfOutlineLazyColumn(
+                    items = attachments,
+                    onItemClick = {
+                        scope.launch { pdfState.pdfViewer?.ui?.performSidebarTreeItemClick(it.id) }
+                    },
+                    arrowResId = R.drawable.outline_download_24,
+                    contentColor = contentColor,
+                )
             }
         }
     )

@@ -14,7 +14,17 @@ open class PdfContainerScope internal constructor(
      * The state of the PDF viewer.
      * @see com.bhuvaneshw.pdf.compose.PdfState
      */
-    val pdfState: PdfState
+    val pdfState: PdfState,
+
+    /**
+     * A lambda invoked to open the outline view.
+     */
+    val openOutlineView: (() -> Unit)?,
+
+    /**
+     * A lambda invoked to close the outline view.
+     */
+    val closeOutlineView: (() -> Unit)?,
 )
 
 /**
@@ -26,8 +36,10 @@ open class PdfContainerScope internal constructor(
  */
 class PdfContainerBoxScope internal constructor(
     pdfState: PdfState,
+    openOutlineView: (() -> Unit)?,
+    closeOutlineView: (() -> Unit)?,
     private val boxScope: BoxScope
-) : PdfContainerScope(pdfState), BoxScope by boxScope
+) : PdfContainerScope(pdfState, openOutlineView, closeOutlineView), BoxScope by boxScope
 
 /**
  * A scope for composables that are part of the PDF viewer's toolbar.

@@ -15,15 +15,22 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +51,8 @@ import com.bhuvaneshw.pdf.compose.DefaultOnReadyCallback
 import com.bhuvaneshw.pdf.compose.OnReadyCallback
 import com.bhuvaneshw.pdf.compose.PdfPrintState
 import com.bhuvaneshw.pdf.compose.PdfState
+import com.bhuvaneshw.pdf.compose.outlineFlow
+import kotlinx.coroutines.launch
 import com.bhuvaneshw.pdf.compose.ui.PdfScrollBar as ActualPdfScrollBar
 import com.bhuvaneshw.pdf.compose.ui.PdfToolBar as ActualPdfToolBar
 
@@ -54,11 +63,13 @@ import com.bhuvaneshw.pdf.compose.ui.PdfToolBar as ActualPdfToolBar
  * @param pdfState The state of the PDF viewer, containing information about the document, page number, etc.
  * @param pdfViewer A composable that renders the PDF viewer within a [PdfContainerBoxScope].
  * @param modifier The modifier to be applied to the container.
- * @param pdfToolBar An optional composable for displaying a toolbar within a [PdfContainerBoxScope].
+ * @param pdfToolBar An optional composable for displaying a toolbar within a [PdfContainerScope].
  * @param pdfScrollBar An optional composable for displaying a scrollbar within a [PdfContainerBoxScope].
  * @param loadingIndicator An optional composable to show while the PDF is loading within a [PdfContainerBoxScope].
  * @param passwordDialogEnabled Whether to show the password dialog if the PDF is encrypted.
  * @param printDialogEnabled Whether to show the print dialog when printing.
+ * @param outlineDrawerState The state of the drawer that shows the PDF outline. Pass null to disable the outline view.
+ *
  * @see com.bhuvaneshw.pdf.compose.PdfViewer
  */
 @Composable
@@ -71,26 +82,69 @@ fun PdfViewerContainer(
     loadingIndicator: (@Composable PdfContainerBoxScope.() -> Unit)? = null,
     passwordDialogEnabled: Boolean = true,
     printDialogEnabled: Boolean = true,
+    outlineDrawerState: DrawerState? = rememberDrawerState(initialValue = DrawerValue.Closed),
 ) {
     var parentSize by remember { mutableStateOf(IntSize(1, 1)) }
+    val scope = rememberCoroutineScope()
 
-    Column(modifier = modifier) {
-        pdfToolBar?.invoke(PdfContainerScope(pdfState))
+    val containerScope = PdfContainerScope(
+        pdfState = pdfState,
+        openOutlineView = { scope.launch { outlineDrawerState?.open() } },
+        closeOutlineView = { scope.launch { outlineDrawerState?.close() } },
+    )
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .onGloballyPositioned { parentSize = it.size }
-        ) {
-            pdfViewer(PdfContainerBoxScope(pdfState, this))
-            pdfScrollBar?.let { scrollBar ->
-                Box(modifier = Modifier.fillMaxSize()) {
-                    scrollBar(PdfContainerBoxScope(pdfState, this), parentSize)
+    val main = @Composable {
+        Column(modifier = modifier) {
+            pdfToolBar?.invoke(containerScope)
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .onGloballyPositioned { parentSize = it.size }
+            ) {
+                val containerBoxScope = PdfContainerBoxScope(
+                    pdfState = pdfState,
+                    openOutlineView = { scope.launch { outlineDrawerState?.open() } },
+                    closeOutlineView = { scope.launch { outlineDrawerState?.close() } },
+                    boxScope = this
+                )
+
+                pdfViewer(containerBoxScope)
+                pdfScrollBar?.let { scrollBar ->
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        scrollBar(containerBoxScope, parentSize)
+                    }
                 }
-            }
 
-            loadingIndicator?.invoke(PdfContainerBoxScope(pdfState, this))
+                loadingIndicator?.invoke(containerBoxScope)
+            }
         }
+    }
+
+    if (outlineDrawerState != null) {
+        val outline by pdfState.outlineFlow().collectAsState(emptyList())
+
+        ModalNavigationDrawer(
+            drawerState = outlineDrawerState,
+            gesturesEnabled = outlineDrawerState.isOpen,
+            drawerContent = {
+                ModalDrawerSheet {
+                    PdfOutlineLazyColumn(
+                        title = if (outline.isEmpty()) "No Outline" else "Outline",
+                        items = outline,
+                        onItemClick = {
+                            scope.launch { pdfState.pdfViewer?.ui?.performSidebarTreeItemClick(it.id) }
+                        },
+                        modifier = Modifier.fillMaxSize(),
+                        contentColor = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
+            },
+        ) {
+            main()
+        }
+    } else {
+        main()
     }
 
     if (passwordDialogEnabled && pdfState.passwordRequired)
@@ -141,6 +195,8 @@ fun PdfContainerBoxScope.PdfViewer(
  * @param pickColor A function to be invoked when a color is picked from the editor.
  * @param dropDownMenu The dropdown menu to be displayed on the toolbar.
  * @param onPlaceIcons A composable that places editor and find icons. Additional icons can be added using this.
+ * @param openOutlineView A lambda invoked to open the outline view.
+ *
  * @see ActualPdfToolBar
  */
 @Composable
@@ -156,6 +212,7 @@ fun PdfContainerScope.PdfToolBar(
     pickColor: PickColor? = null,
     dropDownMenu: PdfToolBarMenu = defaultToolBarDropDownMenu(),
     onPlaceIcons: PlaceIcons = defaultIconsPosition(),
+    openOutlineView: (() -> Unit)? = this@PdfToolBar.openOutlineView,
 ) {
     ActualPdfToolBar(
         pdfState = pdfState,
@@ -170,6 +227,7 @@ fun PdfContainerScope.PdfToolBar(
         pickColor = pickColor,
         dropDownMenu = dropDownMenu,
         onPlaceIcons = onPlaceIcons,
+        openOutlineView = openOutlineView,
     )
 }
 
