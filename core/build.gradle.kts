@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.dokka)
+    alias(libs.plugins.kotlin.serialization)
     id("maven-publish")
 }
 
@@ -47,6 +48,7 @@ dependencies {
     implementation(libs.androidx.annotation.jvm)
     implementation(libs.androidx.webkit)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.serialization.json)
 }
 
 dokka {

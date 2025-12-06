@@ -18,6 +18,7 @@ lifecycleRuntimeKtx = "2.9.2"
 aboutLibraries = "12.2.4"
 webkit = "1.14.0"
 dokka = "2.1.0"
+serialization = "1.9.0"
 
 [libraries]
 rangeseekbar = { module = "com.github.MohammedAlaaMorsi:RangeSeekBar", version.ref = "rangeseekbar" }
@@ -53,6 +54,7 @@ android-documentation-plugin = { module = "org.jetbrains.dokka:android-documenta
 about-libraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutLibraries" }
 about-libraries-compose-core = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutLibraries" }
 about-libraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -61,3 +63,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 about-libraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
