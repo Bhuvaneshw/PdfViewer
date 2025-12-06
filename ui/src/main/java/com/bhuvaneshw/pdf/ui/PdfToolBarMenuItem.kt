@@ -62,5 +62,15 @@ enum class PdfToolBarMenuItem(internal val id: Int) {
      * Menu item to view the properties of the document.
      * @see com.bhuvaneshw.pdf.PdfDocumentProperties
      */
-    PROPERTIES(10)
+    PROPERTIES(10),
+
+    /**
+     * Menu item to view the document outline.
+     */
+    OUTLINE(11),
+
+    /**
+     * Menu item to view the document attachments.
+     */
+    ATTACHMENTS(12),
 }

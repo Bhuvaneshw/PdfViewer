@@ -28,11 +28,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bhuvaneshw.pdf.PdfDocumentProperties
 import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 
 /**
  * A toolbar for the PDF viewer that provides various controls for navigation, finding text, editing, and more.
@@ -89,6 +92,11 @@ open class PdfToolBar @JvmOverloads constructor(
      * The function should provide a way for the user to select a color and then invoke the `onPickColor` callback with the selected color.
      */
     var pickColor: ((onPickColor: (Int) -> Unit) -> Unit)? = null
+
+    /**
+     * A lambda invoked to open the outline view.
+     */
+    var openOutlineView: (() -> Unit)? = null
 
     /** The back button view. */
     val back: ImageView = root.findViewById(R.id.back)
@@ -689,8 +697,7 @@ open class PdfToolBar @JvmOverloads constructor(
     }
 
     /**
-     * Handles the back press event to dismiss UI elements managed by this view.
-     * in a specific order.
+     * Handles the back press event to dismiss UI elements managed by this view in a specific order.
      *
      * This function should be called when the user presses the back button. It determines
      * which UI element to close based on a priority order. For instance, an active editor tool
@@ -765,6 +772,8 @@ open class PdfToolBar @JvmOverloads constructor(
             PdfToolBarMenuItem.ALIGN_MODE.id -> showAlignModeDialog()
             PdfToolBarMenuItem.SNAP_PAGE.id -> showSnapPageDialog()
             PdfToolBarMenuItem.PROPERTIES.id -> showPropertiesDialog()
+            PdfToolBarMenuItem.OUTLINE.id -> openOutlineView?.invoke()
+            PdfToolBarMenuItem.ATTACHMENTS.id -> showAttachmentsDialog()
         }
 
         return item.itemId < PdfToolBarMenuItem.entries.size
@@ -813,6 +822,9 @@ open class PdfToolBar @JvmOverloads constructor(
             addMenu("Align Mode", PdfToolBarMenuItem.ALIGN_MODE, filter)
             addMenu("Snap Page", PdfToolBarMenuItem.SNAP_PAGE, filter)
             addMenu("Properties", PdfToolBarMenuItem.PROPERTIES, filter)
+            if (openOutlineView != null)
+                addMenu("Outline", PdfToolBarMenuItem.OUTLINE, filter)
+            addMenu("Attachments", PdfToolBarMenuItem.ATTACHMENTS, filter)
         }
     }
 
@@ -1057,6 +1069,44 @@ open class PdfToolBar @JvmOverloads constructor(
 
         return setView(root)
     }
+
+    private fun showAttachmentsDialog() {
+        alertDialogBuilder()
+            .setTitle("Attachments")
+            .let {
+                pdfViewer.attachments?.let { properties ->
+                    it.setAttachmentsView(properties)
+                } ?: it.setMessage("Attachments not loaded yet!")
+            }
+            .setPositiveButton("Close") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun AlertDialog.Builder.setAttachmentsView(attachments: List<SideBarTreeItem>): AlertDialog.Builder {
+        if (attachments.isEmpty()) {
+            return setView(TextView(context).apply {
+                text = "No Attachments!"
+                setTextColor(contentColor)
+                setPadding(108, 44, 44, 0)
+            })
+        }
+
+        val root = RecyclerView(context).apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = OutlineAdapter(pdfViewer, contentColor, R.drawable.outline_download_24).also {
+                it.setOutlineItems(attachments)
+            }
+            setPadding(44, 44, 44, 0)
+        }
+
+        return setView(root)
+    }
+
 }
 
 @Suppress("NOTHING_TO_INLINE")
