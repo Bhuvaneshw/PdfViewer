@@ -226,13 +226,33 @@ class PdfViewer @JvmOverloads constructor(
      *     "custom-yellow" to Color.YELLOW,
      *     "custom-cyan" to Color.CYAN
      * )
-     * pdfViewer.reInitialize() // Important!
+     * pdfViewer.reInitialize() // Important if viewer already initialized!
      * ```
      *
      * @see defaultHighlightEditorColors
      * @see reInitialize
      */
     var highlightEditorColors: List<Pair<String, Int>> = defaultHighlightEditorColors
+
+    /**
+     * Defines the list of allowed custom protocols for links.
+     *
+     * This list defines custom protocols that are permitted in addition to the default ones:
+     * `"http:"`, `"https:"`, `"ftp:"`, `"mailto:"`, and `"tel:"`.
+     *
+     * **Note:** Any changes to this property require the `PdfViewer` to be reinitialized via the [reInitialize] method
+     * for the changes to take effect or set it initially while creating the instance.
+     *
+     * Example of custom colors:
+     * ```kotlin
+     * pdfViewer.allowedCustomProtocols += "myapp:"
+     * pdfViewer.reInitialize() // Important if viewer already initialized!
+     * ```
+     *
+     * @see PdfListener.onLinkClick
+     * @see reInitialize
+     */
+    val allowedCustomProtocols = mutableListOf<String>()
 
     /**
      * An adapter for handling PDF printing.

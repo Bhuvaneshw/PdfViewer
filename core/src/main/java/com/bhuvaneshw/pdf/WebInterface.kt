@@ -134,6 +134,9 @@ internal class WebInterface(private val pdfViewer: PdfViewer) {
     }
 
     @JavascriptInterface
+    fun getValidCustomProtocols(): String = pdfViewer.allowedCustomProtocols.joinToString { it }
+
+    @JavascriptInterface
     fun getHighlightEditorColorsString() = pdfViewer.highlightEditorColors
         .joinToString(separator = ",") { "${it.first}=${it.second.toJsHex(includeAlpha = false)}" }
 
