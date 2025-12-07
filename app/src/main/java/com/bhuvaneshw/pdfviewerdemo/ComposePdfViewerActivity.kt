@@ -69,6 +69,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfUnstableApi
@@ -340,6 +341,9 @@ private fun Activity.MainScreen(
 
                     addListener(downloadPdfListener)
                     addListener(imagePickerListener)
+                    addListener(onLinkClick = { link ->
+                        startActivity(Intent(Intent.ACTION_VIEW, link.toUri()))
+                    })
                 }
             )
         },

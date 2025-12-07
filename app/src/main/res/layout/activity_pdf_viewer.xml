@@ -41,10 +41,8 @@
         android:id="@+id/loader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/pdf_tool_bar"
         android:background="@color/md_theme_background"
-        android:gravity="center"
-        android:visibility="gone">
+        android:gravity="center">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_bar"

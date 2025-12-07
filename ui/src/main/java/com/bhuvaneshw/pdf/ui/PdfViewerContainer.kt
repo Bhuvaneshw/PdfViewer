@@ -185,10 +185,12 @@ class PdfViewerContainer @JvmOverloads constructor(
      * Designates a view to be shown as a loading indicator while a PDF is loading.
      *
      * @param view The view to show and hide based on the loading state.
+     * @param showBelowToolbar Whether to show loading indicator below [PdfToolBar] if toolbar is found.
+     *
      * @see PdfListener.onPageLoadStart
      * @see PdfListener.onPageLoadSuccess
      */
-    fun setAsLoadingIndicator(view: View) {
+    fun setAsLoadingIndicator(view: View, showBelowToolbar: Boolean = true) {
         pdfViewer?.addListener(object : PdfListener {
             override fun onPageLoadStart() {
                 view.visibility = VISIBLE
@@ -198,6 +200,11 @@ class PdfViewerContainer @JvmOverloads constructor(
                 view.visibility = GONE
             }
         })
+
+        if (showBelowToolbar) pdfToolBar?.let {
+            val params = view.layoutParams.toRelative()
+            params.addRule(RelativeLayout.BELOW, it.id)
+        }
     }
 
     private fun setup() {
