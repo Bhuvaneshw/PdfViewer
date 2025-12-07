@@ -19,9 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.model.SideBarTreeItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * A view that displays the outline of a PDF document in a tree-like structure, ideal for navigation
@@ -61,6 +58,15 @@ class PdfOutlineView @JvmOverloads constructor(
             applyContentColor()
         }
 
+    /**
+     * A listener that is invoked when an item in the outline view is clicked.
+     */
+    var onItemClick: ((SideBarTreeItem) -> Unit)? = null
+        set(value) {
+            field = value
+            (itemsView.adapter as? OutlineAdapter)?.onItemClick = value
+        }
+
     init {
         itemsView.layoutManager = LinearLayoutManager(context)
         itemsView.setHasFixedSize(true)
@@ -89,7 +95,7 @@ class PdfOutlineView @JvmOverloads constructor(
     fun setupWith(pdfViewer: PdfViewer) {
         if (this::pdfViewer.isInitialized && this.pdfViewer == pdfViewer) return
         this.pdfViewer = pdfViewer
-        itemsView.adapter = OutlineAdapter(pdfViewer, contentColor)
+        itemsView.adapter = OutlineAdapter(contentColor, onItemClick)
 
         pdfViewer.addListener(object : PdfListener {
             override fun onLoadOutline(outline: List<SideBarTreeItem>) {
@@ -106,14 +112,13 @@ class PdfOutlineView @JvmOverloads constructor(
 }
 
 internal class OutlineAdapter(
-    private val pdfViewer: PdfViewer,
     @param:ColorInt private val contentColor: Int,
+    var onItemClick: ((SideBarTreeItem) -> Unit)?,
     @param:DrawableRes private val arrowResId: Int? = null,
 ) : RecyclerView.Adapter<OutlineAdapter.VH>() {
 
     private var tree: List<OutlineNode> = emptyList()
     private var flat: List<OutlineNode> = emptyList()
-    private val scope = CoroutineScope(Dispatchers.Default)
 
     @SuppressLint("NotifyDataSetChanged")
     fun setOutlineItems(items: List<SideBarTreeItem>) {
@@ -144,7 +149,7 @@ internal class OutlineAdapter(
 
         holder.row.setOnClickListener {
             if (!hasChildren) {
-                scope.launch { pdfViewer.ui.performSidebarTreeItemClick(node.item.id) }
+                onItemClick?.invoke(node.item)
                 return@setOnClickListener
             }
 

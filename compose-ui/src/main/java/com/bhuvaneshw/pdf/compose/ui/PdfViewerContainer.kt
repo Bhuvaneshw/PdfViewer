@@ -52,6 +52,7 @@ import com.bhuvaneshw.pdf.compose.OnReadyCallback
 import com.bhuvaneshw.pdf.compose.PdfPrintState
 import com.bhuvaneshw.pdf.compose.PdfState
 import com.bhuvaneshw.pdf.compose.outlineFlow
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 import kotlinx.coroutines.launch
 import com.bhuvaneshw.pdf.compose.ui.PdfScrollBar as ActualPdfScrollBar
 import com.bhuvaneshw.pdf.compose.ui.PdfToolBar as ActualPdfToolBar
@@ -83,6 +84,7 @@ fun PdfViewerContainer(
     passwordDialogEnabled: Boolean = true,
     printDialogEnabled: Boolean = true,
     outlineDrawerState: DrawerState? = rememberDrawerState(initialValue = DrawerValue.Closed),
+    onOutlineItemClick: ((SideBarTreeItem) -> Unit)? = null,
 ) {
     var parentSize by remember { mutableStateOf(IntSize(1, 1)) }
     val scope = rememberCoroutineScope()
@@ -132,9 +134,7 @@ fun PdfViewerContainer(
                     PdfOutlineLazyColumn(
                         title = if (outline.isEmpty()) "No Outline" else "Outline",
                         items = outline,
-                        onItemClick = {
-                            scope.launch { pdfState.pdfViewer?.ui?.performSidebarTreeItemClick(it.id) }
-                        },
+                        onItemClick = { onOutlineItemClick?.invoke(it) },
                         modifier = Modifier.fillMaxSize(),
                         contentColor = MaterialTheme.colorScheme.onBackground,
                     )

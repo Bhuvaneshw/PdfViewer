@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bhuvaneshw.pdf.PdfEditor
@@ -34,6 +35,7 @@ class PdfViewerActivity : AppCompatActivity() {
     private var fullscreen = false
     private lateinit var pdfSettingsManager: PdfSettingsManager
     private var selectedColor = Color.WHITE
+    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +105,10 @@ class PdfViewerActivity : AppCompatActivity() {
         view.pdfViewer.addListener(DownloadPdfListener(fileName))
         view.pdfViewer.addListener(ImagePickerListener(this))
         view.container.setAsLoadingIndicator(view.loader)
+        view.pdfOutlineView.onItemClick = {
+            scope.launch { view.pdfViewer.ui.performSidebarTreeItemClick(it.id) }
+            view.container.closeDrawer(GravityCompat.START)
+        }
 
         onBackPressedDispatcher.addCallback(this) {
             when {

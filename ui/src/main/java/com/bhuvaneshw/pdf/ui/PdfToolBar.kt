@@ -36,6 +36,10 @@ import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
 import com.bhuvaneshw.pdf.model.SideBarTreeItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 /**
  * A toolbar for the PDF viewer that provides various controls for navigation, finding text, editing, and more.
@@ -1071,11 +1075,13 @@ open class PdfToolBar @JvmOverloads constructor(
     }
 
     private fun showAttachmentsDialog() {
+        val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
         alertDialogBuilder()
             .setTitle("Attachments")
             .let {
                 pdfViewer.attachments?.let { properties ->
-                    it.setAttachmentsView(properties)
+                    it.setAttachmentsView(properties, scope)
                 } ?: it.setMessage("Attachments not loaded yet!")
             }
             .setPositiveButton("Close") { dialog, _ ->
@@ -1086,7 +1092,10 @@ open class PdfToolBar @JvmOverloads constructor(
     }
 
     @SuppressLint("SetTextI18n")
-    private fun AlertDialog.Builder.setAttachmentsView(attachments: List<SideBarTreeItem>): AlertDialog.Builder {
+    private fun AlertDialog.Builder.setAttachmentsView(
+        attachments: List<SideBarTreeItem>,
+        scope: CoroutineScope
+    ): AlertDialog.Builder {
         if (attachments.isEmpty()) {
             return setView(TextView(context).apply {
                 text = "No Attachments!"
@@ -1098,7 +1107,11 @@ open class PdfToolBar @JvmOverloads constructor(
         val root = RecyclerView(context).apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
-            adapter = OutlineAdapter(pdfViewer, contentColor, R.drawable.outline_download_24).also {
+            adapter = OutlineAdapter(
+                contentColor = contentColor,
+                onItemClick = { scope.launch { pdfViewer.ui.performSidebarTreeItemClick(it.id) } },
+                arrowResId = R.drawable.outline_download_24
+            ).also {
                 it.setOutlineItems(attachments)
             }
             setPadding(44, 44, 44, 0)

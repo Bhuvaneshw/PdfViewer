@@ -428,6 +428,12 @@ private fun Activity.MainScreen(
                 }
             }
         },
+        onOutlineItemClick = {
+            scope.launch {
+                pdfState.pdfViewer?.ui?.performSidebarTreeItemClick(it.id)
+                outlineDrawerState.close()
+            }
+        },
         modifier = modifier,
     )
 
