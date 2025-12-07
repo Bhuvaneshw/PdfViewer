@@ -160,7 +160,7 @@ fun PdfViewerContainer(
  * @param containerColor The background color of the PDF viewer.
  * @param factory A factory function to create a [PdfViewer] instance.
  * @param onCreateViewer A callback that is invoked when the [PdfViewer] is created.
- * @param onReady A callback that is invoked when the PDF document is loaded and ready.
+ * @param onReady A callback that is invoked when the PDF viewer is ready to load a document.
  * @see com.bhuvaneshw.pdf.compose.PdfViewer
  */
 @Composable
