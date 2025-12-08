@@ -15,7 +15,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +22,6 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -83,7 +82,7 @@ fun PdfViewerContainer(
     loadingIndicator: (@Composable PdfContainerBoxScope.() -> Unit)? = null,
     passwordDialogEnabled: Boolean = true,
     printDialogEnabled: Boolean = true,
-    outlineDrawerState: DrawerState? = rememberDrawerState(initialValue = DrawerValue.Closed),
+    outlineDrawerState: PdfOutlineDrawerState? = rememberPdfOutlineDrawerState(initialValue = DrawerValue.Closed),
     onOutlineItemClick: ((SideBarTreeItem) -> Unit)? = null,
 ) {
     var parentSize by remember { mutableStateOf(IntSize(1, 1)) }
@@ -91,8 +90,8 @@ fun PdfViewerContainer(
 
     val containerScope = PdfContainerScope(
         pdfState = pdfState,
-        openOutlineView = { scope.launch { outlineDrawerState?.open() } },
-        closeOutlineView = { scope.launch { outlineDrawerState?.close() } },
+        openOutlineView = { scope.launch { outlineDrawerState?.drawerState?.open() } },
+        closeOutlineView = { scope.launch { outlineDrawerState?.drawerState?.close() } },
     )
 
     val main = @Composable {
@@ -106,8 +105,8 @@ fun PdfViewerContainer(
             ) {
                 val containerBoxScope = PdfContainerBoxScope(
                     pdfState = pdfState,
-                    openOutlineView = { scope.launch { outlineDrawerState?.open() } },
-                    closeOutlineView = { scope.launch { outlineDrawerState?.close() } },
+                    openOutlineView = { scope.launch { outlineDrawerState?.drawerState?.open() } },
+                    closeOutlineView = { scope.launch { outlineDrawerState?.drawerState?.close() } },
                     boxScope = this
                 )
 
@@ -127,10 +126,14 @@ fun PdfViewerContainer(
         val outline by pdfState.outlineFlow().collectAsState(emptyList())
 
         ModalNavigationDrawer(
-            drawerState = outlineDrawerState,
-            gesturesEnabled = outlineDrawerState.isOpen,
+            drawerState = outlineDrawerState.drawerState,
+            gesturesEnabled = outlineDrawerState.drawerState.isOpen,
             drawerContent = {
-                ModalDrawerSheet {
+                ModalDrawerSheet(
+                    modifier = Modifier.graphicsLayer {
+                        translationX = -size.width * outlineDrawerState.backProgress
+                    }
+                ) {
                     PdfOutlineLazyColumn(
                         title = if (outline.isEmpty()) "No Outline" else "Outline",
                         items = outline,

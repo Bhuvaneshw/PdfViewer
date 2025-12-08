@@ -68,6 +68,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -176,9 +177,13 @@ fun PdfToolBar(
         )
 
         if (showEditor) AnimatedVisibility(
-            visible = toolBarState.isEditorOpen,
+            visible = toolBarState.withBackProgress.isEditorOpen,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
+            modifier = Modifier.animateBackProgress(
+                backProgress = toolBarState.backProgress,
+                enabled = !toolBarState.withBackProgress.isEditorInnerBarOpen,
+            ),
         ) {
             toolBarScope.Editor(
                 contentColor = contentColor ?: Color.Unspecified,
@@ -188,9 +193,10 @@ fun PdfToolBar(
         }
 
         AnimatedVisibility(
-            visible = toolBarState.isFindBarOpen,
+            visible = toolBarState.withBackProgress.isFindBarOpen,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
+            modifier = Modifier.animateBackProgress(toolBarState.backProgress),
         ) {
             toolBarScope.FindBar(
                 contentColor = contentColor ?: Color.Unspecified,
@@ -198,7 +204,7 @@ fun PdfToolBar(
             )
         }
 
-        if (!toolBarScope.toolBarState.isFindBarOpen && !toolBarState.isEditorOpen) {
+        if (!toolBarScope.toolBarState.withBackProgress.isFindBarOpen && !toolBarState.withBackProgress.isEditorOpen) {
             onPlaceIcons({
                 if (showEditor) {
                     toolBarScope.ToolBarIcon(
@@ -414,6 +420,12 @@ fun PdfToolBar(
     }
 }
 
+private fun Modifier.animateBackProgress(backProgress: Float, enabled: Boolean = true): Modifier {
+    return graphicsLayer {
+        translationX = if (enabled) size.width * backProgress else 0f
+    }
+}
+
 @Composable
 private fun PdfToolBarScope.Editor(
     contentColor: Color,
@@ -445,37 +457,45 @@ private fun PdfToolBarScope.Editor(
         horizontalArrangement = Arrangement.End
     ) {
         AnimatedVisibility(
-            visible = toolBarState.isTextHighlighterOn,
+            visible = toolBarState.withBackProgress.isTextHighlighterOn,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateBackProgress(toolBarState.backProgress),
         ) {
             HighlightOptions(popupY, contentColor)
         }
 
         AnimatedVisibility(
-            visible = toolBarState.isEditorFreeTextOn,
+            visible = toolBarState.withBackProgress.isEditorFreeTextOn,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateBackProgress(toolBarState.backProgress),
         ) {
             FreeTextOptions(popupY, contentColor, pickColor)
         }
 
         AnimatedVisibility(
-            visible = toolBarState.isEditorInkOn,
+            visible = toolBarState.withBackProgress.isEditorInkOn,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateBackProgress(toolBarState.backProgress),
         ) {
             InkOptions(popupY, contentColor, pickColor)
         }
 
         AnimatedVisibility(
-            visible = toolBarState.isEditorStampOn,
+            visible = toolBarState.withBackProgress.isEditorStampOn,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateBackProgress(toolBarState.backProgress),
         ) {
             StampOptions(contentColor)
         }
@@ -497,7 +517,10 @@ private fun PdfToolBarScope.Editor(
 
 @Suppress("NOTHING_TO_INLINE")
 private inline fun PdfToolBarState.isNothingOn(): Boolean {
-    return !(isTextHighlighterOn || isEditorFreeTextOn || isEditorInkOn || isEditorStampOn)
+    return !withBackProgress.isTextHighlighterOn
+            && !withBackProgress.isEditorFreeTextOn
+            && !withBackProgress.isEditorInkOn
+            && !withBackProgress.isEditorStampOn
 }
 
 @Composable
