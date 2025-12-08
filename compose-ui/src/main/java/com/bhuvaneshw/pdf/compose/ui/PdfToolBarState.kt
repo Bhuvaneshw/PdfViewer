@@ -15,18 +15,18 @@ import androidx.compose.runtime.setValue
  * @see PdfToolBarState
  */
 @Composable
-fun rememberToolBarState(
+fun rememberPdfToolBarState(
     @FloatRange(from = 0.0, to = 1.0, fromInclusive = false) predictiveBackThreshold: Float = 0.1f
 ) = remember { PdfToolBarState(predictiveBackThreshold) }
 
 /**
  * A state object that can be hoisted to control and observe the PDF viewer toolbar state.
  *
- * In a composable, create and remember an instance of this class using [rememberToolBarState].
+ * In a composable, create and remember an instance of this class using [rememberPdfToolBarState].
  * This class manages the visibility of different toolbar sections like the find bar and annotation editor.
  *
  * @param predictiveBackThreshold The threshold for predictive back gestures. Value can be 0f(exclusive) to 1f.
- * @see rememberToolBarState
+ * @see rememberPdfToolBarState
  * @see com.bhuvaneshw.pdf.compose.PdfViewer
  */
 class PdfToolBarState(

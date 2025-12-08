@@ -92,7 +92,7 @@ import com.bhuvaneshw.pdf.compose.ui.PdfToolBarMenuItem
 import com.bhuvaneshw.pdf.compose.ui.PdfViewer
 import com.bhuvaneshw.pdf.compose.ui.PdfViewerContainer
 import com.bhuvaneshw.pdf.compose.ui.rememberPdfOutlineDrawerState
-import com.bhuvaneshw.pdf.compose.ui.rememberToolBarState
+import com.bhuvaneshw.pdf.compose.ui.rememberPdfToolBarState
 import com.bhuvaneshw.pdf.print.DefaultPdfPrintAdapter
 import com.bhuvaneshw.pdf.setting.PdfSettingsManager
 import com.bhuvaneshw.pdf.sharedPdfSettingsManager
@@ -242,7 +242,7 @@ private fun Activity.MainScreen(
     modifier: Modifier = Modifier,
 ) {
     val pdfState = rememberPdfState(source = source)
-    val toolBarState = rememberToolBarState()
+    val toolBarState = rememberPdfToolBarState()
     val outlineDrawerState = rememberPdfOutlineDrawerState(DrawerValue.Closed)
     var toolbarTitle by remember { mutableStateOf(fileName) }
     var fullscreen by remember { mutableStateOf(false) }

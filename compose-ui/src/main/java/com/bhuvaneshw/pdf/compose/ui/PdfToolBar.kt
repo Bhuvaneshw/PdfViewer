@@ -125,7 +125,7 @@ fun PdfToolBar(
     pdfState: PdfState,
     title: String,
     modifier: Modifier = Modifier,
-    toolBarState: PdfToolBarState = rememberToolBarState(),
+    toolBarState: PdfToolBarState = rememberPdfToolBarState(),
     onBack: (() -> Unit)? = null,
     fileName: (() -> String)? = null,
     contentColor: Color? = null,
