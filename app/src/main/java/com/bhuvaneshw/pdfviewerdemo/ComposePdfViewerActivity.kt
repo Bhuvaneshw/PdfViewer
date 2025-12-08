@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,7 +52,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -92,6 +91,7 @@ import com.bhuvaneshw.pdf.compose.ui.PdfToolBar
 import com.bhuvaneshw.pdf.compose.ui.PdfToolBarMenuItem
 import com.bhuvaneshw.pdf.compose.ui.PdfViewer
 import com.bhuvaneshw.pdf.compose.ui.PdfViewerContainer
+import com.bhuvaneshw.pdf.compose.ui.rememberPdfOutlineDrawerState
 import com.bhuvaneshw.pdf.compose.ui.rememberToolBarState
 import com.bhuvaneshw.pdf.print.DefaultPdfPrintAdapter
 import com.bhuvaneshw.pdf.setting.PdfSettingsManager
@@ -99,6 +99,7 @@ import com.bhuvaneshw.pdf.sharedPdfSettingsManager
 import com.bhuvaneshw.pdfviewerdemo.ui.theme.PdfViewerComposeDemoTheme
 import io.mhssn.colorpicker.ColorPickerDialog
 import io.mhssn.colorpicker.ColorPickerType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -242,7 +243,7 @@ private fun Activity.MainScreen(
 ) {
     val pdfState = rememberPdfState(source = source)
     val toolBarState = rememberToolBarState()
-    val outlineDrawerState = rememberDrawerState(DrawerValue.Closed)
+    val outlineDrawerState = rememberPdfOutlineDrawerState(DrawerValue.Closed)
     var toolbarTitle by remember { mutableStateOf(fileName) }
     var fullscreen by remember { mutableStateOf(false) }
     var showSaveDialog by remember { mutableStateOf(false) }
@@ -311,20 +312,61 @@ private fun Activity.MainScreen(
         }
     }
 
-    BackHandler {
-        when {
-            toolBarState.handleBackPressed() -> {
-                // Handled by toolbar
+    PredictiveBackHandler(
+        enabled = toolBarState.canHandleBackPressed()
+                || outlineDrawerState.drawerState.isOpen
+                || pdfState.pdfViewer?.editor?.hasUnsavedChanges == true
+    ) { backFlow ->
+        try {
+            backFlow.collect { event ->
+                when {
+                    toolBarState.canHandleBackPressed() -> {
+                        toolBarState.updateBackProgress(event.progress)
+                    }
+
+                    outlineDrawerState.drawerState.isOpen -> {
+                        outlineDrawerState.updateBackProgress(event.progress)
+                    }
+                }
             }
 
-            outlineDrawerState.isOpen -> {
-                scope.launch { outlineDrawerState.close() }
-            }
+            when {
+                toolBarState.handleBackPressed() -> {
+                    // Handled by toolbar
+                }
 
-            pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> showSaveDialog = true
-            else -> finish()
+                outlineDrawerState.drawerState.isOpen -> {
+                    scope.launch {
+                        outlineDrawerState.drawerState.close()
+                        outlineDrawerState.updateBackProgress(0f)
+                    }
+                }
+
+                pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> {
+                    showSaveDialog = true
+                }
+            }
+        } catch (_: CancellationException) {
+            outlineDrawerState.updateBackProgress(0f)
+        } finally {
+            toolBarState.updateBackProgress(0f)
         }
     }
+
+//    BackHandler {
+//        when {
+//            toolBarState.handleBackPressed() -> {
+//                // Handled by toolbar
+//            }
+//
+//            outlineDrawerState.isOpen -> {
+//                scope.launch { outlineDrawerState.close() }
+//            }
+//
+//            pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> showSaveDialog = true
+//            else -> finish()
+//        }
+//    }
 
     PdfViewerContainer(
         pdfState = pdfState,
@@ -431,7 +473,7 @@ private fun Activity.MainScreen(
         onOutlineItemClick = {
             scope.launch {
                 pdfState.pdfViewer?.ui?.performSidebarTreeItemClick(it.id)
-                outlineDrawerState.close()
+                outlineDrawerState.drawerState.close()
             }
         },
         modifier = modifier,
