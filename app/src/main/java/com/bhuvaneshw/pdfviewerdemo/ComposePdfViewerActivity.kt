@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.setContent
@@ -66,6 +67,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -79,6 +81,7 @@ import com.bhuvaneshw.pdf.callIfScrollSpeedLimitIsEnabled
 import com.bhuvaneshw.pdf.callSafely
 import com.bhuvaneshw.pdf.compose.CustomOnReadyCallback
 import com.bhuvaneshw.pdf.compose.DefaultOnReadyCallback
+import com.bhuvaneshw.pdf.compose.MatchState
 import com.bhuvaneshw.pdf.compose.PdfLoadingState
 import com.bhuvaneshw.pdf.compose.PdfState
 import com.bhuvaneshw.pdf.compose.annotationEditorFlow
@@ -248,6 +251,7 @@ private fun Activity.MainScreen(
     var fullscreen by remember { mutableStateOf(false) }
     var showSaveDialog by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     LaunchedEffect(pdfState.loadingState) {
         pdfState.loadingState.let {
@@ -255,6 +259,13 @@ private fun Activity.MainScreen(
                 toast(it.formatToString())
                 finish()
             }
+        }
+    }
+
+    LaunchedEffect(pdfState.matchState) {
+        pdfState.matchState.run {
+            if (this is MatchState.Completed && !found)
+                Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -1,6 +1,5 @@
 package com.bhuvaneshw.pdf.compose.ui
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -72,7 +71,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -88,7 +86,6 @@ import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
-import com.bhuvaneshw.pdf.compose.MatchState
 import com.bhuvaneshw.pdf.compose.PdfState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -919,17 +916,9 @@ private fun ColorItem(
 
 @Composable
 private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
-    var searchTerm by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
-    val context = LocalContext.current
 
-    LaunchedEffect(pdfState.matchState) {
-        pdfState.matchState.run {
-            if (this is MatchState.Completed && !found && searchTerm.isNotEmpty())
-                Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
-        }
-    }
     DisposableEffect(Unit) {
         onDispose {
             pdfState.pdfViewer?.findController?.stopFind()
@@ -939,12 +928,12 @@ private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
 
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         BasicTextField(
-            value = searchTerm,
-            onValueChange = { searchTerm = it },
+            value = toolBarState.findInputText,
+            onValueChange = { toolBarState.findInputText = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = {
-                if (searchTerm.isNotEmpty()) {
-                    pdfState.pdfViewer?.findController?.startFind(searchTerm)
+                if (toolBarState.findInputText.isNotEmpty()) {
+                    pdfState.pdfViewer?.findController?.startFind(toolBarState.findInputText)
                     keyboard?.hide()
                 }
             }),
@@ -959,7 +948,7 @@ private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
                     textField()
                     this@Row.AnimatedVisibility(
-                        visible = searchTerm.isEmpty(),
+                        visible = toolBarState.findInputText.isEmpty(),
                         enter = slideIn { IntOffset(0, -it.height) } + fadeIn(),
                         exit = slideOut { IntOffset(0, -it.height) } + fadeOut(),
                     ) {

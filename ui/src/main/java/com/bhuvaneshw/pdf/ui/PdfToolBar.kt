@@ -22,7 +22,6 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
@@ -266,8 +265,6 @@ open class PdfToolBar @JvmOverloads constructor(
             }
 
             override fun onFindMatchComplete(found: Boolean) {
-                if (!found)
-                    Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
                 findProgressBar.visibility = GONE
             }
 

@@ -3,6 +3,7 @@ package com.bhuvaneshw.pdfviewerdemo
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -154,6 +155,10 @@ class PdfViewerActivity : AppCompatActivity() {
 
                         else -> {}
                     }
+                },
+                onFindMatchComplete = { found ->
+                    if (!found)
+                        Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
                 }
             )
         }

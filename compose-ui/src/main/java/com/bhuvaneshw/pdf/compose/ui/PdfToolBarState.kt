@@ -41,6 +41,11 @@ class PdfToolBarState(
     }
 
     /**
+     * The text entered in the find bar.
+     */
+    var findInputText by mutableStateOf("")
+
+    /**
      * `true` if the find bar is visible, `false` otherwise.
      */
     var isFindBarOpen by mutableStateOf(false)
