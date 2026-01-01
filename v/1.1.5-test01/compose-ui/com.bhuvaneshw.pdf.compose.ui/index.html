@@ -1,0 +1,407 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>com.bhuvaneshw.pdf.compose.ui</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    PdfViewer
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+<dokka-template-command data="{&quot;@class&quot;:&quot;org.jetbrains.dokka.base.templating.ReplaceVersionsCommand&quot;,&quot;location&quot;:&quot;com.bhuvaneshw.pdf.compose.ui/index.html&quot;}"><div class="dropdown versions-dropdown" data-role="dropdown">
+  <div class="button button_dropdown versions-dropdown-button" role="combobox" data-role="dropdown-toggle" aria-controls="versions-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Select version" tabindex="0" title="1.1.5-test01"><span class="versions-dropdown-button-text">1.1.5-test01</span></div>
+  <div class="dropdown--list dropdown--list_positioned_left versions-dropdown-data" role="listbox" data-role="dropdown-listbox" aria-label="Versions" id="versions-listbox">
+    <div class="dropdown--header" data-remove-style="true" style="display: none"><span>Select version</span><button class="button" data-role="dropdown-toggle" aria-label="Close versions selection"><i class="ui-kit-icon ui-kit-icon_cross"></i></button></div>
+<a href="index.html" class="dropdown--option dropdown--option_active dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test01"><span class="dropdown--option-icon dropdown--option-icon_selected"></span><span class="dropdown--option-text">1.1.5-test01</span></a><a href="../../older/1.0.0-test01/compose-ui/com.bhuvaneshw.pdf.compose.ui/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.0.0-test01"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.0.0-test01</span></a></div>
+  <div class="dropdown--overlay"></div>
+</div>
+</dokka-template-command>        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":compose-ui/main">androidJvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":compose-ui/main" data-filter=":compose-ui/main">
+                                <span class="checkbox--icon"></span>
+                                androidJvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    PdfViewer
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="compose-ui::com.bhuvaneshw.pdf.compose.ui////PointingToDeclaration//-1164257574">
+  <div class="breadcrumbs"><a href="../index.html">compose-ui</a><span class="delimiter">/</span><span class="current">com.bhuvaneshw.pdf.compose.ui</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="345298022%2FClasslikes%2F-1164257574" anchor-label="PdfContainerBoxScope" id="345298022%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-container-box-scope/index.html"><span>Pdf</span><wbr><span>Container</span><wbr><span>Box</span><wbr><span><span>Scope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="345298022%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a> : <a href="-pdf-container-scope/index.html">PdfContainerScope</a>, <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/BoxScope.html">BoxScope</a></div><div class="brief "><p class="paragraph">A scope for composables within a PDF viewer container that is also a <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/BoxScope.html">BoxScope</a>. Provides access to both the PDF viewer state and the receiver scope of a <a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/package-summary.html">androidx.compose.foundation.layout.Box</a> composable.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="668084671%2FClasslikes%2F-1164257574" anchor-label="PdfContainerScope" id="668084671%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-container-scope/index.html"><span>Pdf</span><wbr><span>Container</span><wbr><span><span>Scope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="668084671%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-pdf-container-scope/index.html">PdfContainerScope</a></div><div class="brief "><p class="paragraph">A scope for composables that are part of the PDF viewer container. Provides access to the <a href="../../compose-ui/com.bhuvaneshw.pdf.compose.ui/-pdf-container-scope/--root--.html">pdfState</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="614389108%2FClasslikes%2F-1164257574" anchor-label="PdfOutlineDrawerState" id="614389108%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-outline-drawer-state/index.html"><span>Pdf</span><wbr><span>Outline</span><wbr><span>Drawer</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="614389108%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-pdf-outline-drawer-state/index.html">PdfOutlineDrawerState</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>drawerState<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/material3/DrawerState.html">DrawerState</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">State for the PDF outline drawer.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-261016139%2FClasslikes%2F-1164257574" anchor-label="PdfToolBarBackIcon" id="-261016139%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-tool-bar-back-icon/index.html"><span>Pdf</span><wbr><span>Tool</span><wbr><span>Bar</span><wbr><span>Back</span><wbr><span><span>Icon</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-261016139%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-pdf-tool-bar-back-icon/index.html">PdfToolBarBackIcon</a><span class="token operator"> = </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><a href="-pdf-tool-bar-scope/index.html">PdfToolBarScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></div><div class="brief "><p class="paragraph">A typealias for a composable that represents the back icon on the toolbar.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1509317322%2FClasslikes%2F-1164257574" anchor-label="PdfToolBarMenu" id="-1509317322%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-tool-bar-menu/index.html"><span>Pdf</span><wbr><span>Tool</span><wbr><span>Bar</span><wbr><span><span>Menu</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1509317322%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-pdf-tool-bar-menu/index.html">PdfToolBarMenu</a><span class="token operator"> = </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span>onDismiss<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span>defaultMenus<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span>filtered<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-pdf-tool-bar-menu-item/index.html">PdfToolBarMenuItem</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></div><div class="brief "><p class="paragraph">A typealias for a composable that represents the dropdown menu on the toolbar.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="622074595%2FClasslikes%2F-1164257574" anchor-label="PdfToolBarMenuItem" id="622074595%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-tool-bar-menu-item/index.html"><span>Pdf</span><wbr><span>Tool</span><wbr><span>Bar</span><wbr><span>Menu</span><wbr><span><span>Item</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="622074595%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-pdf-tool-bar-menu-item/index.html">PdfToolBarMenuItem</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-pdf-tool-bar-menu-item/index.html">PdfToolBarMenuItem</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents the menu items available in the PDF viewer toolbar.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2145737895%2FClasslikes%2F-1164257574" anchor-label="PdfToolBarScope" id="-2145737895%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-tool-bar-scope/index.html"><span>Pdf</span><wbr><span>Tool</span><wbr><span>Bar</span><wbr><span><span>Scope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2145737895%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-pdf-tool-bar-scope/index.html">PdfToolBarScope</a></div><div class="brief "><p class="paragraph">A scope for composables that are part of the PDF viewer's toolbar. Provides access to the <a href="../../compose-ui/com.bhuvaneshw.pdf.compose.ui/-pdf-tool-bar-scope/--root--.html">pdfState</a> and <a href="../../compose-ui/com.bhuvaneshw.pdf.compose.ui/-pdf-tool-bar-scope/--root--.html">toolBarState</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-130110532%2FClasslikes%2F-1164257574" anchor-label="PdfToolBarState" id="-130110532%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-tool-bar-state/index.html"><span>Pdf</span><wbr><span>Tool</span><wbr><span>Bar</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-130110532%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-pdf-tool-bar-state/index.html">PdfToolBarState</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/FloatRange.html"><span class="token annotation builtin">FloatRange</span></a><span class="token punctuation">(</span><span>from<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">0.0</span></span><span class="token punctuation">, </span></span><wbr><span>to<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">1.0</span></span><span class="token punctuation">, </span></span><wbr><span>fromInclusive<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">false</span></span></span><wbr><span class="token punctuation">)</span>&nbsp;</span><span class="token keyword">val </span>predictiveBackThreshold<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A state object that can be hoisted to control and observe the PDF viewer toolbar state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="514046850%2FClasslikes%2F-1164257574" anchor-label="PickColor" id="514046850%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pick-color/index.html"><span>Pick</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="514046850%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-pick-color/index.html">PickColor</a><span class="token operator"> = </span><span class="token punctuation">(</span>previousColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token punctuation">, </span><span class="token punctuation">(</span>color<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></div><div class="brief "><p class="paragraph">A typealias for a function that picks a color.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2137103051%2FClasslikes%2F-1164257574" anchor-label="PlaceIcons" id="2137103051%2FClasslikes%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-place-icons/index.html"><span>Place</span><wbr><span><span>Icons</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2137103051%2FClasslikes%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-place-icons/index.html">PlaceIcons</a><span class="token operator"> = </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span>editorIcon<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span>findIcon<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></div><div class="brief "><p class="paragraph">A typealias for a function that places editor and find icons.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1245659059%2FFunctions%2F-1164257574" anchor-label="PdfOutlineLazyColumn" id="1245659059%2FFunctions%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-outline-lazy-column.html"><span>Pdf</span><wbr><span>Outline</span><wbr><span>Lazy</span><wbr><span><span>Column</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1245659059%2FFunctions%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-pdf-outline-lazy-column.html"><span class="token function">PdfOutlineLazyColumn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">items<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../core/com.bhuvaneshw.pdf.model/-side-bar-tree-item/index.html">SideBarTreeItem</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">onItemClick<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../core/com.bhuvaneshw.pdf.model/-side-bar-tree-item/index.html">SideBarTreeItem</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">contentColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/DrawableRes.html"><span class="token annotation builtin">DrawableRes</span></a>&nbsp;</span>arrowResId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A Composable that displays a tree-like structure in a lazy-loading list, ideal for navigation outlines in a PDF viewer.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-11620468%2FFunctions%2F-1164257574" anchor-label="PdfScrollBar" id="-11620468%2FFunctions%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-scroll-bar.html"><span>Pdf</span><wbr><span>Scroll</span><wbr><span><span>Bar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-11620468%2FFunctions%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a><span class="token punctuation">.</span><a href="-pdf-scroll-bar.html"><span class="token function">PdfScrollBar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">parentSize<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/unit/IntSize.html">IntSize</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">contentColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator"> = </span>Color.Black<span class="token punctuation">, </span></span><span class="parameter ">handleColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator"> = </span>Color(0xfff1f1f1)<span class="token punctuation">, </span></span><span class="parameter ">interactiveScrolling<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">useVerticalScrollBarForHorizontalMode<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">This is a wrapper around <a href="-pdf-scroll-bar.html">ActualPdfScrollBar</a> within a <a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a>.</p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a><span class="token punctuation">.</span><a href="-pdf-scroll-bar.html"><span class="token function">PdfScrollBar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pdfState<span class="token operator">: </span><a href="../../compose/com.bhuvaneshw.pdf.compose/-pdf-state/index.html">PdfState</a><span class="token punctuation">, </span></span><span class="parameter ">parentSize<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/unit/IntSize.html">IntSize</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">contentColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator"> = </span>Color.Black<span class="token punctuation">, </span></span><span class="parameter ">handleColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator"> = </span>Color(0xfff1f1f1)<span class="token punctuation">, </span></span><span class="parameter ">interactiveScrolling<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">useVerticalScrollBarForHorizontalMode<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">animationSpec<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/animation/core/FiniteAnimationSpec.html">FiniteAnimationSpec</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span><span class="token operator"> = </span>spring(stiffness = Spring.StiffnessMediumLow)</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A composable that displays a scrollbar for the PDF viewer that can be dragged to navigate through pages. It can be either vertical or horizontal, and shows the current page number.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="910891663%2FFunctions%2F-1164257574" anchor-label="PdfToolBar" id="910891663%2FFunctions%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-tool-bar.html"><span>Pdf</span><wbr><span>Tool</span><wbr><span><span>Bar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="910891663%2FFunctions%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-pdf-tool-bar.html"><span class="token function">PdfToolBar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pdfState<span class="token operator">: </span><a href="../../compose/com.bhuvaneshw.pdf.compose/-pdf-state/index.html">PdfState</a><span class="token punctuation">, </span></span><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">toolBarState<span class="token operator">: </span><a href="-pdf-tool-bar-state/index.html">PdfToolBarState</a><span class="token operator"> = </span>rememberPdfToolBarState()<span class="token punctuation">, </span></span><span class="parameter ">onBack<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">fileName<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">contentColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">backIcon<span class="token operator">: </span><a href="-pdf-tool-bar-back-icon/index.html">PdfToolBarBackIcon</a><span class="token operator">?</span><span class="token operator"> = </span>defaultToolBarBackIcon(contentColor, onBack)<span class="token punctuation">, </span></span><span class="parameter ">showEditor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">pickColor<span class="token operator">: </span><a href="-pick-color/index.html">PickColor</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">dropDownMenu<span class="token operator">: </span><a href="-pdf-tool-bar-menu/index.html">PdfToolBarMenu</a><span class="token operator"> = </span>defaultToolBarDropDownMenu()<span class="token punctuation">, </span></span><span class="parameter ">onPlaceIcons<span class="token operator">: </span><a href="-place-icons/index.html">PlaceIcons</a><span class="token operator"> = </span>defaultIconsPosition()<span class="token punctuation">, </span></span><span class="parameter ">openOutlineView<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A composable function that provides a toolbar for the PDF viewer that provides various controls for navigation, finding text, editing, and more.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="599329354%2FFunctions%2F-1164257574" anchor-label="PdfToolBar" id="599329354%2FFunctions%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-tool-bar.html"><span>Pdf</span><wbr><span>Tool</span><wbr><span><span>Bar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="599329354%2FFunctions%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-pdf-container-scope/index.html">PdfContainerScope</a><span class="token punctuation">.</span><a href="-pdf-tool-bar.html"><span class="token function">PdfToolBar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">toolBarState<span class="token operator">: </span><a href="-pdf-tool-bar-state/index.html">PdfToolBarState</a><span class="token operator"> = </span>rememberPdfToolBarState()<span class="token punctuation">, </span></span><span class="parameter ">onBack<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">fileName<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">contentColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">backIcon<span class="token operator">: </span><a href="-pdf-tool-bar-back-icon/index.html">PdfToolBarBackIcon</a><span class="token operator">?</span><span class="token operator"> = </span>defaultToolBarBackIcon(contentColor, onBack)<span class="token punctuation">, </span></span><span class="parameter ">showEditor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">pickColor<span class="token operator">: </span><a href="-pick-color/index.html">PickColor</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">dropDownMenu<span class="token operator">: </span><a href="-pdf-tool-bar-menu/index.html">PdfToolBarMenu</a><span class="token operator"> = </span>defaultToolBarDropDownMenu()<span class="token punctuation">, </span></span><span class="parameter ">onPlaceIcons<span class="token operator">: </span><a href="-place-icons/index.html">PlaceIcons</a><span class="token operator"> = </span>defaultIconsPosition()<span class="token punctuation">, </span></span><span class="parameter ">openOutlineView<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>this@PdfToolBar.openOutlineView</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">This is a wrapper around <a href="-pdf-tool-bar.html">ActualPdfToolBar</a> within a <a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-395270277%2FFunctions%2F-1164257574" anchor-label="PdfViewer" id="-395270277%2FFunctions%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-viewer.html"><span>Pdf</span><wbr><span><span>Viewer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-395270277%2FFunctions%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a><span class="token punctuation">.</span><a href="-pdf-viewer.html"><span class="token function">PdfViewer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">containerColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span>context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a><span class="token operator"> = </span>{ PdfViewer(context = it) }<span class="token punctuation">, </span></span><span class="parameter ">onCreateViewer<span class="token operator">: </span><a href="../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">onReady<span class="token operator">: </span><a href="../../compose/com.bhuvaneshw.pdf.compose/-on-ready-callback/index.html">OnReadyCallback</a><span class="token operator"> = </span>DefaultOnReadyCallback()</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">This is a wrapper around <a href="../../compose/com.bhuvaneshw.pdf.compose/index.html">com.bhuvaneshw.pdf.compose.PdfViewer</a> within a <a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="342082773%2FFunctions%2F-1164257574" anchor-label="PdfViewerContainer" id="342082773%2FFunctions%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-viewer-container.html"><span>Pdf</span><wbr><span>Viewer</span><wbr><span><span>Container</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="342082773%2FFunctions%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-pdf-viewer-container.html"><span class="token function">PdfViewerContainer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pdfState<span class="token operator">: </span><a href="../../compose/com.bhuvaneshw.pdf.compose/-pdf-state/index.html">PdfState</a><span class="token punctuation">, </span></span><span class="parameter ">pdfViewer<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">pdfToolBar<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><a href="-pdf-container-scope/index.html">PdfContainerScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">pdfScrollBar<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span>parentSize<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/unit/IntSize.html">IntSize</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">loadingIndicator<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><a href="-pdf-container-box-scope/index.html">PdfContainerBoxScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">passwordDialogEnabled<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">printDialogEnabled<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">outlineDrawerState<span class="token operator">: </span><a href="-pdf-outline-drawer-state/index.html">PdfOutlineDrawerState</a><span class="token operator">?</span><span class="token operator"> = </span>rememberPdfOutlineDrawerState(initialValue = DrawerValue.Closed)<span class="token punctuation">, </span></span><span class="parameter ">onOutlineItemClick<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../core/com.bhuvaneshw.pdf.model/-side-bar-tree-item/index.html">SideBarTreeItem</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A container view that orchestrates interactions between a <a href="../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a>, <a href="-pdf-tool-bar.html">ActualPdfToolBar</a>, and <a href="-pdf-scroll-bar.html">ActualPdfScrollBar</a>. It manages the display of a PDF viewer, a toolbar, a scrollbar, loading indicators, and dialogs for passwords and printing.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2122682246%2FFunctions%2F-1164257574" anchor-label="rememberPdfOutlineDrawerState" id="-2122682246%2FFunctions%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-pdf-outline-drawer-state.html"><span>remember</span><wbr><span>Pdf</span><wbr><span>Outline</span><wbr><span>Drawer</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2122682246%2FFunctions%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="remember-pdf-outline-drawer-state.html"><span class="token function">rememberPdfOutlineDrawerState</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">initialValue<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/material3/DrawerValue.html">DrawerValue</a><span class="token punctuation">, </span></span><span class="parameter ">confirmStateChange<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/material3/DrawerValue.html">DrawerValue</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span>{ true }</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-pdf-outline-drawer-state/index.html">PdfOutlineDrawerState</a></div><div class="brief "><p class="paragraph">Creates and remembers a <a href="-pdf-outline-drawer-state/index.html">PdfOutlineDrawerState</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1511419407%2FFunctions%2F-1164257574" anchor-label="rememberPdfToolBarState" id="1511419407%2FFunctions%2F-1164257574" data-filterable-set=":compose-ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose-ui/main" data-filterable-set=":compose-ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-pdf-tool-bar-state.html"><span>remember</span><wbr><span>Pdf</span><wbr><span>Tool</span><wbr><span>Bar</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1511419407%2FFunctions%2F-1164257574"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose-ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="remember-pdf-tool-bar-state.html"><span class="token function">rememberPdfToolBarState</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/FloatRange.html"><span class="token annotation builtin">FloatRange</span></a><span class="token punctuation">(</span><span>from<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">0.0</span></span><span class="token punctuation">, </span></span><wbr><span>to<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">1.0</span></span><span class="token punctuation">, </span></span><wbr><span>fromInclusive<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">false</span></span></span><wbr><span class="token punctuation">)</span>&nbsp;</span>predictiveBackThreshold<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator"> = </span><span class="token constant">0.1f</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-pdf-tool-bar-state/index.html">PdfToolBarState</a></div><div class="brief "><p class="paragraph">Creates and remembers a <a href="-pdf-tool-bar-state/index.html">PdfToolBarState</a> for a PDF viewer toolbar.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>By Bhuvaneshwaran</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
