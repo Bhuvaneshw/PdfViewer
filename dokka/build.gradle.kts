@@ -30,11 +30,14 @@ dokka {
             renderVersionsNavigationOnAllPages = true
         }
         pluginsConfiguration.html {
+            customStyleSheets.from("style.css")
+            customAssets.from("logo.png")
             footerMessage.set("By Bhuvaneshwaran")
         }
     }
 
     dokkaPublications.html {
+        includes.from("README.md")
         if (dokkaVersionsDirectory != null)
             outputDirectory = dokkaVersionsDirectory.resolve(apiVersion)
     }
