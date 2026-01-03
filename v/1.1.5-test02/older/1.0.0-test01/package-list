@@ -1,0 +1,15 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:compose
+com.bhuvaneshw.pdf.compose
+module:compose-ui
+com.bhuvaneshw.pdf.compose.ui
+module:core
+com.bhuvaneshw.pdf
+com.bhuvaneshw.pdf.js
+com.bhuvaneshw.pdf.print
+com.bhuvaneshw.pdf.resource
+com.bhuvaneshw.pdf.setting
+module:ui
+com.bhuvaneshw.pdf.ui
