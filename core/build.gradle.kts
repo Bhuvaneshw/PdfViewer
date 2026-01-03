@@ -56,6 +56,8 @@ dokka {
         includes.from(project.files(), "module.md")
     }
     pluginsConfiguration.html {
+        @Suppress("DEPRECATION") // Moved to DokkaPublication#suppressInheritedMembers. but not working as expected.
+        suppressInheritedMembers.set(true)
         customStyleSheets.from("../dokka/style.css", "../dokka/dokka-style.css")
         customAssets.from("../dokka/logo.png")
         footerMessage.set("By Bhuvaneshwaran")

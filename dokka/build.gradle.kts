@@ -31,7 +31,7 @@ dokka {
         }
         pluginsConfiguration.html {
             customStyleSheets.from("style.css", "dokka-style.css")
-            customAssets.from("logo.png")
+            customAssets.from("logo.png", "main.js")
             footerMessage.set("By Bhuvaneshwaran")
         }
     }
