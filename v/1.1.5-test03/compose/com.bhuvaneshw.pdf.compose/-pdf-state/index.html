@@ -1,0 +1,1171 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>PdfState</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo.png">
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/dokka-style.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    PdfViewer
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+<dokka-template-command data="{&quot;@class&quot;:&quot;org.jetbrains.dokka.base.templating.ReplaceVersionsCommand&quot;,&quot;location&quot;:&quot;com.bhuvaneshw.pdf.compose/-pdf-state/index.html&quot;}"><div class="dropdown versions-dropdown" data-role="dropdown">
+  <div class="button button_dropdown versions-dropdown-button" role="combobox" data-role="dropdown-toggle" aria-controls="versions-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Select version" tabindex="0" title="1.1.5-test03"><span class="versions-dropdown-button-text">1.1.5-test03</span></div>
+  <div class="dropdown--list dropdown--list_positioned_left versions-dropdown-data" role="listbox" data-role="dropdown-listbox" aria-label="Versions" id="versions-listbox">
+    <div class="dropdown--header" data-remove-style="true" style="display: none"><span>Select version</span><button class="button" data-role="dropdown-toggle" aria-label="Close versions selection"><i class="ui-kit-icon ui-kit-icon_cross"></i></button></div>
+<a href="index.html" class="dropdown--option dropdown--option_active dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test03"><span class="dropdown--option-icon dropdown--option-icon_selected"></span><span class="dropdown--option-text">1.1.5-test03</span></a><a href="../../../older/1.1.5-test02/compose/com.bhuvaneshw.pdf.compose/-pdf-state/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test02"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.1.5-test02</span></a><a href="../../../older/1.1.5-test01/compose/com.bhuvaneshw.pdf.compose/-pdf-state/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test01"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.1.5-test01</span></a><a href="../../../older/1.0.0-test01/compose/com.bhuvaneshw.pdf.compose/-pdf-state/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.0.0-test01"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.0.0-test01</span></a></div>
+  <div class="dropdown--overlay"></div>
+</div>
+</dokka-template-command>        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":compose/main">androidJvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":compose/main" data-filter=":compose/main">
+                                <span class="checkbox--icon"></span>
+                                androidJvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    PdfViewer
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="compose::com.bhuvaneshw.pdf.compose/PdfState///PointingToDeclaration//1583999977">
+  <div class="breadcrumbs"><a href="../../index.html">compose</a><span class="delimiter">/</span><a href="../index.html">com.bhuvaneshw.pdf.compose</a><span class="delimiter">/</span><span class="current">PdfState</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Pdf</span><wbr><span><span>State</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">PdfState</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="../-pdf-source/index.html">PdfSource</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>highlightEditorColors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>PdfViewerDefaults.highlightEditorColors<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>defaultHighlightColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator"> = </span>highlightEditorColors.firstOrNull()?.second
+        ?: PdfViewerDefaults.highlightEditorColors[0].second</span></span><span class="token punctuation">)</span></div><p class="paragraph">A state object that can be hoisted to control and observe the <a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a>.</p><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>source</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The source of the PDF file.</p></div></div></div></div><div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>highlight</span><wbr><span>Editor</span><wbr><span><span>Colors</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The colors to be used for highlighting text.</p></div></div></div></div><div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>default</span><wbr><span>Highlight</span><wbr><span><span>Color</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The default color to be used for highlighting text.</p></div></div></div></div></div><h4 class="tableheader">See also</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-pdf-viewer.html"><span>Pdf</span><wbr><span><span>Viewer</span></span></a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html"><span>Pdf</span><wbr><span><span>Viewer</span></span></a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1919298613%2FConstructors%2F1583999977" anchor-label="PdfState" id="-1919298613%2FConstructors%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-state.html"><span>Pdf</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1919298613%2FConstructors%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="../-pdf-source/index.html">PdfSource</a><span class="token punctuation">, </span></span><span class="parameter ">highlightEditorColors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>PdfViewerDefaults.highlightEditorColors<span class="token punctuation">, </span></span><span class="parameter ">defaultHighlightColor<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator"> = </span>highlightEditorColors.firstOrNull()?.second
+        ?: PdfViewerDefaults.highlightEditorColors[0].second</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-753102626%2FClasslikes%2F1583999977" anchor-label="Editor" id="-753102626%2FClasslikes%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-editor/index.html"><span><span>Editor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-753102626%2FClasslikes%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">inner </span><span class="token keyword">class </span><a href="-editor/index.html">Editor</a></div><div class="brief "><p class="paragraph">The editor for interacting with the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1237804279%2FClasslikes%2F1583999977" anchor-label="Listener" id="1237804279%2FClasslikes%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-listener/index.html"><span><span>Listener</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1237804279%2FClasslikes%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">inner </span><span class="token keyword">class </span><a href="-listener/index.html">Listener</a> : <a href="../../../core/com.bhuvaneshw.pdf/-pdf-listener/index.html">PdfListener</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-900265961%2FProperties%2F1583999977" anchor-label="actualScaleLimit" id="-900265961%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="actual-scale-limit.html"><span>actual</span><wbr><span>Scale</span><wbr><span><span>Limit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-900265961%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="actual-scale-limit.html">actualScaleLimit</a><span class="token operator">: </span><a href="../-actual-scale-limit/index.html">ActualScaleLimit</a></div><div class="brief "><p class="paragraph">The actual scale limits of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2065796188%2FProperties%2F1583999977" anchor-label="alignMode" id="2065796188%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="align-mode.html"><span>align</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2065796188%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="align-mode.html">alignMode</a><span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-align-mode/index.html">PdfViewer.PageAlignMode</a></div><div class="brief "><p class="paragraph">The alignment of the pages.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="491947324%2FProperties%2F1583999977" anchor-label="currentPage" id="491947324%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="current-page.html"><span>current</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="491947324%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="current-page.html">currentPage</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The current page number of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="292409925%2FProperties%2F1583999977" anchor-label="currentScale" id="292409925%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="current-scale.html"><span>current</span><wbr><span><span>Scale</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="292409925%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="current-scale.html">currentScale</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a></div><div class="brief "><p class="paragraph">The current scale of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-620172940%2FProperties%2F1583999977" anchor-label="defaultHighlightColor" id="-620172940%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="default-highlight-color.html"><span>default</span><wbr><span>Highlight</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-620172940%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="default-highlight-color.html">defaultHighlightColor</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="676537961%2FProperties%2F1583999977" anchor-label="editor" id="676537961%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="editor.html"><span><span>editor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="676537961%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="editor.html">editor</a><span class="token operator">: </span><a href="-editor/index.html">PdfState.Editor</a></div><div class="brief "><p class="paragraph">The editor for interacting with the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1921822669%2FProperties%2F1583999977" anchor-label="highlightEditorColors" id="-1921822669%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="highlight-editor-colors.html"><span>highlight</span><wbr><span>Editor</span><wbr><span><span>Colors</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1921822669%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="highlight-editor-colors.html">highlightEditorColors</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Color.html">Color</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1293611361%2FProperties%2F1583999977" anchor-label="loadingState" id="1293611361%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="loading-state.html"><span>loading</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1293611361%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="loading-state.html">loadingState</a><span class="token operator">: </span><a href="../-pdf-loading-state/index.html">PdfLoadingState</a></div><div class="brief "><p class="paragraph">The current loading state of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2075398550%2FProperties%2F1583999977" anchor-label="matchState" id="-2075398550%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="match-state.html"><span>match</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2075398550%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="match-state.html">matchState</a><span class="token operator">: </span><a href="../-match-state/index.html">MatchState</a></div><div class="brief "><p class="paragraph">The current find match state of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="101882219%2FProperties%2F1583999977" anchor-label="pagesCount" id="101882219%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="pages-count.html"><span>pages</span><wbr><span><span>Count</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="101882219%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="pages-count.html">pagesCount</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The total number of pages in the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="993466844%2FProperties%2F1583999977" anchor-label="passwordRequired" id="993466844%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="password-required.html"><span>password</span><wbr><span><span>Required</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="993466844%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="password-required.html">passwordRequired</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">true</code> if the PDF document requires a password to open.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-650464128%2FProperties%2F1583999977" anchor-label="pdfViewer" id="-650464128%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="pdf-viewer.html"><span>pdf</span><wbr><span><span>Viewer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-650464128%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="pdf-viewer.html">pdfViewer</a><span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The underlying <a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a> instance. It is <code class="lang-kotlin">null</code> until the composable is composed.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="883507538%2FProperties%2F1583999977" anchor-label="printState" id="883507538%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="print-state.html"><span>print</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="883507538%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="print-state.html">printState</a><span class="token operator">: </span><a href="../-pdf-print-state/index.html">PdfPrintState</a></div><div class="brief "><p class="paragraph">The current print state of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1476919523%2FProperties%2F1583999977" anchor-label="properties" id="1476919523%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="properties.html"><span><span>properties</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1476919523%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="properties.html">properties</a><span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-document-properties/index.html">PdfDocumentProperties</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The properties of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1955429576%2FProperties%2F1583999977" anchor-label="rotation" id="-1955429576%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rotation.html"><span><span>rotation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1955429576%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="rotation.html">rotation</a><span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-rotation/index.html">PdfViewer.PageRotation</a></div><div class="brief "><p class="paragraph">The rotation of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1082531003%2FProperties%2F1583999977" anchor-label="scaleLimit" id="-1082531003%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scale-limit.html"><span>scale</span><wbr><span><span>Limit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1082531003%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="scale-limit.html">scaleLimit</a><span class="token operator">: </span><a href="../-scale-limit/index.html">ScaleLimit</a></div><div class="brief "><p class="paragraph">The scale limits of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2112154278%2FProperties%2F1583999977" anchor-label="scrollMode" id="2112154278%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scroll-mode.html"><span>scroll</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2112154278%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="scroll-mode.html">scrollMode</a><span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-scroll-mode/index.html">PdfViewer.PageScrollMode</a></div><div class="brief "><p class="paragraph">The scroll mode of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-274732875%2FProperties%2F1583999977" anchor-label="scrollSpeedLimit" id="-274732875%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scroll-speed-limit.html"><span>scroll</span><wbr><span>Speed</span><wbr><span><span>Limit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-274732875%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="scroll-speed-limit.html">scrollSpeedLimit</a><span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-scroll-speed-limit/index.html">PdfViewer.ScrollSpeedLimit</a></div><div class="brief "><p class="paragraph">The scroll speed limit of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-568760672%2FProperties%2F1583999977" anchor-label="scrollState" id="-568760672%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scroll-state.html"><span>scroll</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-568760672%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="scroll-state.html">scrollState</a><span class="token operator">: </span><a href="../-scroll-state/index.html">ScrollState</a></div><div class="brief "><p class="paragraph">The current scroll state of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-146695439%2FProperties%2F1583999977" anchor-label="singlePageArrangement" id="-146695439%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="single-page-arrangement.html"><span>single</span><wbr><span>Page</span><wbr><span><span>Arrangement</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-146695439%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="single-page-arrangement.html">singlePageArrangement</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">true</code> if the pages are arranged in a single page layout.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-855613027%2FProperties%2F1583999977" anchor-label="snapPage" id="-855613027%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="snap-page.html"><span>snap</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-855613027%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="snap-page.html">snapPage</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">true</code> if the page should snap to the nearest page when scrolling.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1698685061%2FProperties%2F1583999977" anchor-label="source" id="-1698685061%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="source.html"><span><span>source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1698685061%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="source.html">source</a><span class="token operator">: </span><a href="../-pdf-source/index.html">PdfSource</a></div><div class="brief "><p class="paragraph">The source of the PDF file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1530489280%2FProperties%2F1583999977" anchor-label="spreadMode" id="1530489280%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="spread-mode.html"><span>spread</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1530489280%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="spread-mode.html">spreadMode</a><span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-spread-mode/index.html">PdfViewer.PageSpreadMode</a></div><div class="brief "><p class="paragraph">The spread mode of the PDF.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-904702489%2FProperties%2F1583999977" anchor-label="webViewError" id="-904702489%2FProperties%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="web-view-error.html"><span>web</span><wbr><span>View</span><wbr><span><span>Error</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-904702489%2FProperties%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="web-view-error.html">webViewError</a><span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-web-view-error/index.html">WebViewError</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The last WebView error that occurred.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="2142614329%2FFunctions%2F1583999977" anchor-label="actualScaleLimitFlow" id="2142614329%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../actual-scale-limit-flow.html"><span>actual</span><wbr><span>Scale</span><wbr><span>Limit</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2142614329%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../actual-scale-limit-flow.html"><span class="token function">actualScaleLimitFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-triple/index.html">Triple</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the actual scale limits of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1411679286%2FFunctions%2F1583999977" anchor-label="alignModeFlow" id="1411679286%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../align-mode-flow.html"><span>align</span><wbr><span>Mode</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1411679286%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../align-mode-flow.html"><span class="token function">alignModeFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-align-mode/index.html">PdfViewer.PageAlignMode</a><span class="token punctuation">, </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-align-mode/index.html">PdfViewer.PageAlignMode</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the requested and applied page alignment modes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1134290934%2FFunctions%2F1583999977" anchor-label="annotationEditorFlow" id="1134290934%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../annotation-editor-flow.html"><span>annotation</span><wbr><span>Editor</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1134290934%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../annotation-editor-flow.html"><span class="token function">annotationEditorFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-editor/-annotation-event-type/index.html">PdfEditor.AnnotationEventType</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits events from the annotation editor.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="320010014%2FFunctions%2F1583999977" anchor-label="attachmentsFlow" id="320010014%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../attachments-flow.html"><span>attachments</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="320010014%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../attachments-flow.html"><span class="token function">attachmentsFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf.model/-side-bar-tree-item/index.html">SideBarTreeItem</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the document attachments.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-820380994%2FFunctions%2F1583999977" anchor-label="clearFind" id="-820380994%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-find.html"><span>clear</span><wbr><span><span>Find</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-820380994%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="clear-find.html"><span class="token function">clearFind</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Clears the find results.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1361279067%2FFunctions%2F1583999977" anchor-label="doubleClickFlow" id="-1361279067%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../double-click-flow.html"><span>double</span><wbr><span>Click</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1361279067%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../double-click-flow.html"><span class="token function">doubleClickFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits when a double click occurs on the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1634581762%2FFunctions%2F1583999977" anchor-label="downloadFlow" id="1634581762%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../download-flow.html"><span>download</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1634581762%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../download-flow.html"><span class="token function">downloadFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-triple/index.html">Triple</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits information about a file download triggered from the PDF viewer.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2098573385%2FFunctions%2F1583999977" anchor-label="editorFreeFontColorFlow" id="2098573385%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-free-font-color-flow.html"><span>editor</span><wbr><span>Free</span><wbr><span>Font</span><wbr><span>Color</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2098573385%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-free-font-color-flow.html"><span class="token function">editorFreeFontColorFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current editor free-font color.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="81084035%2FFunctions%2F1583999977" anchor-label="editorFreeFontSizeFlow" id="81084035%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-free-font-size-flow.html"><span>editor</span><wbr><span>Free</span><wbr><span>Font</span><wbr><span>Size</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="81084035%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-free-font-size-flow.html"><span class="token function">editorFreeFontSizeFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current editor free-font size.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="417724758%2FFunctions%2F1583999977" anchor-label="editorHighlightColorFlow" id="417724758%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-highlight-color-flow.html"><span>editor</span><wbr><span>Highlight</span><wbr><span>Color</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="417724758%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-highlight-color-flow.html"><span class="token function">editorHighlightColorFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current editor highlight color.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1827270169%2FFunctions%2F1583999977" anchor-label="editorHighlightThicknessFlow" id="-1827270169%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-highlight-thickness-flow.html"><span>editor</span><wbr><span>Highlight</span><wbr><span>Thickness</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1827270169%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-highlight-thickness-flow.html"><span class="token function">editorHighlightThicknessFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current editor highlight thickness.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="613973924%2FFunctions%2F1583999977" anchor-label="editorInkColorFlow" id="613973924%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-ink-color-flow.html"><span>editor</span><wbr><span>Ink</span><wbr><span>Color</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="613973924%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-ink-color-flow.html"><span class="token function">editorInkColorFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current editor ink color.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-692264692%2FFunctions%2F1583999977" anchor-label="editorInkOpacityFlow" id="-692264692%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-ink-opacity-flow.html"><span>editor</span><wbr><span>Ink</span><wbr><span>Opacity</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-692264692%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-ink-opacity-flow.html"><span class="token function">editorInkOpacityFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current editor ink opacity.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-631193291%2FFunctions%2F1583999977" anchor-label="editorInkThicknessFlow" id="-631193291%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-ink-thickness-flow.html"><span>editor</span><wbr><span>Ink</span><wbr><span>Thickness</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-631193291%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-ink-thickness-flow.html"><span class="token function">editorInkThicknessFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current editor ink thickness.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1944194760%2FFunctions%2F1583999977" anchor-label="editorMessageFlow" id="1944194760%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-message-flow.html"><span>editor</span><wbr><span>Message</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1944194760%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-message-flow.html"><span class="token function">editorMessageFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits messages from the editor.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-257705937%2FFunctions%2F1583999977" anchor-label="editorModeStateFlow" id="-257705937%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-mode-state-flow.html"><span>editor</span><wbr><span>Mode</span><wbr><span>State</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-257705937%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-mode-state-flow.html"><span class="token function">editorModeStateFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-editor/-editor-mode-state/index.html">PdfEditor.EditorModeState</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current state of the editor mode.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="592694596%2FFunctions%2F1583999977" anchor-label="editorShowAllHighlightsFlow" id="592694596%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../editor-show-all-highlights-flow.html"><span>editor</span><wbr><span>Show</span><wbr><span>All</span><wbr><span>Highlights</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="592694596%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../editor-show-all-highlights-flow.html"><span class="token function">editorShowAllHighlightsFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits whether all highlights are shown in the editor.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1485187996%2FFunctions%2F1583999977" anchor-label="linkClickFlow" id="1485187996%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../link-click-flow.html"><span>link</span><wbr><span>Click</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1485187996%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../link-click-flow.html"><span class="token function">linkClickFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the URL of a clicked link in the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1717755345%2FFunctions%2F1583999977" anchor-label="loadingStateFlow" id="-1717755345%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../loading-state-flow.html"><span>loading</span><wbr><span>State</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1717755345%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../loading-state-flow.html"><span class="token function">loadingStateFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../-pdf-loading-state/index.html">PdfLoadingState</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current loading state of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2101025190%2FFunctions%2F1583999977" anchor-label="longClickFlow" id="-2101025190%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../long-click-flow.html"><span>long</span><wbr><span>Click</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2101025190%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../long-click-flow.html"><span class="token function">longClickFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits when a long click occurs on the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="819318982%2FFunctions%2F1583999977" anchor-label="matchStateFlow" id="819318982%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../match-state-flow.html"><span>match</span><wbr><span>State</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="819318982%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../match-state-flow.html"><span class="token function">matchStateFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../-match-state/index.html">MatchState</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the state of the find-in-page functionality.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2047934640%2FFunctions%2F1583999977" anchor-label="outlineFlow" id="2047934640%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../outline-flow.html"><span>outline</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2047934640%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../outline-flow.html"><span class="token function">outlineFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf.model/-side-bar-tree-item/index.html">SideBarTreeItem</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the document outline.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1030743474%2FFunctions%2F1583999977" anchor-label="pageNumberFlow" id="1030743474%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../page-number-flow.html"><span>page</span><wbr><span>Number</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1030743474%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../page-number-flow.html"><span class="token function">pageNumberFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current page number of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-28190242%2FFunctions%2F1583999977" anchor-label="pageRenderedFlow" id="-28190242%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../page-rendered-flow.html"><span>page</span><wbr><span>Rendered</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-28190242%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../page-rendered-flow.html"><span class="token function">pageRenderedFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the page number when a page is rendered.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1439288253%2FFunctions%2F1583999977" anchor-label="passwordDialogFlow" id="1439288253%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../password-dialog-flow.html"><span>password</span><wbr><span>Dialog</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1439288253%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../password-dialog-flow.html"><span class="token function">passwordDialogFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits whether the password dialog is open.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1943893794%2FFunctions%2F1583999977" anchor-label="printStateFlow" id="-1943893794%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../print-state-flow.html"><span>print</span><wbr><span>State</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1943893794%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../print-state-flow.html"><span class="token function">printStateFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../-pdf-print-state/index.html">PdfPrintState</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current state of the print process.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="699422765%2FFunctions%2F1583999977" anchor-label="propertiesFlow" id="699422765%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../properties-flow.html"><span>properties</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="699422765%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../properties-flow.html"><span class="token function">propertiesFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-document-properties/index.html">PdfDocumentProperties</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the properties of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="897054068%2FFunctions%2F1583999977" anchor-label="renderProcessGoneFlow" id="897054068%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../render-process-gone-flow.html"><span>render</span><wbr><span>Process</span><wbr><span>Gone</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="897054068%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../render-process-gone-flow.html"><span class="token function">renderProcessGoneFlow</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">handled<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span>{ true }</span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://developer.android.com/reference/kotlin/android/webkit/RenderProcessGoneDetail.html">RenderProcessGoneDetail</a><span class="token operator">?</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits when the render process has gone.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="716788728%2FFunctions%2F1583999977" anchor-label="rotationFlow" id="716788728%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../rotation-flow.html"><span>rotation</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="716788728%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../rotation-flow.html"><span class="token function">rotationFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-rotation/index.html">PdfViewer.PageRotation</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current rotation of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-489125213%2FFunctions%2F1583999977" anchor-label="savePdfFlow" id="-489125213%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../save-pdf-flow.html"><span>save</span><wbr><span>Pdf</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-489125213%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../save-pdf-flow.html"><span class="token function"><strike>savePdfFlow</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the PDF document to be saved as a byte array.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1654644792%2FFunctions%2F1583999977" anchor-label="scaleFlow" id="1654644792%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../scale-flow.html"><span>scale</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1654644792%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../scale-flow.html"><span class="token function">scaleFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current scale of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-46503029%2FFunctions%2F1583999977" anchor-label="scaleLimitFlow" id="-46503029%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../scale-limit-flow.html"><span>scale</span><wbr><span>Limit</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-46503029%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../scale-limit-flow.html"><span class="token function">scaleLimitFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-triple/index.html">Triple</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current scale limits of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="6146314%2FFunctions%2F1583999977" anchor-label="scrollModeFlow" id="6146314%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../scroll-mode-flow.html"><span>scroll</span><wbr><span>Mode</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="6146314%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../scroll-mode-flow.html"><span class="token function">scrollModeFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-scroll-mode/index.html">PdfViewer.PageScrollMode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current scroll mode of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1890286811%2FFunctions%2F1583999977" anchor-label="scrollSpeedLimitFlow" id="1890286811%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../scroll-speed-limit-flow.html"><span>scroll</span><wbr><span>Speed</span><wbr><span>Limit</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1890286811%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../scroll-speed-limit-flow.html"><span class="token function">scrollSpeedLimitFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-scroll-speed-limit/index.html">PdfViewer.ScrollSpeedLimit</a><span class="token punctuation">, </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-scroll-speed-limit/index.html">PdfViewer.ScrollSpeedLimit</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the requested and applied scroll speed limits.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1531465422%2FFunctions%2F1583999977" anchor-label="scrollStateFlow" id="-1531465422%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../scroll-state-flow.html"><span>scroll</span><wbr><span>State</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1531465422%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../scroll-state-flow.html"><span class="token function">scrollStateFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../-scroll-state/index.html">ScrollState</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current scroll state of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="712086686%2FFunctions%2F1583999977" anchor-label="showFileChooserFlow" id="712086686%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../show-file-chooser-flow.html"><span>show</span><wbr><span>File</span><wbr><span>Chooser</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="712086686%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../show-file-chooser-flow.html"><span class="token function">showFileChooserFlow</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">handled<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://developer.android.com/reference/kotlin/android/webkit/ValueCallback.html">ValueCallback</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="https://developer.android.com/reference/kotlin/android/net/Uri.html">Uri</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">, </span><a href="https://developer.android.com/reference/kotlin/android/webkit/WebChromeClient.FileChooserParams.html">WebChromeClient.FileChooserParams</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits when the file chooser should be shown.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="831351182%2FFunctions%2F1583999977" anchor-label="singleClickFlow" id="831351182%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../single-click-flow.html"><span>single</span><wbr><span>Click</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="831351182%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../single-click-flow.html"><span class="token function">singleClickFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits when a single click occurs on the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-872112511%2FFunctions%2F1583999977" anchor-label="singlePageArrangementFlow" id="-872112511%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../single-page-arrangement-flow.html"><span>single</span><wbr><span>Page</span><wbr><span>Arrangement</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-872112511%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../single-page-arrangement-flow.html"><span class="token function">singlePageArrangementFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the requested and applied single-page arrangement.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1042519876%2FFunctions%2F1583999977" anchor-label="snapFlow" id="1042519876%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../snap-flow.html"><span>snap</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1042519876%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../snap-flow.html"><span class="token function">snapFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits whether page snapping is enabled.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1074978992%2FFunctions%2F1583999977" anchor-label="spreadModeFlow" id="1074978992%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../spread-mode-flow.html"><span>spread</span><wbr><span>Mode</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1074978992%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../spread-mode-flow.html"><span class="token function">spreadModeFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/-page-spread-mode/index.html">PdfViewer.PageSpreadMode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits the current spread mode of the PDF document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1097356009%2FFunctions%2F1583999977" anchor-label="webViewErrorFlow" id="1097356009%2FFunctions%2F1583999977" data-filterable-set=":compose/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":compose/main" data-filterable-set=":compose/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../web-view-error-flow.html"><span>web</span><wbr><span>View</span><wbr><span>Error</span><wbr><span><span>Flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1097356009%2FFunctions%2F1583999977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":compose/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PdfState</a><span class="token punctuation">.</span><a href="../web-view-error-flow.html"><span class="token function">webViewErrorFlow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><a href="../../../core/com.bhuvaneshw.pdf/-web-view-error/index.html">WebViewError</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A flow that emits any errors that occur in the WebView.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>By Bhuvaneshwaran</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

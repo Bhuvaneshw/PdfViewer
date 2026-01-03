@@ -1,0 +1,442 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>PdfEditor</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    PdfViewer
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+<dokka-template-command data="{&quot;@class&quot;:&quot;org.jetbrains.dokka.base.templating.ReplaceVersionsCommand&quot;,&quot;location&quot;:&quot;com.bhuvaneshw.pdf/-pdf-editor/index.html&quot;}"><div class="dropdown versions-dropdown" data-role="dropdown">
+  <div class="button button_dropdown versions-dropdown-button" role="combobox" data-role="dropdown-toggle" aria-controls="versions-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Select version" tabindex="0" title="1.1.5-test01"><span class="versions-dropdown-button-text">1.1.5-test01</span></div>
+  <div class="dropdown--list dropdown--list_positioned_left versions-dropdown-data" role="listbox" data-role="dropdown-listbox" aria-label="Versions" id="versions-listbox">
+    <div class="dropdown--header" data-remove-style="true" style="display: none"><span>Select version</span><button class="button" data-role="dropdown-toggle" aria-label="Close versions selection"><i class="ui-kit-icon ui-kit-icon_cross"></i></button></div>
+<a href="../../../../../core/com.bhuvaneshw.pdf/-pdf-editor/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test03"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.1.5-test03</span></a><a href="../../../../1.1.5-test02/core/com.bhuvaneshw.pdf/-pdf-editor/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test02"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.1.5-test02</span></a><a href="index.html" class="dropdown--option dropdown--option_active dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test01"><span class="dropdown--option-icon dropdown--option-icon_selected"></span><span class="dropdown--option-text">1.1.5-test01</span></a><a href="../../../../1.0.0-test01/core/com.bhuvaneshw.pdf/-pdf-editor/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.0.0-test01"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.0.0-test01</span></a></div>
+  <div class="dropdown--overlay"></div>
+</div>
+</dokka-template-command>        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":core/main">androidJvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":core/main" data-filter=":core/main">
+                                <span class="checkbox--icon"></span>
+                                androidJvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    PdfViewer
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="core::com.bhuvaneshw.pdf/PdfEditor///PointingToDeclaration//-2055549142">
+  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">com.bhuvaneshw.pdf</a><span class="delimiter">/</span><span class="current">PdfEditor</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Pdf</span><wbr><span><span>Editor</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">PdfEditor</a></div><p class="paragraph">Provides functionality to edit a PDF document.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="254318376%2FClasslikes%2F-2055549142" anchor-label="AnnotationEventType" id="254318376%2FClasslikes%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-annotation-event-type/index.html"><span>Annotation</span><wbr><span>Event</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="254318376%2FClasslikes%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-annotation-event-type/index.html">AnnotationEventType</a></div><div class="brief "><p class="paragraph">Represents different types of annotation events that can occur in the editor.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-481771156%2FClasslikes%2F-2055549142" anchor-label="EditorModeState" id="-481771156%2FClasslikes%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-editor-mode-state/index.html"><span>Editor</span><wbr><span>Mode</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-481771156%2FClasslikes%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-editor-mode-state/index.html">EditorModeState</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>isTextHighlighterOn<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>isEditorFreeTextOn<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>isEditorInkOn<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>isEditorStampOn<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Represents the state of the various editor modes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-1581252131%2FProperties%2F-2055549142" anchor-label="applyHighlightColorOnTextSelection" id="-1581252131%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="apply-highlight-color-on-text-selection.html"><span>apply</span><wbr><span>Highlight</span><wbr><span>Color</span><wbr><span>On</span><wbr><span>Text</span><wbr><span><span>Selection</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1581252131%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="apply-highlight-color-on-text-selection.html">applyHighlightColorOnTextSelection</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">If true, applies the highlight color on text selection.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="833108338%2FProperties%2F-2055549142" anchor-label="freeFontColor" id="833108338%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="free-font-color.html"><span>free</span><wbr><span>Font</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="833108338%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/ColorInt.html"><span class="token annotation builtin">ColorInt</span></a></div></div><span class="token keyword">var </span><a href="free-font-color.html">freeFontColor</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The color of the free text font.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="670728228%2FProperties%2F-2055549142" anchor-label="freeFontSize" id="670728228%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="free-font-size.html"><span>free</span><wbr><span>Font</span><wbr><span><span>Size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="670728228%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/IntRange.html"><span class="token annotation builtin">IntRange</span></a><span class="token punctuation">(</span><span>from<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">5</span></span><span class="token punctuation">, </span></span><wbr><span>to<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">100</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="free-font-size.html">freeFontSize</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The size of the free text font, ranging from 5 to 100.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1937237608%2FProperties%2F-2055549142" anchor-label="freeTextOn" id="1937237608%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="free-text-on.html"><span>free</span><wbr><span>Text</span><wbr><span><span>On</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1937237608%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="free-text-on.html">freeTextOn</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Enables or disables the free text tool.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1149698165%2FProperties%2F-2055549142" anchor-label="hasUnsavedChanges" id="-1149698165%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-unsaved-changes.html"><span>has</span><wbr><span>Unsaved</span><wbr><span><span>Changes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1149698165%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="has-unsaved-changes.html">hasUnsavedChanges</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Indicates if there are any unsaved changes in the editor.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-340296911%2FProperties%2F-2055549142" anchor-label="highlightColor" id="-340296911%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="highlight-color.html"><span>highlight</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-340296911%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="highlight-color.html">highlightColor</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The current color used for highlighting text.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="489727168%2FProperties%2F-2055549142" anchor-label="highlightThickness" id="489727168%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="highlight-thickness.html"><span>highlight</span><wbr><span><span>Thickness</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="489727168%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/IntRange.html"><span class="token annotation builtin">IntRange</span></a><span class="token punctuation">(</span><span>from<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">8</span></span><span class="token punctuation">, </span></span><wbr><span>to<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">24</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="highlight-thickness.html">highlightThickness</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The thickness of the highlight, ranging from 8 to 24.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1832937181%2FProperties%2F-2055549142" anchor-label="inkColor" id="-1832937181%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ink-color.html"><span>ink</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1832937181%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/ColorInt.html"><span class="token annotation builtin">ColorInt</span></a></div></div><span class="token keyword">var </span><a href="ink-color.html">inkColor</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The color of the ink used for drawing.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="522444789%2FProperties%2F-2055549142" anchor-label="inkOn" id="522444789%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ink-on.html"><span>ink</span><wbr><span><span>On</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="522444789%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="ink-on.html">inkOn</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Enables or disables the ink tool for free-hand drawing.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-642504901%2FProperties%2F-2055549142" anchor-label="inkOpacity" id="-642504901%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ink-opacity.html"><span>ink</span><wbr><span><span>Opacity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-642504901%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/IntRange.html"><span class="token annotation builtin">IntRange</span></a><span class="token punctuation">(</span><span>from<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">1</span></span><span class="token punctuation">, </span></span><wbr><span>to<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">100</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="ink-opacity.html">inkOpacity</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The opacity of the ink, ranging from 1 to 100.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1506510414%2FProperties%2F-2055549142" anchor-label="inkThickness" id="-1506510414%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ink-thickness.html"><span>ink</span><wbr><span><span>Thickness</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1506510414%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/IntRange.html"><span class="token annotation builtin">IntRange</span></a><span class="token punctuation">(</span><span>from<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">1</span></span><span class="token punctuation">, </span></span><wbr><span>to<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">20</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="ink-thickness.html">inkThickness</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The thickness of the ink, ranging from 1 to 20.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1196000020%2FProperties%2F-2055549142" anchor-label="isEditing" id="-1196000020%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-editing.html"><span>is</span><wbr><span><span>Editing</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1196000020%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="is-editing.html">isEditing</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns true if any of the editor modes (text highlight, free text, ink, stamp) are active.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1158746153%2FProperties%2F-2055549142" anchor-label="showAllHighlights" id="-1158746153%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="show-all-highlights.html"><span>show</span><wbr><span>All</span><wbr><span><span>Highlights</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1158746153%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="show-all-highlights.html">showAllHighlights</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Toggles the visibility of all highlights in the document.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-100473160%2FProperties%2F-2055549142" anchor-label="stampOn" id="-100473160%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stamp-on.html"><span>stamp</span><wbr><span><span>On</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-100473160%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="stamp-on.html">stampOn</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Enables or disables the stamp tool.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2011175591%2FProperties%2F-2055549142" anchor-label="textHighlighterOn" id="2011175591%2FProperties%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text-highlighter-on.html"><span>text</span><wbr><span>Highlighter</span><wbr><span><span>On</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2011175591%2FProperties%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="text-highlighter-on.html">textHighlighterOn</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Enables or disables the text highlighter tool.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="594957295%2FFunctions%2F-2055549142" anchor-label="clickAddStamp" id="594957295%2FFunctions%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="click-add-stamp.html"><span>click</span><wbr><span>Add</span><wbr><span><span>Stamp</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="594957295%2FFunctions%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation builtin">JvmOverloads</span></a></div></div><span class="token keyword">fun </span><a href="click-add-stamp.html"><span class="token function">clickAddStamp</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">distanceFromRight<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator"> = </span><span class="token constant">1.0f</span><span class="token punctuation">, </span></span><span class="parameter ">distanceFromTop<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator"> = </span><span class="token constant">1.0f</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Simulates a click on the 'Add Stamp' button within the PdfViewer.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1377738466%2FFunctions%2F-2055549142" anchor-label="redo" id="1377738466%2FFunctions%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="redo.html"><span><span>redo</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1377738466%2FFunctions%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="redo.html"><span class="token function">redo</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Redoes the last undone editing action.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1164414652%2FFunctions%2F-2055549142" anchor-label="undo" id="1164414652%2FFunctions%2F-2055549142" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="undo.html"><span><span>undo</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1164414652%2FFunctions%2F-2055549142"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="undo.html"><span class="token function">undo</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Undoes the last editing action.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>By Bhuvaneshwaran</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

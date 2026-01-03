@@ -1,0 +1,325 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>PdfScrollBar</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo.png">
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/dokka-style.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    PdfViewer
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+<dokka-template-command data="{&quot;@class&quot;:&quot;org.jetbrains.dokka.base.templating.ReplaceVersionsCommand&quot;,&quot;location&quot;:&quot;com.bhuvaneshw.pdf.ui/-pdf-scroll-bar/index.html&quot;}"><div class="dropdown versions-dropdown" data-role="dropdown">
+  <div class="button button_dropdown versions-dropdown-button" role="combobox" data-role="dropdown-toggle" aria-controls="versions-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Select version" tabindex="0" title="1.1.5-test03"><span class="versions-dropdown-button-text">1.1.5-test03</span></div>
+  <div class="dropdown--list dropdown--list_positioned_left versions-dropdown-data" role="listbox" data-role="dropdown-listbox" aria-label="Versions" id="versions-listbox">
+    <div class="dropdown--header" data-remove-style="true" style="display: none"><span>Select version</span><button class="button" data-role="dropdown-toggle" aria-label="Close versions selection"><i class="ui-kit-icon ui-kit-icon_cross"></i></button></div>
+<a href="index.html" class="dropdown--option dropdown--option_active dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test03"><span class="dropdown--option-icon dropdown--option-icon_selected"></span><span class="dropdown--option-text">1.1.5-test03</span></a><a href="../../../older/1.1.5-test02/ui/com.bhuvaneshw.pdf.ui/-pdf-scroll-bar/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test02"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.1.5-test02</span></a><a href="../../../older/1.1.5-test01/ui/com.bhuvaneshw.pdf.ui/-pdf-scroll-bar/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.1.5-test01"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.1.5-test01</span></a><a href="../../../older/1.0.0-test01/ui/com.bhuvaneshw.pdf.ui/-pdf-scroll-bar/index.html" class="dropdown--option dropdown--option-link" style="display: block; padding: 5px; color: #fff" data-remove-style="true" role="option" title="1.0.0-test01"><span class="dropdown--option-icon"></span><span class="dropdown--option-text">1.0.0-test01</span></a></div>
+  <div class="dropdown--overlay"></div>
+</div>
+</dokka-template-command>        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":ui/main">androidJvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":ui/main" data-filter=":ui/main">
+                                <span class="checkbox--icon"></span>
+                                androidJvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    PdfViewer
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="ui::com.bhuvaneshw.pdf.ui/PdfScrollBar///PointingToDeclaration//1980898389">
+  <div class="breadcrumbs"><a href="../../index.html">ui</a><span class="delimiter">/</span><a href="../index.html">com.bhuvaneshw.pdf.ui</a><span class="delimiter">/</span><span class="current">PdfScrollBar</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Pdf</span><wbr><span>Scroll</span><wbr><span><span>Bar</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">PdfScrollBar</a>&nbsp;<span><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation builtin">JvmOverloads</span></a>&nbsp;</span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">attrs<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/util/AttributeSet.html">AttributeSet</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">defStyleAttr<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span></span></span><span class="token punctuation">)</span> : <a href="https://developer.android.com/reference/kotlin/android/widget/FrameLayout.html">FrameLayout</a></div><p class="paragraph">A scrollbar for the PDF viewer that can be dragged to navigate through pages. It can be either vertical or horizontal, and shows the current page number.</p><h4 class="tableheader">See also</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html"><span>Pdf</span><wbr><span><span>Viewer</span></span></a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1577137580%2FConstructors%2F1980898389" anchor-label="PdfScrollBar" id="-1577137580%2FConstructors%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pdf-scroll-bar.html"><span>Pdf</span><wbr><span>Scroll</span><wbr><span><span>Bar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1577137580%2FConstructors%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation builtin">JvmOverloads</span></a></div></div><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">attrs<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/util/AttributeSet.html">AttributeSet</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">defStyleAttr<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-772485519%2FProperties%2F1980898389" anchor-label="animationDuration" id="-772485519%2FProperties%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="animation-duration.html"><span>animation</span><wbr><span><span>Duration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-772485519%2FProperties%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="animation-duration.html">animationDuration</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">The duration of the show/hide animation in milliseconds.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1841996629%2FProperties%2F1980898389" anchor-label="dragHandle" id="1841996629%2FProperties%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="drag-handle.html"><span>drag</span><wbr><span><span>Handle</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1841996629%2FProperties%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="drag-handle.html">dragHandle</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/widget/ImageView.html">ImageView</a></div><div class="brief "><p class="paragraph">The <a href="https://developer.android.com/reference/kotlin/android/widget/ImageView.html">ImageView</a> that serves as the draggable handle of the scrollbar.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-616965502%2FProperties%2F1980898389" anchor-label="hideDelayMillis" id="-616965502%2FProperties%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hide-delay-millis.html"><span>hide</span><wbr><span>Delay</span><wbr><span><span>Millis</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-616965502%2FProperties%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="hide-delay-millis.html">hideDelayMillis</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">The delay in milliseconds after which the scrollbar will hide automatically.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1853760894%2FProperties%2F1980898389" anchor-label="interactiveScrolling" id="1853760894%2FProperties%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="interactive-scrolling.html"><span>interactive</span><wbr><span><span>Scrolling</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1853760894%2FProperties%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="interactive-scrolling.html">interactiveScrolling</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">If true, the <a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a> will scroll as the user drags the scrollbar handle. If false, the <a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a> will only scroll when the user releases the handle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1397135190%2FProperties%2F1980898389" anchor-label="isHorizontalScroll" id="1397135190%2FProperties%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-horizontal-scroll.html"><span>is</span><wbr><span>Horizontal</span><wbr><span><span>Scroll</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1397135190%2FProperties%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="is-horizontal-scroll.html">isHorizontalScroll</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">True if the PDF is currently in horizontal scroll mode.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1234130549%2FProperties%2F1980898389" anchor-label="pageNumberInfo" id="-1234130549%2FProperties%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="page-number-info.html"><span>page</span><wbr><span>Number</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1234130549%2FProperties%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="page-number-info.html">pageNumberInfo</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/widget/TextView.html">TextView</a></div><div class="brief "><p class="paragraph">The <a href="https://developer.android.com/reference/kotlin/android/widget/TextView.html">TextView</a> that displays the current page number.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-239350558%2FProperties%2F1980898389" anchor-label="useVerticalScrollBarForHorizontalMode" id="-239350558%2FProperties%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="use-vertical-scroll-bar-for-horizontal-mode.html"><span>use</span><wbr><span>Vertical</span><wbr><span>Scroll</span><wbr><span>Bar</span><wbr><span>For</span><wbr><span>Horizontal</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-239350558%2FProperties%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="use-vertical-scroll-bar-for-horizontal-mode.html">useVerticalScrollBarForHorizontalMode</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">If true, the vertical scrollbar will be used even when the PDF is in horizontal scroll mode.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="794011974%2FFunctions%2F1980898389" anchor-label="addScrollModeChangeListener" id="794011974%2FFunctions%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-scroll-mode-change-listener.html"><span>add</span><wbr><span>Scroll</span><wbr><span>Mode</span><wbr><span>Change</span><wbr><span><span>Listener</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="794011974%2FFunctions%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-scroll-mode-change-listener.html"><span class="token function">addScrollModeChangeListener</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">listener<span class="token operator">: </span><span class="token punctuation">(</span>isHorizontalScroll<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adds a listener that will be notified when the scroll mode changes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="362070251%2FFunctions%2F1980898389" anchor-label="removeScrollModeChangeListener" id="362070251%2FFunctions%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remove-scroll-mode-change-listener.html"><span>remove</span><wbr><span>Scroll</span><wbr><span>Mode</span><wbr><span>Change</span><wbr><span><span>Listener</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="362070251%2FFunctions%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="remove-scroll-mode-change-listener.html"><span class="token function">removeScrollModeChangeListener</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">listener<span class="token operator">: </span><span class="token punctuation">(</span>isHorizontalScroll<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Removes a previously added scroll mode change listener.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1666962402%2FFunctions%2F1980898389" anchor-label="setContentColor" id="1666962402%2FFunctions%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-content-color.html"><span>set</span><wbr><span>Content</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1666962402%2FFunctions%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="set-content-color.html"><span class="token function">setContentColor</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/ColorInt.html"><span class="token annotation builtin">ColorInt</span></a>&nbsp;</span>contentColor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/ColorInt.html"><span class="token annotation builtin">ColorInt</span></a>&nbsp;</span>handleColor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets the color of the scrollbar content and handle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="982655419%2FFunctions%2F1980898389" anchor-label="setupWith" id="982655419%2FFunctions%2F1980898389" data-filterable-set=":ui/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ui/main" data-filterable-set=":ui/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="setup-with.html"><span>setup</span><wbr><span><span>With</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="982655419%2FFunctions%2F1980898389"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ui/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="setup-with.html"><span class="token function">setupWith</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pdfViewer<span class="token operator">: </span><a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a><span class="token punctuation">, </span></span><span class="parameter ">toolBar<span class="token operator">: </span><a href="../-pdf-tool-bar/index.html">PdfToolBar</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">force<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets up the scrollbar with the given <a href="../../../core/com.bhuvaneshw.pdf/-pdf-viewer/index.html">PdfViewer</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>By Bhuvaneshwaran</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

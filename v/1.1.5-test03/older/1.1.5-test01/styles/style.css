@@ -1,0 +1,11 @@
+
+.library-name--link:before {
+    background: url("../images/logo.png");
+    background-size: contain;
+    border-radius: 6px;
+}
+
+.library-version {
+    font-size: 12px;
+    padding-top: 4px;
+}
