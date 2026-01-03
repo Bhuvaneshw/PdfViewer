@@ -30,7 +30,7 @@ dokka {
             renderVersionsNavigationOnAllPages = true
         }
         pluginsConfiguration.html {
-            customStyleSheets.from("style.css")
+            customStyleSheets.from("style.css", "dokka-style.css")
             customAssets.from("logo.png")
             footerMessage.set("By Bhuvaneshwaran")
         }
