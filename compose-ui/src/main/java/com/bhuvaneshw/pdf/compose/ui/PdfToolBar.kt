@@ -1058,14 +1058,20 @@ private fun ZoomDialog(pdfState: PdfState, onDismiss: () -> Unit) {
 @Composable
 private fun GoToPageDialog(pdfState: PdfState, onDismiss: () -> Unit) {
     var pageNumber by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
 
     val select: () -> Unit = {
         pageNumber.toIntOrNull()?.let { pdfState.pdfViewer?.goToPage(it) }
+        keyboard?.hide()
         onDismiss()
     }
 
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            keyboard?.hide()
+            onDismiss()
+        },
         title = {
             Text(
                 text = "Go to page",
@@ -1074,7 +1080,12 @@ private fun GoToPageDialog(pdfState: PdfState, onDismiss: () -> Unit) {
             )
         },
         confirmButton = { TextButton(onClick = select) { Text("Go") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(text = "Cancel") } },
+        dismissButton = {
+            TextButton(onClick = {
+                keyboard?.hide()
+                onDismiss()
+            }) { Text("Cancel") }
+        },
         text = {
             BasicTextField(
                 value = pageNumber,
@@ -1092,7 +1103,8 @@ private fun GoToPageDialog(pdfState: PdfState, onDismiss: () -> Unit) {
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 6.dp),
+                    .padding(horizontal = 6.dp)
+                    .focusRequester(focusRequester),
                 decorationBox = { textField ->
                     Box(Modifier.fillMaxWidth()) {
                         textField()
@@ -1112,6 +1124,13 @@ private fun GoToPageDialog(pdfState: PdfState, onDismiss: () -> Unit) {
             )
         }
     )
+
+    LaunchedEffect(focusRequester) {
+        // Add a small delay to ensure the text field is composed and ready for focus
+        delay(100)
+        focusRequester.requestFocus()
+        keyboard?.show()
+    }
 }
 
 @Composable
