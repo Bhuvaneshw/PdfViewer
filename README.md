@@ -13,6 +13,12 @@ A lightweight **Android PDF Viewer Library** powered by Mozilla's [PDF.js](https
 ## Demo
 You can download apk from [here](/app/release/app-release.apk)
 
+--------------------------------------
+Docs for v1.1.2 will be updated in future! Preview can be found at [https://bhuvaneshw.github.io/PdfViewer](https://bhuvaneshw.github.io/PdfViewer)
+--------------------------------------
+
+[Join Discord Server](https://discord.gg/KphXNkPBYk)
+
 ## Contents
 1. [Setup](#1-setup)<br>
    1.1. [Setup - Kotlin DSL](#11-kotlin-dsl)<br>

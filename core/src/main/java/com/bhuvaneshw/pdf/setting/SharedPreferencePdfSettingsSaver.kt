@@ -3,12 +3,24 @@ package com.bhuvaneshw.pdf.setting
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * A [PdfSettingsSaver] implementation that uses [SharedPreferences] to store settings.
+ *
+ * @param sharedPreferences The [SharedPreferences] instance to use.
+ */
 class SharedPreferencePdfSettingsSaver(
     private val sharedPreferences: SharedPreferences
 ) : PdfSettingsSaver {
 
     private val editor = sharedPreferences.edit()
 
+    /**
+     * Creates a new instance of [SharedPreferencePdfSettingsSaver].
+     *
+     * @param context The context to use.
+     * @param name The name of the shared preferences file.
+     * @param mode The operating mode.
+     */
     constructor(context: Context, name: String, mode: Int = Context.MODE_PRIVATE) : this(
         context.getSharedPreferences(name, mode)
     )

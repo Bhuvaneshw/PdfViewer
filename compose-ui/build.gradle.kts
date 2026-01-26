@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.dokka)
     id("maven-publish")
 }
 
@@ -54,6 +55,17 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":compose"))
+}
+
+dokka {
+    dokkaSourceSets.configureEach {
+        includes.from(project.files(), "module.md")
+    }
+    pluginsConfiguration.html {
+        customStyleSheets.from("../dokka/style.css", "../dokka/dokka-style.css")
+        customAssets.from("../dokka/logo.png")
+        footerMessage.set("By Bhuvaneshwaran")
+    }
 }
 
 afterEvaluate {

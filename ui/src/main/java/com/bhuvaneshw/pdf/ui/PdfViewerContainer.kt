@@ -18,23 +18,93 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import kotlin.random.Random
 
-class PdfViewerContainer : RelativeLayout {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-            : super(context, attrs, defStyleAttr)
+/**
+ * A container view that orchestrates interactions between a [PdfViewer], [PdfToolBar], and [PdfScrollBar].
+ *
+ * It manages the display of a PDF viewer, a toolbar, a scrollbar, loading indicators, and dialogs for passwords and printing.
+ *
+ * @see PdfViewer
+ * @see PdfToolBar
+ * @see PdfScrollBar
+ */
+class PdfViewerContainer @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : DrawerLayout(context, attrs, defStyleAttr) {
 
+    /**
+     * The [PdfViewer] instance contained within this layout. It is automatically detected when added as a child.
+     * @see PdfViewer
+     */
     var pdfViewer: PdfViewer? = null; private set
+
+    /**
+     * The [PdfToolBar] instance for this container. It is automatically detected when added as a child.
+     */
     var pdfToolBar: PdfToolBar? = null; private set
+
+    /**
+     * The [PdfScrollBar] instance for this container. It is automatically detected when added as a child.
+     */
     var pdfScrollBar: PdfScrollBar? = null; private set
+
+    /**
+     * The [PdfOutlineView] instance for this container. It is automatically detected when added as a child.
+     */
+    var pdfOutlineView: PdfOutlineView? = null; private set
+
+    /**
+     * A builder for creating [AlertDialog] instances used for password prompts and print dialogs.
+     * This allows for customization of the dialogs' appearance.
+     */
     var alertDialogBuilder: () -> AlertDialog.Builder = { AlertDialog.Builder(context) }
+
+    /**
+     * Determines whether the password dialog is shown when a protected PDF is loaded.
+     * Defaults to `true`.
+     * @see PdfListener.onPasswordDialogChange
+     */
     var passwordDialogEnabled: Boolean = true
+
+    /**
+     * Determines whether the print dialog is shown when printing is initiated.
+     * Defaults to `true`.
+     * @see PdfListener.onPrintProcessStart
+     */
     var printDialogEnabled: Boolean = true
 
+    /**
+     * The main view of the container, which holds the [PdfViewer], [PdfToolBar], and [PdfScrollBar].
+     */
+    val mainView = RelativeLayout(context, attrs, defStyleAttr)
+
+    init {
+        super.addView(
+            mainView,
+            0,
+            LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        )
+        lockDrawer()
+
+        addDrawerListener(object : DrawerListener {
+            override fun onDrawerOpened(drawerView: View): Unit = unlockDrawer()
+            override fun onDrawerClosed(drawerView: View): Unit = lockDrawer()
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
+    }
+
+    /**
+     * Adds a child view. This method is overridden to automatically detect and configure
+     * [PdfViewer], [PdfToolBar], and [PdfScrollBar] children.
+     */
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
         when (child) {
             is PdfViewer -> {
@@ -44,31 +114,27 @@ class PdfViewerContainer : RelativeLayout {
                 setup()
 
                 pdfToolBar?.let { toolBar ->
-                    super.addView(child, index, params.apply {
-                        if (this is LayoutParams) {
-                            addRule(BELOW, toolBar.id)
-                        }
+                    mainView.addView(child, index, params.toRelative().apply {
+                        addRule(RelativeLayout.BELOW, toolBar.id)
                     })
-                } ?: super.addView(child, index, params)
+                } ?: mainView.addView(child, index, params.toRelative())
             }
 
             is PdfScrollBar -> {
                 this.pdfScrollBar = child
                 setup()
 
-                super.addView(child, index, params.apply {
-                    if (this is LayoutParams) {
-                        addRule(ALIGN_PARENT_END)
-                        if (isInEditMode)
-                            pdfToolBar?.id?.let { addRule(BELOW, it) }
-                        child.addScrollModeChangeListener { isHorizontal ->
-                            if (isHorizontal) {
-                                addRule(ALIGN_PARENT_BOTTOM)
-                                removeRule(ALIGN_PARENT_END)
-                            } else {
-                                addRule(ALIGN_PARENT_END)
-                                removeRule(ALIGN_PARENT_BOTTOM)
-                            }
+                mainView.addView(child, index, params.toRelative().apply {
+                    addRule(RelativeLayout.ALIGN_PARENT_END)
+                    if (isInEditMode)
+                        pdfToolBar?.id?.let { addRule(RelativeLayout.BELOW, it) }
+                    child.addScrollModeChangeListener { isHorizontal ->
+                        if (isHorizontal) {
+                            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                            removeRule(RelativeLayout.ALIGN_PARENT_END)
+                        } else {
+                            addRule(RelativeLayout.ALIGN_PARENT_END)
+                            removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
                         }
                     }
                 })
@@ -78,7 +144,16 @@ class PdfViewerContainer : RelativeLayout {
                 this.pdfToolBar = child.apply {
                     if (id == NO_ID) id = Random.nextInt()
                 }
-                super.addView(child, index, params)
+                mainView.addView(child, index, params.toRelative().apply {
+                    addRule(RelativeLayout.ALIGN_PARENT_TOP)
+                })
+                pdfViewer?.let { viewer ->
+                    (viewer.layoutParams as? RelativeLayout.LayoutParams)?.addRule(
+                        RelativeLayout.BELOW,
+                        child.id
+                    )
+                    viewer.requestLayout()
+                }
                 setup()
 
                 context?.let {
@@ -87,11 +162,35 @@ class PdfViewerContainer : RelativeLayout {
                 }
             }
 
-            else -> super.addView(child, index, params)
+            is PdfOutlineView -> {
+                this.pdfOutlineView = child
+                super.addView(child, index, (params as LayoutParams).apply {
+                    gravity = GravityCompat.START
+                })
+                child.setOnClickListener {
+                    // empty click listener to prevent click event delegate to underlying views
+                }
+                setup()
+            }
+
+            else -> if (child != mainView) {
+                mainView.addView(child, index, params.toRelative())
+            } else {
+                super.addView(child, index, params)
+            }
         }
     }
 
-    fun setAsLoadingIndicator(view: View) {
+    /**
+     * Designates a view to be shown as a loading indicator while a PDF is loading.
+     *
+     * @param view The view to show and hide based on the loading state.
+     * @param showBelowToolbar Whether to show loading indicator below [PdfToolBar] if toolbar is found.
+     *
+     * @see PdfListener.onPageLoadStart
+     * @see PdfListener.onPageLoadSuccess
+     */
+    fun setAsLoadingIndicator(view: View, showBelowToolbar: Boolean = true) {
         pdfViewer?.addListener(object : PdfListener {
             override fun onPageLoadStart() {
                 view.visibility = VISIBLE
@@ -101,13 +200,32 @@ class PdfViewerContainer : RelativeLayout {
                 view.visibility = GONE
             }
         })
+
+        if (showBelowToolbar) pdfToolBar?.let {
+            val params = view.layoutParams.toRelative()
+            params.addRule(RelativeLayout.BELOW, it.id)
+        }
     }
 
     private fun setup() {
         pdfViewer?.let { viewer ->
             pdfToolBar?.setupWith(viewer)
             pdfScrollBar?.setupWith(viewer, pdfToolBar)
+            pdfOutlineView?.apply {
+                setupWith(viewer)
+                pdfToolBar?.openOutlineView = { openDrawer(GravityCompat.START) }
+            }
         }
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun lockDrawer() {
+        setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun unlockDrawer() {
+        setDrawerLockMode(LOCK_MODE_UNLOCKED)
     }
 
     @Suppress("NOTHING_TO_INLINE", "FunctionName")
@@ -220,6 +338,9 @@ class PdfViewerContainer : RelativeLayout {
         }
     }
 
+    /**
+     * Immediately shows the [PdfToolBar] if it exists.
+     */
     fun showToolBar() {
         pdfToolBar?.let {
             pdfViewer?.let { viewer ->
@@ -228,14 +349,17 @@ class PdfViewerContainer : RelativeLayout {
 
             it.translationY = 0f
             pdfViewer?.layoutParams.let { params ->
-                if (params is LayoutParams) {
-                    params.addRule(BELOW, it.id)
+                if (params is RelativeLayout.LayoutParams) {
+                    params.addRule(RelativeLayout.BELOW, it.id)
                     pdfViewer?.requestLayout()
                 }
             }
         }
     }
 
+    /**
+     * Immediately hides the [PdfToolBar] if it exists.
+     */
     fun hideToolBar() {
         pdfToolBar?.let {
             pdfViewer?.let { viewer ->
@@ -244,14 +368,21 @@ class PdfViewerContainer : RelativeLayout {
 
             it.translationY = -it.height.toFloat()
             pdfViewer?.layoutParams.let { params ->
-                if (params is LayoutParams) {
-                    params.removeRule(BELOW)
+                if (params is RelativeLayout.LayoutParams) {
+                    params.removeRule(RelativeLayout.BELOW)
                     pdfViewer?.requestLayout()
                 }
             }
         }
     }
 
+    /**
+     * Animates the showing or hiding of the [PdfToolBar].
+     *
+     * @param show `true` to show the toolbar, `false` to hide it.
+     * @param animDuration The duration of the animation in milliseconds.
+     * @param onEnd A callback to invoke when the animation ends.
+     */
     fun animateToolBar(
         show: Boolean,
         animDuration: Long = 150L,
@@ -263,18 +394,18 @@ class PdfViewerContainer : RelativeLayout {
             }
 
             toolBar.animate()
-                .translationY(if (show) 0f else -height.toFloat())
+                .translationY(if (show) 0f else -toolBar.height.toFloat())
                 .setDuration(animDuration)
                 .start()
 
             pdfViewer?.layoutParams.let { params ->
-                if (params is LayoutParams) {
+                if (params is RelativeLayout.LayoutParams) {
                     pdfViewer?.animate()
                         ?.translationY(if (show) toolBar.height.toFloat() else -toolBar.height.toFloat())
                         ?.setDuration(animDuration)
                         ?.onAnimateEnd {
-                            if (show) params.addRule(BELOW, toolBar.id)
-                            else params.removeRule(BELOW)
+                            if (show) params.addRule(RelativeLayout.BELOW, toolBar.id)
+                            else params.removeRule(RelativeLayout.BELOW)
                             pdfViewer?.requestLayout()
                             pdfViewer?.translationY = 0f
                             onEnd?.invoke()
@@ -283,6 +414,22 @@ class PdfViewerContainer : RelativeLayout {
                 }
             }
         }
+    }
+
+    /**
+     * Handles the back press event to dismiss UI elements managed by this view.
+     *
+     * Closes outline view drawer.
+     *
+     * @return `true` if the event was handled, `false` otherwise.
+     */
+    fun handleBackPressed(): Boolean {
+        if (isDrawerOpen(GravityCompat.START)) {
+            closeDrawer(GravityCompat.START)
+            return true
+        }
+
+        return false
     }
 
 }
@@ -296,4 +443,14 @@ private fun ViewPropertyAnimator.onAnimateEnd(onEnd: () -> Unit): ViewPropertyAn
             onEnd()
         }
     })
+}
+
+private fun ViewGroup.LayoutParams?.toRelative(): RelativeLayout.LayoutParams {
+    if (this == null) {
+        return RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
+    return this as? RelativeLayout.LayoutParams ?: RelativeLayout.LayoutParams(this)
 }

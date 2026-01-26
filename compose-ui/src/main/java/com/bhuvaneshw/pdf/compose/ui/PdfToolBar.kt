@@ -1,6 +1,5 @@
 package com.bhuvaneshw.pdf.compose.ui
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -58,6 +57,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,10 +67,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -86,17 +86,43 @@ import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
-import com.bhuvaneshw.pdf.compose.MatchState
 import com.bhuvaneshw.pdf.compose.PdfState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
+/**
+ * A composable function that provides a toolbar for the PDF viewer that provides various controls
+ * for navigation, finding text, editing, and more.
+ *
+ * @param pdfState The state of the PDF viewer.
+ * @param title The title to be displayed on the toolbar.
+ * @param modifier The modifier to be applied to the toolbar.
+ * @param toolBarState The state of the toolbar.
+ * @param onBack A lambda to be invoked when the back button is pressed.
+ * @param fileName A lambda that returns the name of the file.
+ * @param contentColor The color of the content on the toolbar.
+ * @param backIcon A composable that represents the back icon.
+ * @param showEditor A boolean to indicate whether to show the editor tools.
+ * @param pickColor A lambda to be invoked when a color is picked.
+ * @param dropDownMenu A composable that represents the dropdown menu.
+ * @param onPlaceIcons A composable that places editor and find icons. Additional icons can be added using this.
+ * @param openOutlineView A lambda invoked to open the outline view.
+ *
+ * @see PdfState
+ * @see PdfToolBarState
+ * @see PdfToolBarBackIcon
+ * @see PickColor
+ * @see PdfToolBarMenu
+ * @see com.bhuvaneshw.pdf.compose.PdfViewer
+ */
 @Composable
 fun PdfToolBar(
     pdfState: PdfState,
     title: String,
     modifier: Modifier = Modifier,
-    toolBarState: PdfToolBarState = rememberToolBarState(),
+    toolBarState: PdfToolBarState = rememberPdfToolBarState(),
     onBack: (() -> Unit)? = null,
     fileName: (() -> String)? = null,
     contentColor: Color? = null,
@@ -104,7 +130,10 @@ fun PdfToolBar(
     showEditor: Boolean = false,
     pickColor: PickColor? = null,
     dropDownMenu: PdfToolBarMenu = defaultToolBarDropDownMenu(),
+    onPlaceIcons: PlaceIcons = defaultIconsPosition(),
+    openOutlineView: (() -> Unit)? = null,
 ) {
+    val scope = rememberCoroutineScope()
     val toolBarScope = PdfToolBarScope(
         pdfState = pdfState,
         toolBarState = toolBarState,
@@ -145,9 +174,13 @@ fun PdfToolBar(
         )
 
         if (showEditor) AnimatedVisibility(
-            visible = toolBarState.isEditorOpen,
+            visible = toolBarState.withBackProgress.isEditorOpen,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
+            modifier = Modifier.animateBackProgress(
+                backProgress = toolBarState.backProgress,
+                enabled = !toolBarState.withBackProgress.isEditorInnerBarOpen,
+            ),
         ) {
             toolBarScope.Editor(
                 contentColor = contentColor ?: Color.Unspecified,
@@ -157,9 +190,10 @@ fun PdfToolBar(
         }
 
         AnimatedVisibility(
-            visible = toolBarState.isFindBarOpen,
+            visible = toolBarState.withBackProgress.isFindBarOpen,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
+            modifier = Modifier.animateBackProgress(toolBarState.backProgress),
         ) {
             toolBarScope.FindBar(
                 contentColor = contentColor ?: Color.Unspecified,
@@ -167,24 +201,27 @@ fun PdfToolBar(
             )
         }
 
-        if (!toolBarScope.toolBarState.isFindBarOpen && !toolBarState.isEditorOpen) {
-            if (showEditor) {
+        if (!toolBarScope.toolBarState.withBackProgress.isFindBarOpen && !toolBarState.withBackProgress.isEditorOpen) {
+            onPlaceIcons({
+                if (showEditor) {
+                    toolBarScope.ToolBarIcon(
+                        icon = Icons.Default.Edit,
+                        contentDescription = "Edit",
+                        isEnabled = !pdfState.loadingState.isLoading,
+                        onClick = { toolBarState.isEditorOpen = true },
+                        tint = contentColor ?: Color.Unspecified,
+                    )
+                }
+            }, {
                 toolBarScope.ToolBarIcon(
-                    icon = Icons.Default.Edit,
-                    contentDescription = "Edit",
+                    icon = Icons.Default.Search,
+                    contentDescription = "Find",
                     isEnabled = !pdfState.loadingState.isLoading,
-                    onClick = { toolBarState.isEditorOpen = true },
+                    onClick = { toolBarState.isFindBarOpen = true },
                     tint = contentColor ?: Color.Unspecified,
                 )
-            }
+            })
 
-            toolBarScope.ToolBarIcon(
-                icon = Icons.Default.Search,
-                contentDescription = "Search",
-                isEnabled = !pdfState.loadingState.isLoading,
-                onClick = { toolBarState.isFindBarOpen = true },
-                tint = contentColor ?: Color.Unspecified,
-            )
             Box {
                 var showMoreOptions by remember { mutableStateOf(false) }
 
@@ -196,6 +233,7 @@ fun PdfToolBar(
                 var showAlignMode by remember { mutableStateOf(false) }
                 var showSnapPage by remember { mutableStateOf(false) }
                 var showDocumentProperties by remember { mutableStateOf(false) }
+                var showAttachments by remember { mutableStateOf(false) }
                 val onDismiss = { showMoreOptions = false }
 
                 toolBarScope.ToolBarIcon(
@@ -312,6 +350,24 @@ fun PdfToolBar(
                                     onDismiss()
                                 }
                             )
+                            openOutlineView?.let {
+                                DropdownMenuItem(
+                                    menuItem = PdfToolBarMenuItem.OUTLINE,
+                                    filteredItem = filteredItem,
+                                    onClick = {
+                                        openOutlineView()
+                                        onDismiss()
+                                    }
+                                )
+                            }
+                            DropdownMenuItem(
+                                menuItem = PdfToolBarMenuItem.ATTACHMENTS,
+                                filteredItem = filteredItem,
+                                onClick = {
+                                    showAttachments = true
+                                    onDismiss()
+                                }
+                            )
                         }
                     }
                 }
@@ -349,8 +405,21 @@ fun PdfToolBar(
                         fileName = fileName,
                         onDismiss = { showDocumentProperties = false },
                     )
+                if (showAttachments)
+                    AttachmentsDialog(
+                        pdfState = pdfState,
+                        scope = scope,
+                        onDismiss = { showAttachments = false },
+                        contentColor = contentColor,
+                    )
             }
         }
+    }
+}
+
+private fun Modifier.animateBackProgress(backProgress: Float, enabled: Boolean = true): Modifier {
+    return graphicsLayer {
+        translationX = if (enabled) size.width * backProgress else 0f
     }
 }
 
@@ -385,37 +454,45 @@ private fun PdfToolBarScope.Editor(
         horizontalArrangement = Arrangement.End
     ) {
         AnimatedVisibility(
-            visible = toolBarState.isTextHighlighterOn,
+            visible = toolBarState.withBackProgress.isTextHighlighterOn,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateBackProgress(toolBarState.backProgress),
         ) {
             HighlightOptions(popupY, contentColor)
         }
 
         AnimatedVisibility(
-            visible = toolBarState.isEditorFreeTextOn,
+            visible = toolBarState.withBackProgress.isEditorFreeTextOn,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateBackProgress(toolBarState.backProgress),
         ) {
             FreeTextOptions(popupY, contentColor, pickColor)
         }
 
         AnimatedVisibility(
-            visible = toolBarState.isEditorInkOn,
+            visible = toolBarState.withBackProgress.isEditorInkOn,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateBackProgress(toolBarState.backProgress),
         ) {
             InkOptions(popupY, contentColor, pickColor)
         }
 
         AnimatedVisibility(
-            visible = toolBarState.isEditorStampOn,
+            visible = toolBarState.withBackProgress.isEditorStampOn,
             enter = slideIn { IntOffset(it.width / 25, 0) } + fadeIn(),
             exit = slideOut { IntOffset(it.width / 50, 0) } + fadeOut(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateBackProgress(toolBarState.backProgress),
         ) {
             StampOptions(contentColor)
         }
@@ -437,7 +514,10 @@ private fun PdfToolBarScope.Editor(
 
 @Suppress("NOTHING_TO_INLINE")
 private inline fun PdfToolBarState.isNothingOn(): Boolean {
-    return !(isTextHighlighterOn || isEditorFreeTextOn || isEditorInkOn || isEditorStampOn)
+    return !withBackProgress.isTextHighlighterOn
+            && !withBackProgress.isEditorFreeTextOn
+            && !withBackProgress.isEditorInkOn
+            && !withBackProgress.isEditorStampOn
 }
 
 @Composable
@@ -540,7 +620,7 @@ private fun PdfToolBarScope.FreeTextOptions(
             selectedColor = pdfState.editor.freeFontColor,
             borderColor = contentColor,
             onClick = {
-                pickColor?.invoke { color ->
+                pickColor?.invoke(pdfState.editor.freeFontColor) { color ->
                     pdfState.pdfViewer?.editor?.freeFontColor = color.toArgb()
                 }
             },
@@ -598,7 +678,7 @@ private fun PdfToolBarScope.InkOptions(
             selectedColor = pdfState.editor.inkColor,
             borderColor = contentColor,
             onClick = {
-                pickColor?.invoke { color ->
+                pickColor?.invoke(pdfState.editor.inkColor) { color ->
                     pdfState.pdfViewer?.editor?.inkColor = color.toArgb()
                 }
             },
@@ -625,6 +705,14 @@ private fun PdfToolBarScope.StampOptions(contentColor: Color) {
         Spacer(Modifier.weight(1f))
 
         UndoRedoButtons()
+
+        ToolBarIcon(
+            painter = painterResource(R.drawable.outline_add_24),
+            contentDescription = "Add Stamp",
+            isEnabled = true,
+            tint = MaterialTheme.colorScheme.onBackground,
+            onClick = { pdfState.pdfViewer?.editor?.clickAddStamp() }
+        )
     }
 }
 
@@ -828,17 +916,9 @@ private fun ColorItem(
 
 @Composable
 private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
-    var searchTerm by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
-    val context = LocalContext.current
 
-    LaunchedEffect(pdfState.matchState) {
-        pdfState.matchState.run {
-            if (this is MatchState.Completed && !found && searchTerm.isNotEmpty())
-                Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
-        }
-    }
     DisposableEffect(Unit) {
         onDispose {
             pdfState.pdfViewer?.findController?.stopFind()
@@ -848,12 +928,12 @@ private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
 
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         BasicTextField(
-            value = searchTerm,
-            onValueChange = { searchTerm = it },
+            value = toolBarState.findInputText,
+            onValueChange = { toolBarState.findInputText = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = {
-                if (searchTerm.isNotEmpty()) {
-                    pdfState.pdfViewer?.findController?.startFind(searchTerm)
+                if (toolBarState.findInputText.isNotEmpty()) {
+                    pdfState.pdfViewer?.findController?.startFind(toolBarState.findInputText)
                     keyboard?.hide()
                 }
             }),
@@ -868,7 +948,7 @@ private fun PdfToolBarScope.FindBar(contentColor: Color, modifier: Modifier) {
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
                     textField()
                     this@Row.AnimatedVisibility(
-                        visible = searchTerm.isEmpty(),
+                        visible = toolBarState.findInputText.isEmpty(),
                         enter = slideIn { IntOffset(0, -it.height) } + fadeIn(),
                         exit = slideOut { IntOffset(0, -it.height) } + fadeOut(),
                     ) {
@@ -1303,6 +1383,44 @@ private fun DocumentPropertiesDialog(
     )
 }
 
+@Composable
+private fun AttachmentsDialog(
+    pdfState: PdfState,
+    scope: CoroutineScope,
+    onDismiss: () -> Unit,
+    contentColor: Color? = null,
+) {
+    val attachments = pdfState.pdfViewer?.attachments ?: run { onDismiss(); return }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "Attachments",
+                style = MaterialTheme.typography.titleLarge,
+            )
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(text = "Close") } },
+        text = {
+            if (attachments.isEmpty()) {
+                Text(
+                    text = "No attachments!", modifier = Modifier.padding(8.dp),
+                    color = contentColor ?: Color.Unspecified,
+                )
+            } else {
+                PdfOutlineLazyColumn(
+                    items = attachments,
+                    onItemClick = {
+                        scope.launch { pdfState.pdfViewer?.ui?.performSidebarTreeItemClick(it.id) }
+                    },
+                    arrowResId = R.drawable.outline_download_24,
+                    contentColor = contentColor,
+                )
+            }
+        }
+    )
+}
+
 private fun LazyListScope.propertyItem(name: String, value: String) {
     item {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -1405,9 +1523,34 @@ internal fun defaultToolBarDropDownMenu(): PdfToolBarMenu {
     }
 }
 
+internal fun defaultIconsPosition(): PlaceIcons = { editorIcon, findIcon ->
+    editorIcon()
+    findIcon()
+}
+
+/**
+ * A typealias for a composable that represents the back icon on the toolbar.
+ */
 typealias PdfToolBarBackIcon = @Composable PdfToolBarScope.() -> Unit
+
+/**
+ * A typealias for a composable that represents the dropdown menu on the toolbar.
+ *
+ * @see PdfToolBarMenuItem
+ */
 typealias PdfToolBarMenu = @Composable (onDismiss: () -> Unit, defaultMenus: @Composable (filtered: List<PdfToolBarMenuItem>) -> Unit) -> Unit
-typealias PickColor = ((color: Color) -> Unit) -> Unit
+
+/**
+ * A typealias for a function that picks a color.
+ */
+typealias PickColor = (previousColor: Color, (color: Color) -> Unit) -> Unit
+
+/**
+ * A typealias for a function that places editor and find icons.
+ * @param editorIcon A composable that represents the editor icon.
+ * @param findIcon A composable that represents the find icon.
+ */
+typealias PlaceIcons = @Composable (editorIcon: @Composable () -> Unit, findIcon: @Composable () -> Unit) -> Unit
 
 @Composable
 private fun DropdownMenuItem(

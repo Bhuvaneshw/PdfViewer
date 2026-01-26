@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.webkit.ConsoleMessage
 import android.webkit.RenderProcessGoneDetail
+import android.webkit.URLUtil
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
@@ -81,6 +82,7 @@ internal fun PdfViewer.PdfJsWebView() = WebView(context).apply {
             }
         }
 
+        @Suppress("OVERRIDE_DEPRECATION")
         override fun onReceivedError(
             view: WebView?,
             errorCode: Int,
@@ -124,7 +126,7 @@ internal fun PdfViewer.PdfJsWebView() = WebView(context).apply {
                 ?.shouldInterceptRequest(uri)
         }
 
-        @Suppress("deprecation")
+        @Suppress("OVERRIDE_DEPRECATION")
         override fun shouldInterceptRequest(
             view: WebView?,
             url: String?
@@ -148,7 +150,9 @@ internal fun PdfViewer.PdfJsWebView() = WebView(context).apply {
         }
     }
 
-    setDownloadListener { url, _, _, _, _ ->
-        webInterface.getBase64StringFromBlobUrl(url)?.let { evaluateJavascript(it, null) }
+    setDownloadListener { url, _, contentDisposition, mimetype, _ ->
+        val fileName = URLUtil.guessFileName(url, contentDisposition, mimetype)
+        webInterface.getBase64StringFromBlobUrl(url, fileName, mimetype)
+            ?.let { evaluateJavascript(it, null) }
     }
 }

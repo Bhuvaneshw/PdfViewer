@@ -67,3 +67,9 @@
 #viewer ::-moz-selection {
     background: var(--selection-color, rgba(0 0 255 / 0.25));
 }
+
+#editorStampParamsToolbar {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}

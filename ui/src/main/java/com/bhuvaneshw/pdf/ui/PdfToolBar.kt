@@ -22,18 +22,29 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bhuvaneshw.pdf.PdfDocumentProperties
 import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.PdfViewer.PageSpreadMode
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
+/**
+ * A toolbar for the PDF viewer that provides various controls for navigation, finding text, editing, and more.
+ *
+ * @see com.bhuvaneshw.pdf.PdfViewer
+ */
 open class PdfToolBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -43,56 +54,149 @@ open class PdfToolBar @JvmOverloads constructor(
     private val layoutInflater = LayoutInflater.from(context)
     protected lateinit var pdfViewer: PdfViewer; private set
 
+    /**
+     * A callback to be invoked when the back button is pressed and the toolbar has handled all its internal back press events.
+     */
     var onBack: (() -> Unit)? = null
+
+    /**
+     * A factory for creating [AlertDialog.Builder] instances.
+     * This can be customized to provide a different dialog style.
+     */
     var alertDialogBuilder: () -> AlertDialog.Builder = { AlertDialog.Builder(context) }
+
+    /**
+     * A function to show a [Dialog].
+     * This can be customized to handle dialog showing differently.
+     */
     var showDialog: (Dialog) -> Unit = { dialog -> dialog.show() }
     private var fileName: String? = null
 
     @SuppressLint("InflateParams")
     private val root = layoutInflater.inflate(R.layout.pdf_toolbar, null)
 
+    /**
+     * The color of the toolbar's content, including icons and text.
+     */
     @ColorInt
     var contentColor: Int = Color.BLACK
         set(value) {
             field = value
             applyContentColor(value)
         }
+
+    /**
+     * The background color of the popups shown by the toolbar.
+     */
     var popupBackgroundColor: Int = Color.WHITE
+
+    /**
+     * A function to be invoked when a color needs to be picked. This is used for editor features like setting font color or ink color.
+     * The function should provide a way for the user to select a color and then invoke the `onPickColor` callback with the selected color.
+     */
     var pickColor: ((onPickColor: (Int) -> Unit) -> Unit)? = null
 
+    /**
+     * A lambda invoked to open the outline view.
+     */
+    var openOutlineView: (() -> Unit)? = null
+
+    /** The back button view. */
     val back: ImageView = root.findViewById(R.id.back)
+
+    /** The title text view. */
     val title: TextView = root.findViewById(R.id.title)
+
+    /** The find button view. */
     val find: ImageView = root.findViewById(R.id.find)
+
+    /** The more options button view. */
     val more: ImageView = root.findViewById(R.id.more)
+
+    /** The find bar layout. */
     val findBar: LinearLayout = root.findViewById(R.id.find_bar)
+
+    /** The EditText for entering find queries. */
     val findEditText: EditText = root.findViewById(R.id.find_edit_text)
+
+    /** The progress bar shown during a find operation. */
     val findProgressBar: ProgressBar = root.findViewById(R.id.find_progress_bar)
+
+    /** The TextView that shows the current find result info (e.g., "1 of 5"). */
     val findInfo: TextView = root.findViewById(R.id.find_info)
+
+    /** The button to go to the previous find result. */
     val findPrevious: ImageView = root.findViewById(R.id.find_previous)
+
+    /** The button to go to the next find result. */
     val findNext: ImageView = root.findViewById(R.id.find_next)
+
+    /** The edit button view to show the editor bar. */
     val edit: ImageView = root.findViewById(R.id.edit)
+
+    /** The main editor bar layout. */
     val editorBar: LinearLayout = root.findViewById(R.id.editor_bar)
+
+    /** The editor bar for highlighting. */
     val highlightBar: LinearLayout = root.findViewById(R.id.highlight_bar)
+
+    /** The editor bar for free text. */
     val freeTextBar: LinearLayout = root.findViewById(R.id.free_text_bar)
+
+    /** The editor bar for ink drawing. */
     val inkBar: LinearLayout = root.findViewById(R.id.ink_bar)
+
+    /** The editor bar for stamps/images. */
     val stampBar: LinearLayout = root.findViewById(R.id.stamp_bar)
+
+    /** The undo button view. */
     val undo: ImageView = root.findViewById(R.id.undo)
+
+    /** The redo button view. */
     val redo: ImageView = root.findViewById(R.id.redo)
+
+    /** The title of the current editor mode. */
     val editTitle: TextView = root.findViewById(R.id.edit_title)
+
+    /** The highlight tool button. */
     val highlight: ImageView = root.findViewById(R.id.highlight)
+
+    /** The free text tool button. */
     val freeText: ImageView = root.findViewById(R.id.free_text)
+
+    /** The ink tool button. */
     val ink: ImageView = root.findViewById(R.id.ink)
+
+    /** The stamp tool button. */
     val stamp: ImageView = root.findViewById(R.id.stamp)
 
+    /** The switch to toggle visibility of all highlights. */
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     val showAllHighlights: Switch = root.findViewById(R.id.show_all_highlights)
+
+    /** The button to adjust highlight thickness. */
     val highlightThickness: ImageView = root.findViewById(R.id.highlight_thickness)
+
+    /** The view to show and change the highlight color. */
     val highlightColor: ColorItemView = root.findViewById(R.id.highlight_color)
+
+    /** The button to adjust free text font size. */
     val freeFontSize: ImageView = root.findViewById(R.id.free_font_size)
+
+    /** The view to show and change the free text font color. */
     val freeFontColor: ColorItemView = root.findViewById(R.id.free_font_color)
+
+    /** The button to adjust ink thickness. */
     val inkThickness: ImageView = root.findViewById(R.id.ink_thickness)
+
+    /** The button to adjust ink opacity. */
     val inkOpacity: ImageView = root.findViewById(R.id.ink_opacity)
+
+    /** The view to show and change the ink color. */
     val inkColor: ColorItemView = root.findViewById(R.id.ink_color)
+
+    /** The button to open file picker */
+    val addStamp: ImageView = root.findViewById(R.id.add_stamp)
 
     init {
         initListeners()
@@ -117,6 +221,13 @@ open class PdfToolBar @JvmOverloads constructor(
         addView(root)
     }
 
+    /**
+     * Sets up the toolbar with the given [PdfViewer].
+     * This must be called to make the toolbar functional.
+     *
+     * @param pdfViewer The [PdfViewer] instance.
+     * @see com.bhuvaneshw.pdf.PdfViewer
+     */
     @SuppressLint("SetTextI18n")
     fun setupWith(pdfViewer: PdfViewer) {
         if (this::pdfViewer.isInitialized && this.pdfViewer == pdfViewer) return
@@ -154,8 +265,6 @@ open class PdfToolBar @JvmOverloads constructor(
             }
 
             override fun onFindMatchComplete(found: Boolean) {
-                if (!found)
-                    Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
                 findProgressBar.visibility = GONE
             }
 
@@ -174,18 +283,40 @@ open class PdfToolBar @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Sets the file name of the PDF.
+     *
+     * @param name The file name.
+     * @param setAsTitle If true, the file name will also be set as the toolbar title.
+     */
     fun setFileName(name: String, setAsTitle: Boolean = true) {
         this.fileName = name
         if (setAsTitle)
             setTitle(name)
     }
 
+    /**
+     * Sets the title of the toolbar.
+     *
+     * @param title The title text.
+     */
     fun setTitle(title: String) {
         this.title.text = title
     }
 
+    /**
+     * Checks if the find bar is currently visible.
+     *
+     * @return True if the find bar is visible, false otherwise.
+     */
     fun isFindBarVisible() = findBar.isVisible
 
+    /**
+     * Shows or hides the find bar.
+     *
+     * @param visible True to show the find bar, false to hide it.
+     * @see com.bhuvaneshw.pdf.FindController
+     */
     fun setFindBarVisible(visible: Boolean) {
         findBar.visibility = if (visible) VISIBLE else GONE
         findEditText.setText("")
@@ -198,6 +329,12 @@ open class PdfToolBar @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Shows or hides the main editor bar.
+     *
+     * @param visible True to show the editor bar, false to hide it.
+     * @see com.bhuvaneshw.pdf.PdfEditor
+     */
     fun setEditorBarVisible(visible: Boolean) {
         editorBar.visibility = if (visible) VISIBLE else GONE
         setEditorMainIconsVisible(mainIconsVisible = true, undoRedoVisible = false)
@@ -213,8 +350,18 @@ open class PdfToolBar @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Checks if the main editor bar is currently visible.
+     *
+     * @return True if the editor bar is visible, false otherwise.
+     */
     fun isEditorBarVisible() = editorBar.isVisible
 
+    /**
+     * Shows or hides the highlight editor bar.
+     *
+     * @param visible True to show the highlight bar, false to hide it.
+     */
     @SuppressLint("SetTextI18n")
     fun setHighlightBarVisible(visible: Boolean) {
         editTitle.text = "Highlight"
@@ -228,8 +375,18 @@ open class PdfToolBar @JvmOverloads constructor(
         setEditorMainIconsVisible(mainIconsVisible = false, undoRedoVisible = true)
     }
 
+    /**
+     * Checks if the highlight editor bar is currently visible.
+     *
+     * @return True if the highlight bar is visible, false otherwise.
+     */
     fun isHighlightBarVisible() = highlightBar.isVisible
 
+    /**
+     * Shows or hides the free text editor bar.
+     *
+     * @param visible True to show the free text bar, false to hide it.
+     */
     @SuppressLint("SetTextI18n")
     fun setFreeTextBarVisible(visible: Boolean) {
         editTitle.text = "Text"
@@ -242,8 +399,18 @@ open class PdfToolBar @JvmOverloads constructor(
         setEditorMainIconsVisible(mainIconsVisible = false, undoRedoVisible = true)
     }
 
+    /**
+     * Checks if the free text editor bar is currently visible.
+     *
+     * @return True if the free text bar is visible, false otherwise.
+     */
     fun isFreeTextBarVisible() = freeTextBar.isVisible
 
+    /**
+     * Shows or hides the ink editor bar.
+     *
+     * @param visible True to show the ink bar, false to hide it.
+     */
     @SuppressLint("SetTextI18n")
     fun setInkBarVisible(visible: Boolean) {
         editTitle.text = "Draw"
@@ -257,8 +424,18 @@ open class PdfToolBar @JvmOverloads constructor(
         setEditorMainIconsVisible(mainIconsVisible = false, undoRedoVisible = true)
     }
 
+    /**
+     * Checks if the ink editor bar is currently visible.
+     *
+     * @return True if the ink bar is visible, false otherwise.
+     */
     fun isInkBarVisible() = inkBar.isVisible
 
+    /**
+     * Shows or hides the stamp editor bar.
+     *
+     * @param visible True to show the stamp bar, false to hide it.
+     */
     @SuppressLint("SetTextI18n")
     fun setStampBarVisible(visible: Boolean) {
         editTitle.text = "Add/Edit Images"
@@ -270,6 +447,11 @@ open class PdfToolBar @JvmOverloads constructor(
         setEditorMainIconsVisible(mainIconsVisible = false, undoRedoVisible = true)
     }
 
+    /**
+     * Checks if the stamp editor bar is currently visible.
+     *
+     * @return True if the stamp bar is visible, false otherwise.
+     */
     fun isStampBarVisible() = stampBar.isVisible
 
     @SuppressLint("SetTextI18n")
@@ -302,7 +484,7 @@ open class PdfToolBar @JvmOverloads constructor(
             state.isEditorFreeTextOn -> setFreeTextBarVisible(true)
             state.isEditorInkOn -> setInkBarVisible(true)
             state.isEditorStampOn -> setStampBarVisible(true)
-            else -> setEditorBarVisible(true)
+            else -> setEditorBarVisible(isEditorBarVisible())
         }
     }
 
@@ -509,8 +691,27 @@ open class PdfToolBar @JvmOverloads constructor(
                 inkColor.color = color
             }
         }
+
+        addStamp.setOnClickListener {
+            pdfViewer.editor.clickAddStamp()
+        }
     }
 
+    /**
+     * Handles the back press event to dismiss UI elements managed by this view in a specific order.
+     *
+     * This function should be called when the user presses the back button. It determines
+     * which UI element to close based on a priority order. For instance, an active editor tool
+     * is closed before the editor itself.
+     *
+     * The order of closing is:
+     * 1. Active editor tool (highlighter, free text, ink, stamp)
+     * 2. Annotation editor
+     * 3. Find bar
+     *
+     * @return `true` if the back press was consumed and a UI element was closed, `false` otherwise.
+     *         If `false` is returned, the caller should handle the back press further (e.g., by closing the screen).
+     */
     fun handleBackPressed(): Boolean {
         when {
             isHighlightBarVisible() -> {
@@ -553,6 +754,12 @@ open class PdfToolBar @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Handles a click on a menu item in the "more" popup menu.
+     *
+     * @param item The clicked menu item.
+     * @return True if the click was handled, false otherwise.
+     */
     protected open fun handlePopupMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             PdfToolBarMenuItem.DOWNLOAD.id -> pdfViewer.downloadFile()
@@ -566,15 +773,30 @@ open class PdfToolBar @JvmOverloads constructor(
             PdfToolBarMenuItem.ALIGN_MODE.id -> showAlignModeDialog()
             PdfToolBarMenuItem.SNAP_PAGE.id -> showSnapPageDialog()
             PdfToolBarMenuItem.PROPERTIES.id -> showPropertiesDialog()
+            PdfToolBarMenuItem.OUTLINE.id -> openOutlineView?.invoke()
+            PdfToolBarMenuItem.ATTACHMENTS.id -> showAttachmentsDialog()
         }
 
         return item.itemId < PdfToolBarMenuItem.entries.size
     }
 
+    /**
+     * Creates and returns the "more" options [PopupMenu].
+     *
+     * @param anchorView The view to which the popup menu should be anchored.
+     * @return The created [PopupMenu].
+     */
     protected open fun getPopupMenu(anchorView: View): PopupMenu {
         return addDefaultMenus(PopupMenu(context, anchorView))
     }
 
+    /**
+     * Adds the default menu items to the given [PopupMenu].
+     *
+     * @param popupMenu The [PopupMenu] to add items to.
+     * @param filter A filter to conditionally add menu items.
+     * @return The modified [PopupMenu].
+     */
     protected open fun addDefaultMenus(
         popupMenu: PopupMenu,
         filter: (menuItem: PdfToolBarMenuItem) -> Boolean = { true },
@@ -601,6 +823,9 @@ open class PdfToolBar @JvmOverloads constructor(
             addMenu("Align Mode", PdfToolBarMenuItem.ALIGN_MODE, filter)
             addMenu("Snap Page", PdfToolBarMenuItem.SNAP_PAGE, filter)
             addMenu("Properties", PdfToolBarMenuItem.PROPERTIES, filter)
+            if (openOutlineView != null)
+                addMenu("Outline", PdfToolBarMenuItem.OUTLINE, filter)
+            addMenu("Attachments", PdfToolBarMenuItem.ATTACHMENTS, filter)
         }
     }
 
@@ -845,6 +1070,53 @@ open class PdfToolBar @JvmOverloads constructor(
 
         return setView(root)
     }
+
+    private fun showAttachmentsDialog() {
+        val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        alertDialogBuilder()
+            .setTitle("Attachments")
+            .let {
+                pdfViewer.attachments?.let { properties ->
+                    it.setAttachmentsView(properties, scope)
+                } ?: it.setMessage("Attachments not loaded yet!")
+            }
+            .setPositiveButton("Close") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun AlertDialog.Builder.setAttachmentsView(
+        attachments: List<SideBarTreeItem>,
+        scope: CoroutineScope
+    ): AlertDialog.Builder {
+        if (attachments.isEmpty()) {
+            return setView(TextView(context).apply {
+                text = "No Attachments!"
+                setTextColor(contentColor)
+                setPadding(108, 44, 44, 0)
+            })
+        }
+
+        val root = RecyclerView(context).apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = OutlineAdapter(
+                contentColor = contentColor,
+                onItemClick = { scope.launch { pdfViewer.ui.performSidebarTreeItemClick(it.id) } },
+                arrowResId = R.drawable.outline_download_24
+            ).also {
+                it.setOutlineItems(attachments)
+            }
+            setPadding(44, 44, 44, 0)
+        }
+
+        return setView(root)
+    }
+
 }
 
 @Suppress("NOTHING_TO_INLINE")

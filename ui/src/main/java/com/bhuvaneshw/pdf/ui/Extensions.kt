@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.graphics.ColorUtils
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -81,7 +82,7 @@ internal fun Long.formatToSize(): String {
 internal fun String.formatToDate(): String {
     val cleanDate = if (this.startsWith("D:")) this.substring(2) else this
     if (cleanDate.length < 14) return this
-    val rawDate = cleanDate.substring(0, 14)
+    val rawDate = cleanDate.take(14)
 
     val parser = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
     val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a", Locale.getDefault())
@@ -131,4 +132,44 @@ internal inline fun Float.tryCoerceIn(min: Float, max: Float, block: (value: Flo
     }
 
     block(value)
+}
+
+internal data class OutlineNode(
+    val item: SideBarTreeItem,
+    val level: Int,
+    var expanded: Boolean = false,
+    val children: List<OutlineNode>
+)
+
+internal fun buildOutlineTree(
+    items: List<SideBarTreeItem>,
+    level: Int = 0
+): List<OutlineNode> {
+    return items.map { item ->
+        OutlineNode(
+            item = item,
+            level = level,
+            expanded = false,
+            children = buildOutlineTree(
+                item.children, level
+                        + 1
+            )
+        )
+    }
+}
+
+internal fun List<OutlineNode>.flattenTree(): List<OutlineNode> {
+    val result = mutableListOf<OutlineNode>()
+
+    fun addNodes(nodes: List<OutlineNode>) {
+        for (node in nodes) {
+            result += node
+            if (node.expanded) {
+                addNodes(node.children)
+            }
+        }
+    }
+
+    addNodes(this)
+    return result
 }

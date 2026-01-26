@@ -337,6 +337,7 @@ function assert(cond, msg) {
     unreachable(msg);
   }
 }
+let validCustomProtocols = [];
 function _isValidProtocol(url) {
   switch (url?.protocol) {
     case "http:":
@@ -346,7 +347,7 @@ function _isValidProtocol(url) {
     case "tel:":
       return true;
     default:
-      return false;
+      return validCustomProtocols.includes(url.protocol);
   }
 }
 function createValidAbsoluteUrl(url, baseUrl = null, options = null) {
@@ -57703,6 +57704,9 @@ class WorkerMessageHandler {
     handler.on("Ready", function (data) {
       setupDoc(docParams);
       docParams = null;
+    });
+    handler.on("setValidCustomProtocols", function (data) {
+      validCustomProtocols = data;
     });
     return workerHandlerName;
   }

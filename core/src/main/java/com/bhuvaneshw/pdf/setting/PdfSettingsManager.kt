@@ -4,22 +4,71 @@ import com.bhuvaneshw.pdf.PdfUnstableApi
 import com.bhuvaneshw.pdf.PdfViewer
 import com.bhuvaneshw.pdf.addListener
 
+/**
+ * Manages saving and restoring of [PdfViewer] settings.
+ */
 class PdfSettingsManager(private val saver: PdfSettingsSaver) {
 
+    /**
+     * Whether to include the current page when saving settings.
+     * Default is `false`.
+     */
     var currentPageIncluded = false
+    /**
+     * Whether to include the minimum scale when saving settings.
+     * Default is `true`.
+     */
     var minScaleIncluded = true
+    /**
+     * Whether to include the maximum scale when saving settings.
+     * Default is `true`.
+     */
     var maxScaleIncluded = true
+    /**
+     * Whether to include the default scale when saving settings.
+     * Default is `true`.
+     */
     var defaultScaleIncluded = true
+    /**
+     * Whether to include the scroll mode when saving settings.
+     * Default is `true`.
+     */
     var scrollModeIncluded = true
+    /**
+     * Whether to include the spread mode when saving settings.
+     * Default is `true`.
+     */
     var spreadModeIncluded = true
+    /**
+     * Whether to include the page rotation when saving settings.
+     * Default is `true`.
+     */
     var rotationIncluded = true
+    /**
+     * Whether to include the snap page setting when saving settings.
+     * Default is `true`.
+     */
     var snapPageIncluded = true
 
-    // Unstable apis are excluded by default
+    /**
+     * Whether to include the align mode when saving settings.
+     * This is unstable and is `false` by default.
+     */
     var alignModeIncluded = false
+    /**
+     * Whether to include the single page arrangement when saving settings.
+     * This is unstable and is `false` by default.
+     */
     var singlePageArrangementIncluded = false
+    /**
+     * Whether to include the scroll speed limit when saving settings.
+     * This is unstable and is `false` by default.
+     */
     var scrollSpeedLimitIncluded = false
 
+    /**
+     * Includes all settings to be saved.
+     */
     fun includeAll() {
         currentPageIncluded = true
         minScaleIncluded = true
@@ -35,6 +84,9 @@ class PdfSettingsManager(private val saver: PdfSettingsSaver) {
         scrollSpeedLimitIncluded = true
     }
 
+    /**
+     * Excludes all settings from being saved.
+     */
     fun excludeAll() {
         currentPageIncluded = false
         minScaleIncluded = false
@@ -50,6 +102,12 @@ class PdfSettingsManager(private val saver: PdfSettingsSaver) {
         scrollSpeedLimitIncluded = false
     }
 
+    /**
+     * Saves the settings of the given [PdfViewer].
+     * The settings to be saved are determined by the `include` flags.
+     *
+     * @param pdfViewer The [PdfViewer] from which to save the settings.
+     */
     fun save(pdfViewer: PdfViewer) {
         saver.run {
             pdfViewer.run {
@@ -81,6 +139,11 @@ class PdfSettingsManager(private val saver: PdfSettingsSaver) {
         }
     }
 
+    /**
+     * Restores the settings to the given [PdfViewer].
+     *
+     * @param pdfViewer The [PdfViewer] to which to restore the settings.
+     */
     fun restore(pdfViewer: PdfViewer) {
         saver.run {
             pdfViewer.run {
@@ -111,6 +174,9 @@ class PdfSettingsManager(private val saver: PdfSettingsSaver) {
         }
     }
 
+    /**
+     * Resets all saved settings.
+     */
     fun reset() {
         saver.clearAll()
         saver.apply()

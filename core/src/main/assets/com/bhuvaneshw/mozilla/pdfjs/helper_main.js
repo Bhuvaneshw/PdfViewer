@@ -142,7 +142,7 @@ function doOnLast() {
                 }
             }
         })
-        if (Object.keys(state).length == 4 && !isSame(prevEditorState, state)){
+        if (Object.keys(state).length == 4 && !isSame(prevEditorState, state)) {
             prevEditorState = state;
             JWI.onEditorStateChange(JSON.stringify(state));
         }
@@ -209,6 +209,26 @@ function setupHelper() {
         JWI.onPageChange(pageNumber);
     });
 
+    PDFViewerApplication.eventBus.on("pagerendered", (event) => {
+        const { pageNumber } = event;
+        const pageDiv = PDFViewerApplication.pdfViewer.getPageView(pageNumber - 1).div;
+        const textLayer = pageDiv.querySelector(".textLayer");
+
+        if (textLayer) {
+            JWI.onPageRendered(pageNumber);
+            return;
+        }
+
+        observe(pageDiv, { childList: true }, (mutations, observer) => {
+            const textLayer = pageDiv.querySelector(".textLayer");
+
+            if (textLayer) {
+                observer.disconnect();
+                JWI.onPageRendered(pageNumber);
+            }
+        });
+    });
+
     PDFViewerApplication.eventBus.on("updatefindcontrolstate", (event) => {
         JWI.onFindMatchChange(event.matchesCount?.current || 0, event.matchesCount?.total || 0);
     });
@@ -223,6 +243,14 @@ function setupHelper() {
 
     PDFViewerApplication.eventBus.on("scrollmodechanged", (event) => {
         JWI.onScrollModeChange(event.mode);
+    });
+
+    PDFViewerApplication.eventBus.on("outlineloaded", (e) => {
+        loadOutline();
+    });
+
+    PDFViewerApplication.eventBus.on("attachmentsloaded", (e) => {
+        loadAttachments();
     });
 
     viewerContainer.addEventListener("scroll", () => {
@@ -310,8 +338,8 @@ function observe(target, options, callback) {
 }
 
 function isSame(prev, curr) {
-  const keys = Object.keys(prev);
-  if (keys.length !== Object.keys(curr).length) return false;
+    const keys = Object.keys(prev);
+    if (keys.length !== Object.keys(curr).length) return false;
 
-  return keys.every(key => prev[key] === curr[key]);
+    return keys.every(key => prev[key] === curr[key]);
 }

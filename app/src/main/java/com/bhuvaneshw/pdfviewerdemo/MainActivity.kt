@@ -33,7 +33,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(view.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(view.container) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val systemBars =
+                insets.getInsets(WindowInsetsCompat.Type.systemBars() + WindowInsetsCompat.Type.displayCutout())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }

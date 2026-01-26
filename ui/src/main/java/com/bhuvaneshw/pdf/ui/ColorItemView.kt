@@ -8,12 +8,20 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
 
+/**
+ * A custom view that displays a circular color item.
+ *
+ * This view draws a circle filled with a specified [color] and an optional border.
+ */
 class ColorItemView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
+    /**
+     * The fill color of the circle.
+     */
     @ColorInt
     var color: Int = Color.GRAY
         set(value) {
@@ -21,6 +29,9 @@ class ColorItemView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    /**
+     * The border color of the circle.
+     */
     @ColorInt
     var borderColor: Int = Color.BLACK
         set(value) {

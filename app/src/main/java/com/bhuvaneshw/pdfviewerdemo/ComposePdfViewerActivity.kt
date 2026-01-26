@@ -2,9 +2,11 @@ package com.bhuvaneshw.pdfviewerdemo
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,10 +22,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
@@ -32,6 +36,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -41,6 +46,7 @@ import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.RangeSliderState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -60,8 +66,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.bhuvaneshw.pdf.PdfEditor
 import com.bhuvaneshw.pdf.PdfListener
 import com.bhuvaneshw.pdf.PdfUnstableApi
@@ -72,6 +81,7 @@ import com.bhuvaneshw.pdf.callIfScrollSpeedLimitIsEnabled
 import com.bhuvaneshw.pdf.callSafely
 import com.bhuvaneshw.pdf.compose.CustomOnReadyCallback
 import com.bhuvaneshw.pdf.compose.DefaultOnReadyCallback
+import com.bhuvaneshw.pdf.compose.MatchState
 import com.bhuvaneshw.pdf.compose.PdfLoadingState
 import com.bhuvaneshw.pdf.compose.PdfState
 import com.bhuvaneshw.pdf.compose.annotationEditorFlow
@@ -84,13 +94,15 @@ import com.bhuvaneshw.pdf.compose.ui.PdfToolBar
 import com.bhuvaneshw.pdf.compose.ui.PdfToolBarMenuItem
 import com.bhuvaneshw.pdf.compose.ui.PdfViewer
 import com.bhuvaneshw.pdf.compose.ui.PdfViewerContainer
-import com.bhuvaneshw.pdf.compose.ui.rememberToolBarState
+import com.bhuvaneshw.pdf.compose.ui.rememberPdfOutlineDrawerState
+import com.bhuvaneshw.pdf.compose.ui.rememberPdfToolBarState
 import com.bhuvaneshw.pdf.print.DefaultPdfPrintAdapter
 import com.bhuvaneshw.pdf.setting.PdfSettingsManager
 import com.bhuvaneshw.pdf.sharedPdfSettingsManager
 import com.bhuvaneshw.pdfviewerdemo.ui.theme.PdfViewerComposeDemoTheme
 import io.mhssn.colorpicker.ColorPickerDialog
 import io.mhssn.colorpicker.ColorPickerType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -123,12 +135,15 @@ class ComposePdfViewerActivity : ComponentActivity() {
             PdfViewerComposeDemoTheme {
                 val snackBarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
+                val isLandscape =
+                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
                 Scaffold(
                     snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    contentWindowInsets = if (isLandscape) WindowInsets.safeContent else ScaffoldDefaults.contentWindowInsets
                 ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         MainScreen(
                             fileName = fileName,
                             source = filePath,
@@ -145,7 +160,8 @@ class ComposePdfViewerActivity : ComponentActivity() {
                                         duration = SnackbarDuration.Short,
                                     )
                                 }
-                            }
+                            },
+                            modifier = Modifier.padding(innerPadding)
                         )
                     }
                 }
@@ -197,13 +213,19 @@ class ComposePdfViewerActivity : ComponentActivity() {
             }
         }
 
-        override fun onSavePdf(pdfAsBytes: ByteArray) {
-            bytes = pdfAsBytes
+        override fun onDownload(
+            fileBytes: ByteArray,
+            fileName: String?,
+            mimeType: String?
+        ) {
+            bytes = fileBytes
 
             saveFileLauncher.launch(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/pdf"
-                putExtra(Intent.EXTRA_TITLE, pdfTitle)
+                type = mimeType ?: "application/pdf"
+                putExtra(
+                    Intent.EXTRA_TITLE, if (mimeType == "application/pdf") pdfTitle else fileName
+                )
             })
         }
     }
@@ -220,12 +242,16 @@ private fun Activity.MainScreen(
     downloadPdfListener: ComposePdfViewerActivity.DownloadPdfListener,
     imagePickerListener: ImagePickerListener,
     onShowMessage: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val pdfState = rememberPdfState(source = source)
-    val toolBarState = rememberToolBarState()
+    val toolBarState = rememberPdfToolBarState()
+    val outlineDrawerState = rememberPdfOutlineDrawerState(DrawerValue.Closed)
     var toolbarTitle by remember { mutableStateOf(fileName) }
     var fullscreen by remember { mutableStateOf(false) }
     var showSaveDialog by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     LaunchedEffect(pdfState.loadingState) {
         pdfState.loadingState.let {
@@ -236,13 +262,22 @@ private fun Activity.MainScreen(
         }
     }
 
+    LaunchedEffect(pdfState.matchState) {
+        pdfState.matchState.run {
+            if (this is MatchState.Completed && !found)
+                Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     @OptIn(PdfUnstableApi::class)
     LaunchedEffect(pdfState) {
         launch {
             pdfState.singleClickFlow().collectLatest {
                 pdfState.pdfViewer?.callSafely {  // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                    fullscreen = !fullscreen
-                    setFullscreen(fullscreen)
+                    if (!toolBarState.isEditorOpen) {
+                        fullscreen = !fullscreen
+                        setFullscreen(fullscreen)
+                    }
                 }
             }
         }
@@ -251,13 +286,15 @@ private fun Activity.MainScreen(
             pdfState.doubleClickFlow().collectLatest {
                 pdfState.pdfViewer?.apply {
                     callSafely { // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                        val originalCurrentPage = currentPage
+                        if (!toolBarState.isEditorOpen) {
+                            val originalCurrentPage = currentPage
 
-                        if (!isZoomInMinScale()) zoomToMinimum()
-                        else zoomToMaximum()
+                            if (!isZoomInMinScale()) zoomToMinimum()
+                            else zoomToMaximum()
 
-                        callIfScrollSpeedLimitIsEnabled {
-                            goToPage(originalCurrentPage)
+                            callIfScrollSpeedLimitIsEnabled {
+                                goToPage(originalCurrentPage)
+                            }
                         }
                     }
                 }
@@ -286,18 +323,65 @@ private fun Activity.MainScreen(
         }
     }
 
-    BackHandler {
-        when {
-            toolBarState.handleBackPressed() -> {
-                // Handled by toolbar
+    PredictiveBackHandler(
+        enabled = toolBarState.canHandleBackPressed()
+                || outlineDrawerState.drawerState.isOpen
+                || pdfState.pdfViewer?.editor?.hasUnsavedChanges == true
+    ) { backFlow ->
+        try {
+            backFlow.collect { event ->
+                when {
+                    toolBarState.canHandleBackPressed() -> {
+                        toolBarState.updateBackProgress(event.progress)
+                    }
+
+                    outlineDrawerState.drawerState.isOpen -> {
+                        outlineDrawerState.updateBackProgress(event.progress)
+                    }
+                }
             }
-            pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> showSaveDialog = true
-            else -> finish()
+
+            when {
+                toolBarState.handleBackPressed() -> {
+                    // Handled by toolbar
+                }
+
+                outlineDrawerState.drawerState.isOpen -> {
+                    scope.launch {
+                        outlineDrawerState.drawerState.close()
+                        outlineDrawerState.updateBackProgress(0f)
+                    }
+                }
+
+                pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> {
+                    showSaveDialog = true
+                }
+            }
+        } catch (_: CancellationException) {
+            outlineDrawerState.updateBackProgress(0f)
+        } finally {
+            toolBarState.updateBackProgress(0f)
         }
     }
 
+//    BackHandler {
+//        when {
+//            toolBarState.handleBackPressed() -> {
+//                // Handled by toolbar
+//            }
+//
+//            outlineDrawerState.isOpen -> {
+//                scope.launch { outlineDrawerState.close() }
+//            }
+//
+//            pdfState.pdfViewer?.editor?.hasUnsavedChanges == true -> showSaveDialog = true
+//            else -> finish()
+//        }
+//    }
+
     PdfViewerContainer(
         pdfState = pdfState,
+        outlineDrawerState = outlineDrawerState,
         pdfViewer = {
             PdfViewer(
                 modifier = Modifier.fillMaxSize(),
@@ -310,6 +394,9 @@ private fun Activity.MainScreen(
 
                     addListener(downloadPdfListener)
                     addListener(imagePickerListener)
+                    addListener(onLinkClick = { link ->
+                        startActivity(Intent(Intent.ACTION_VIEW, link.toUri()))
+                    })
                 }
             )
         },
@@ -341,7 +428,7 @@ private fun Activity.MainScreen(
                             defaultMenus = defaultMenus
                         )
                     },
-                    pickColor = { onPickColor ->
+                    pickColor = { _, onPickColor ->
                         onPickColorCallback = onPickColor
                     },
                 )
@@ -393,7 +480,14 @@ private fun Activity.MainScreen(
                     Text(text = "Loading...")
                 }
             }
-        }
+        },
+        onOutlineItemClick = {
+            scope.launch {
+                pdfState.pdfViewer?.ui?.performSidebarTreeItemClick(it.id)
+                outlineDrawerState.drawerState.close()
+            }
+        },
+        modifier = modifier,
     )
 
     if (showSaveDialog) {

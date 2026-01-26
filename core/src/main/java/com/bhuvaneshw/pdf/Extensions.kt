@@ -5,12 +5,27 @@ import android.net.Uri
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient.FileChooserParams
+import com.bhuvaneshw.pdf.model.SideBarTreeItem
 import com.bhuvaneshw.pdf.setting.PdfSettingsManager
 import com.bhuvaneshw.pdf.setting.SharedPreferencePdfSettingsSaver
 
+/**
+ * Creates a [PdfSettingsManager] that stores settings in shared preferences.
+ *
+ * @param name The name of the shared preferences file.
+ * @param mode The operating mode.
+ * @return A [PdfSettingsManager] instance.
+ */
 fun Context.sharedPdfSettingsManager(name: String, mode: Int = Context.MODE_PRIVATE) =
     PdfSettingsManager(SharedPreferencePdfSettingsSaver(this, name, mode))
 
+/**
+ * Calls a block of code safely, handling scroll speed limits and editing state.
+ *
+ * @param checkScrollSpeedLimit Whether to check the scroll speed limit.
+ * @param checkEditing Whether to check if the editor is in editing mode.
+ * @param block The block of code to execute.
+ */
 @PdfUnstableApi
 fun PdfViewer.callSafely(
     checkScrollSpeedLimit: Boolean = true,
@@ -30,10 +45,21 @@ fun PdfViewer.callSafely(
     } else block.invoke(scope)
 }
 
+/**
+ * Calls the provided function if the scroll speed limit is enabled.
+ *
+ * @param onEnabled The function to call.
+ */
 fun ScrollSpeedLimitScope.callIfScrollSpeedLimitIsEnabled(onEnabled: () -> Unit) {
     this.onEnabled = onEnabled
 }
 
+/**
+ * Parses a string to a [PdfEditor.AnnotationEventType].
+ *
+ * @param type The string to parse.
+ * @return The parsed [PdfEditor.AnnotationEventType].
+ */
 fun PdfEditor.AnnotationEventType.Companion.parse(type: String?): PdfEditor.AnnotationEventType {
     return when (type) {
         "highlight" -> PdfEditor.AnnotationEventType.Unsaved.Highlight
@@ -46,8 +72,28 @@ fun PdfEditor.AnnotationEventType.Companion.parse(type: String?): PdfEditor.Anno
     }
 }
 
+/**
+ * A scope for managing scroll speed limits.
+ *
+ * @property onEnabled A function to be called when the scroll speed limit is enabled.
+ */
 class ScrollSpeedLimitScope internal constructor(internal var onEnabled: (() -> Unit)? = null)
 
+/**
+ * Adds a listener to the `PdfViewer` with individual lambda functions for each event.
+ *
+ * This is a convenience function that creates a `PdfListener` and sets the provided lambdas
+ * without needing to implement all callbacks.
+ *
+ * Example
+ * ```kotlin
+ * pdfViewer.addListener(onPageLoadSuccess = { pagesCount ->
+ *  // do stuff
+ * })
+ * ```
+ *
+ * @see PdfListener
+ */
 fun PdfViewer.addListener(
     onPageLoadStart: (() -> Unit)? = null,
     onPageLoadSuccess: ((pagesCount: Int) -> Unit)? = null,
@@ -55,8 +101,10 @@ fun PdfViewer.addListener(
     onReceivedError: ((error: WebViewError) -> Unit)? = null,
     onProgressChange: ((progress: Float) -> Unit)? = null,
     onPageChange: ((pageNumber: Int) -> Unit)? = null,
+    onPageRendered: ((pageNumber: Int) -> Unit)? = null,
     onScaleChange: ((scale: Float) -> Unit)? = null,
     onSavePdf: ((pdfAsBytes: ByteArray) -> Unit)? = null,
+    onDownload: ((fileBytes: ByteArray, fileName: String?, mimeType: String?) -> Unit)? = null,
     onFindMatchStart: (() -> Unit)? = null,
     onFindMatchChange: ((current: Int, total: Int) -> Unit)? = null,
     onFindMatchComplete: ((found: Boolean) -> Unit)? = null,
@@ -93,6 +141,8 @@ fun PdfViewer.addListener(
     onAlignModeChange: ((requestedMode: PdfViewer.PageAlignMode, appliedMode: PdfViewer.PageAlignMode) -> Unit)? = null,
     onScrollSpeedLimitChange: ((requestedLimit: PdfViewer.ScrollSpeedLimit, appliedLimit: PdfViewer.ScrollSpeedLimit) -> Unit)? = null,
     onShowFileChooser: ((filePathCallback: ValueCallback<Array<out Uri?>?>?, fileChooserParams: FileChooserParams?) -> Boolean)? = null,
+    onLoadOutline: ((outline: List<SideBarTreeItem>) -> Unit)? = null,
+    onLoadAttachments: ((attachments: List<SideBarTreeItem>) -> Unit)? = null,
 ) {
     addListener(object : PdfListener {
         override fun onPageLoadStart() {
@@ -119,12 +169,25 @@ fun PdfViewer.addListener(
             onPageChange?.invoke(pageNumber)
         }
 
+        override fun onPageRendered(pageNumber: Int) {
+            onPageRendered?.invoke(pageNumber)
+        }
+
         override fun onScaleChange(scale: Float) {
             onScaleChange?.invoke(scale)
         }
 
+        @Suppress("OVERRIDE_DEPRECATION")
         override fun onSavePdf(pdfAsBytes: ByteArray) {
             onSavePdf?.invoke(pdfAsBytes)
+        }
+
+        override fun onDownload(
+            fileBytes: ByteArray,
+            fileName: String?,
+            mimeType: String?
+        ) {
+            onDownload?.invoke(fileBytes, fileName, mimeType)
         }
 
         override fun onFindMatchStart() {
@@ -293,6 +356,14 @@ fun PdfViewer.addListener(
             fileChooserParams: FileChooserParams?
         ): Boolean {
             return onShowFileChooser?.invoke(filePathCallback, fileChooserParams) == true
+        }
+
+        override fun onLoadOutline(outline: List<SideBarTreeItem>) {
+            onLoadOutline?.invoke(outline)
+        }
+
+        override fun onLoadAttachments(attachments: List<SideBarTreeItem>) {
+            onLoadAttachments?.invoke(attachments)
         }
     })
 }

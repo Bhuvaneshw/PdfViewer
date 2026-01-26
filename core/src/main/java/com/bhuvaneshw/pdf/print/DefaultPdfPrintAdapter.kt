@@ -7,6 +7,12 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.pdf.PdfDocument
 
+/**
+ * A default implementation of [PdfPrintAdapter] that renders a PDF page by
+ * drawing a scaled bitmap centered on a white background.
+ *
+ * @param context The context.
+ */
 class DefaultPdfPrintAdapter(context: Context) : PdfPrintAdapter(context) {
 
     override fun onRenderStart() {}

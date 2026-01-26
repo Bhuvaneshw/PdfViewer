@@ -11661,6 +11661,7 @@ function getDocument(src = {}) {
       const transport = new WorkerTransport(messageHandler, task, networkStream, transportParams, transportFactory);
       task._transport = transport;
       messageHandler.send("Ready", null);
+      messageHandler.send("setValidCustomProtocols", JWI.getValidCustomProtocols().split(","));
     });
   }).catch(task._capability.reject);
   return task;

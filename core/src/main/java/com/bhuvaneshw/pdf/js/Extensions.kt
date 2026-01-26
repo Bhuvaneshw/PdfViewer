@@ -1,8 +1,13 @@
 package com.bhuvaneshw.pdf.js
 
+import android.util.Base64
 import android.webkit.WebView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 internal infix fun WebView.with(jsObject: JsObject): Pair<WebView, JsObject> {
     return this to jsObject
@@ -82,3 +87,14 @@ internal fun JSONObject.getBoolean(name: String, default: Boolean): Boolean {
         default
     }
 }
+
+internal suspend infix fun WebView.evaluate(jsCode: String): String? {
+    return withContext(Dispatchers.Main) {
+        suspendCoroutine { continuation ->
+            evaluateJavascript(jsCode, continuation::resume)
+        }
+    }
+}
+
+internal fun String.decode(): String = String(Base64.decode(this, Base64.DEFAULT))
+internal fun String.encode():String = "btoa(unescape(encodeURIComponent($this)))"

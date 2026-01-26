@@ -25,16 +25,16 @@ class ExtendedToolBar @JvmOverloads constructor(
     @OptIn(PdfUnstableApi::class)
     override fun getPopupMenu(anchorView: View): PopupMenu {
         return PopupMenu(context, anchorView).apply {
-            // Item ids 0-10 are already taken
-            menu.add(Menu.NONE, 15, Menu.NONE, "Print")
+            // Note: Item ids 0-12 are already taken
+            menu.add(Menu.NONE, 24, Menu.NONE, "Print")
             if (pdfViewer.createSharableUri(authority) != null) {
-                menu.add(Menu.NONE, 11, Menu.NONE, "Share")
-                menu.add(Menu.NONE, 12, Menu.NONE, "Open With")
+                menu.add(Menu.NONE, 20, Menu.NONE, "Share")
+                menu.add(Menu.NONE, 21, Menu.NONE, "Open With")
             }
-            menu.add(Menu.NONE, 13, Menu.NONE, "Zoom Limit")
+            menu.add(Menu.NONE, 22, Menu.NONE, "Zoom Limit")
             menu.add(
                 Menu.NONE,
-                14,
+                23,
                 Menu.NONE,
                 (if (pdfViewer.scrollSpeedLimit == PdfViewer.ScrollSpeedLimit.None) "Enable" else "Disable")
                         + " scroll speed limit"
@@ -48,12 +48,12 @@ class ExtendedToolBar @JvmOverloads constructor(
         if (super.handlePopupMenuItemClick(item)) return true
 
         return when (item.itemId) {
-            15 -> {
+            24 -> {
                 pdfViewer.printFile()
                 return true
             }
 
-            11 -> {
+            20 -> {
                 pdfViewer
                     .createSharableUri(authority)
                     ?.let {
@@ -67,7 +67,7 @@ class ExtendedToolBar @JvmOverloads constructor(
                 return true
             }
 
-            12 -> {
+            21 -> {
                 pdfViewer
                     .createSharableUri(authority)
                     ?.let {
@@ -78,12 +78,12 @@ class ExtendedToolBar @JvmOverloads constructor(
                 return true
             }
 
-            13 -> {
+            22 -> {
                 showZoomLimitDialog()
                 true
             }
 
-            14 -> {
+            23 -> {
                 if (pdfViewer.scrollSpeedLimit == PdfViewer.ScrollSpeedLimit.None)
                     pdfViewer.scrollSpeedLimit = PdfViewer.ScrollSpeedLimit.AdaptiveFling()
                 else pdfViewer.scrollSpeedLimit = PdfViewer.ScrollSpeedLimit.None

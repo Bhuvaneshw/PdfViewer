@@ -8,6 +8,13 @@ import android.widget.BaseAdapter
 import android.widget.GridView
 import androidx.annotation.ColorInt
 
+/**
+ * A GridView that displays a list of colors for selection.
+ *
+ * This view is used to present a grid of colors to the user. When a color is selected,
+ * the `onSelectColor` callback is invoked. This is typically used for color selection
+ * in annotation tools.
+ */
 @SuppressLint("ViewConstructor")
 class ColorItemGrid internal constructor(
     context: Context,

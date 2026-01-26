@@ -3,11 +3,13 @@ package com.bhuvaneshw.pdfviewerdemo
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bhuvaneshw.pdf.PdfEditor
@@ -34,6 +36,7 @@ class PdfViewerActivity : AppCompatActivity() {
     private var fullscreen = false
     private lateinit var pdfSettingsManager: PdfSettingsManager
     private var selectedColor = Color.WHITE
+    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +45,19 @@ class PdfViewerActivity : AppCompatActivity() {
         view = ActivityPdfViewerBinding.inflate(layoutInflater)
         setContentView(view.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(view.container) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(view.container.mainView) { v, insets ->
+            val systemBars =
+                insets.getInsets(WindowInsetsCompat.Type.systemBars() + WindowInsetsCompat.Type.displayCutout())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        ViewCompat.setOnApplyWindowInsetsListener(view.pdfOutlineView) { v, insets ->
+            val systemBars =
+                insets.getInsets(WindowInsetsCompat.Type.systemBars() + WindowInsetsCompat.Type.displayCutout())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         pdfSettingsManager = sharedPdfSettingsManager("PdfSettings", MODE_PRIVATE)
             .also { it.includeAll() }
 
@@ -95,11 +106,19 @@ class PdfViewerActivity : AppCompatActivity() {
         view.pdfViewer.addListener(DownloadPdfListener(fileName))
         view.pdfViewer.addListener(ImagePickerListener(this))
         view.container.setAsLoadingIndicator(view.loader)
+        view.pdfOutlineView.onItemClick = {
+            scope.launch { view.pdfViewer.ui.performSidebarTreeItemClick(it.id) }
+            view.container.closeDrawer(GravityCompat.START)
+        }
 
         onBackPressedDispatcher.addCallback(this) {
             when {
                 view.pdfToolBar.handleBackPressed() -> {
                     // Handled by toolbar
+                }
+
+                view.container.handleBackPressed() -> {
+                    // Handled by container
                 }
 
                 view.pdfViewer.editor.hasUnsavedChanges -> showSaveDialog()
@@ -136,6 +155,10 @@ class PdfViewerActivity : AppCompatActivity() {
 
                         else -> {}
                     }
+                },
+                onFindMatchComplete = { found ->
+                    if (!found)
+                        Toast.makeText(context, "No match found!", Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -144,9 +167,11 @@ class PdfViewerActivity : AppCompatActivity() {
             @OptIn(PdfUnstableApi::class)
             override fun onSingleClick() {
                 view.pdfViewer.callSafely { // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                    fullscreen = !fullscreen
-                    setFullscreen(fullscreen)
-                    view.container.animateToolBar(!fullscreen)
+                    if (!view.pdfToolBar.isEditorBarVisible()) {
+                        fullscreen = !fullscreen
+                        setFullscreen(fullscreen)
+                        view.container.animateToolBar(!fullscreen)
+                    }
                 }
             }
 
@@ -154,13 +179,15 @@ class PdfViewerActivity : AppCompatActivity() {
             override fun onDoubleClick() {
                 view.pdfViewer.run {
                     callSafely { // Helpful if you are using scrollSpeedLimit or skip if editing pdf
-                        val originalCurrentPage = currentPage
+                        if (!view.pdfToolBar.isEditorBarVisible()) {
+                            val originalCurrentPage = currentPage
 
-                        if (!isZoomInMinScale()) zoomToMinimum()
-                        else zoomToMaximum()
+                            if (!isZoomInMinScale()) zoomToMinimum()
+                            else zoomToMaximum()
 
-                        callIfScrollSpeedLimitIsEnabled {
-                            goToPage(originalCurrentPage)
+                            callIfScrollSpeedLimitIsEnabled {
+                                goToPage(originalCurrentPage)
+                            }
                         }
                     }
                 }
@@ -211,13 +238,19 @@ class PdfViewerActivity : AppCompatActivity() {
             }
         }
 
-        override fun onSavePdf(pdfAsBytes: ByteArray) {
-            bytes = pdfAsBytes
+        override fun onDownload(
+            fileBytes: ByteArray,
+            fileName: String?,
+            mimeType: String?
+        ) {
+            bytes = fileBytes
 
             saveFileLauncher.launch(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/pdf"
-                putExtra(Intent.EXTRA_TITLE, pdfTitle)
+                type = mimeType ?: "application/pdf"
+                putExtra(
+                    Intent.EXTRA_TITLE, if (mimeType == "application/pdf") pdfTitle else fileName
+                )
             })
         }
     }
