@@ -4,11 +4,18 @@
 A lightweight **Android PDF Viewer Library** powered by Mozilla's [PDF.js](https://github.com/mozilla/pdf.js), offering seamless PDF rendering and interactive features. Supports both **Jetpack Compose** and **XML**.
 
 ---
-## 📢 Any iOS dev intreseted in CMP? — [check this](https://github.com/Bhuvaneshw/PdfViewer/discussions/47).
+## 📢 Any iOS dev interested in CMP? — [check this](https://github.com/Bhuvaneshw/PdfViewer/discussions/47).
 
 ## Screenshots
-<img src="screenshots/1.png" width="190" alt="ScreenShot1"/> <img src="screenshots/2.png" width="190" alt="ScreenShot2"/>
-<img src="screenshots/3.png" width="190" alt="ScreenShot3"/> <img src="screenshots/4.png" width="190" alt="ScreenShot4"/> <img src="screenshots/5.png" width="190" alt="ScreenShot5"/>
+<img src="images/screenshot-1.png" width="190" alt="ScreenShot1"/> <img src="images/screenshot-2.png" width="190" alt="ScreenShot2"/>
+<img src="images/screenshot-3.png" width="190" alt="ScreenShot3"/> <img src="images/screenshot-4.png" width="190" alt="ScreenShot4"/> <img src="images/screenshot-5.png" width="190" alt="ScreenShot5"/>
+
+## PdfVision
+Check out the complete application developed based on PdfViewer library.
+
+<a href="https://play.google.com/store/apps/details?id=com.jetbotlabs.pdfvision">
+   <img src="images/GetItOnGooglePlay_Badge_Web_color_English.svg" alt="GetItOnGooglePlay_Badge_Web_color_English.svg" />
+</a>
 
 ## Demo
 You can download apk from [here](/app/release/app-release.apk)
