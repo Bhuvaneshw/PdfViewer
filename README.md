@@ -14,7 +14,7 @@ A lightweight **Android PDF Viewer Library** powered by Mozilla's [PDF.js](https
 Check out the complete application developed based on PdfViewer library.
 
 <a href="https://play.google.com/store/apps/details?id=com.jetbotlabs.pdfvision">
-   <img src="images/GetItOnGooglePlay_Badge_Web_color_English.svg" alt="GetItOnGooglePlay_Badge_Web_color_English.svg" />
+   <img src="images/GetItOnGooglePlay_Badge_Web_color_English.svg" alt="GetItOnGooglePlay_Badge_Web_color_English.svg" height="48px"/>
 </a>
 
 ## Demo
