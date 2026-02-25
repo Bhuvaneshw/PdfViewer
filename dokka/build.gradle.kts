@@ -44,10 +44,10 @@ dokka {
 }
 
 dependencies {
-    dokka(project(":core"))
-    dokka(project(":compose"))
-    dokka(project(":ui"))
-    dokka(project(":compose-ui"))
+    dokka(projects.core)
+    dokka(projects.compose)
+    dokka(projects.ui)
+    dokka(projects.composeUi)
 
     dokkaHtmlPlugin(libs.dokka.versioning.plugin)
 }

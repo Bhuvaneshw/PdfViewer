@@ -48,7 +48,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.recyclerview)
 
-    implementation(project(":core"))
+    implementation(projects.core)
 }
 
 dokka {

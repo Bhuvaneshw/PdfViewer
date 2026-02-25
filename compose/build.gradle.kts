@@ -52,7 +52,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
 
-    api(project(":core"))
+    api(projects.core)
 }
 
 dokka {

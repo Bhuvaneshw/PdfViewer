@@ -20,7 +20,9 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "PdfViewer"
+
 include(":app")
 include(":core")
 include(":ui")

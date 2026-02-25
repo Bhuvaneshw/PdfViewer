@@ -69,12 +69,12 @@ dependencies {
     implementation(libs.about.libraries.compose.core)
     implementation(libs.about.libraries.compose.m3)
 
-    implementation(project(":core"))
-    implementation(project(":ui"))
-    implementation(project(":compose"))
-    implementation(project(":compose-ui"))
-    implementation(project(":icc"))
-    implementation(project(":jp2"))
+    implementation(projects.core)
+    implementation(projects.ui)
+    implementation(projects.compose)
+    implementation(projects.composeUi)
+    implementation(projects.icc)
+    implementation(projects.jp2)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

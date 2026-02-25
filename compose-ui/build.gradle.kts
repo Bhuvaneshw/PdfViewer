@@ -53,8 +53,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
 
-    implementation(project(":core"))
-    implementation(project(":compose"))
+    implementation(projects.core)
+    implementation(projects.compose)
 }
 
 dokka {
