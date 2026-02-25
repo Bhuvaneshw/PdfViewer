@@ -18,7 +18,7 @@ lifecycleRuntimeKtx = "2.9.2"
 aboutLibraries = "12.2.4"
 recyclerview = "1.4.0"
 webkit = "1.14.0"
-dokka = "2.1.0"
+dokka = "2.2.0-Beta"
 serialization = "1.9.0"
 
 [libraries]

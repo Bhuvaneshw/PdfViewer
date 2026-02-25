@@ -22,11 +22,9 @@ dokka {
     pluginsConfiguration {
         versioning {
             version = apiVersion
-            if (dokkaVersionsDirectory != null) olderVersionsDir = dokkaVersionsDirectory
-            // TODO: set olderVersionsDirName to empty string
-//            olderVersionsDirName = ""
-//            waiting for this property to be release in dokka
-//            property is in source but not yet released (checked v: 2.1.0)
+            if (dokkaVersionsDirectory != null) {
+                olderVersionsDir = dokkaVersionsDirectory
+            }
             renderVersionsNavigationOnAllPages = true
         }
         pluginsConfiguration.html {

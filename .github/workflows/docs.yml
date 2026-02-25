@@ -67,12 +67,11 @@ jobs:
         id: prep
         shell: bash
         run: |
-          VERSION=${{ steps.setup_version.outputs.version }}
-          mkdir -p docs/v/$VERSION
-          cp -r build/docs/v/$VERSION/* docs/v/$VERSION/
-#          rm -rf docs/latest
-#          mkdir -p docs/latest
-#          cp -r build/docs/v/$VERSION/* docs/latest/
+          chmod +x ./dokka/setup-doc-structure.sh
+          ./dokka/setup-doc-structure.sh \
+            ${{ steps.setup_version.outputs.version }} \
+            build/docs/v \
+            docs/v
 
       - name: Add index redirect
         run: |
