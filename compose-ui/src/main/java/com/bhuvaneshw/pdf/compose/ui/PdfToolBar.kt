@@ -1528,8 +1528,8 @@ typealias PickColor = (previousColor: Color, (color: Color) -> Unit) -> Unit
 
 /**
  * A typealias for a function that places editor and find icons.
- * @param editorIcon A composable that represents the editor icon.
- * @param findIcon A composable that represents the find icon.
+ * param editorIcon - A composable that represents the editor icon.
+ * param findIcon - A composable that represents the find icon.
  */
 typealias PlaceIcons = @Composable (editorIcon: @Composable () -> Unit, findIcon: @Composable () -> Unit) -> Unit
 
