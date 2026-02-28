@@ -1,0 +1,6 @@
+
+.library-name--link:before {
+    background: url("../images/logo.png") center no-repeat !important;
+    background-size: contain !important;
+    border-radius: 6px;
+}

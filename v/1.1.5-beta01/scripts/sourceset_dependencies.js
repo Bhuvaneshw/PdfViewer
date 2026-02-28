@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":core/main":[],":core/release":[],":ui/main":[],":ui/release":[],":compose/main":[],":compose/release":[],":compose-ui/main":[],":compose-ui/release":[]}'
