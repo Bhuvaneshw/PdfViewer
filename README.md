@@ -3,6 +3,8 @@
 
 A lightweight **Android PDF Viewer Library** powered by Mozilla's [PDF.js](https://github.com/mozilla/pdf.js), offering seamless PDF rendering and interactive features. Supports both **Jetpack Compose** and **XML**.
 
+[Join Discord Server](https://discord.gg/KphXNkPBYk)
+
 ---
 ## 📢 Any iOS dev interested in CMP? — [check this](https://github.com/Bhuvaneshw/PdfViewer/discussions/47).
 
@@ -20,11 +22,8 @@ Check out the complete application developed based on PdfViewer library.
 ## Demo
 You can download apk from [here](/app/release/app-release.apk)
 
---------------------------------------
-Docs for v1.1.2 will be updated in future! Preview can be found at [https://bhuvaneshw.github.io/PdfViewer](https://bhuvaneshw.github.io/PdfViewer)
---------------------------------------
-
-[Join Discord Server](https://discord.gg/KphXNkPBYk)
+## Docs
+[See Docs](https://bhuvaneshw.github.io/PdfViewer)
 
 ## Contents
 1. [Setup](#1-setup)<br>
