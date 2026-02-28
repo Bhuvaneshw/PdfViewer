@@ -41,7 +41,14 @@ jobs:
             VERSION=${{ github.event.inputs.version }}
             SOURCE="input"
           fi
+
           VERSION=${VERSION#v}
+
+          if [[ -z "$VERSION" ]]; then
+            echo "Version is empty."
+            exit 1
+          fi
+
           echo "Using version $VERSION from $SOURCE"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
